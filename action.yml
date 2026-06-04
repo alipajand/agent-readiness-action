@@ -1,0 +1,50 @@
+name: Agent Readiness Audit
+description: Audit repository readiness for AI coding agents using agent-readiness-kit
+author: agent-readiness-kit
+
+branding:
+  icon: check-circle
+  color: blue
+
+inputs:
+  repo-path:
+    description: >
+      Path to the repository to audit. Relative paths are resolved from the
+      GitHub Actions workspace root (GITHUB_WORKSPACE).
+    default: '.'
+    required: false
+  min-score:
+    description: >
+      Minimum acceptable agent-readiness score (0–100). Used when
+      fail-on-threshold is true.
+    default: '0'
+    required: false
+  output:
+    description: >
+      Write a Markdown report to this path. Relative paths are resolved under
+      repo-path; absolute paths are written as given.
+    default: ''
+    required: false
+  json:
+    description: Echo the raw JSON audit output to the Actions log.
+    default: 'false'
+    required: false
+  comment-on-pr:
+    description: >
+      Post or update a PR comment with the audit summary. Only runs on
+      pull_request events. Requires the GITHUB_TOKEN environment variable to
+      be set with issues: write and pull-requests: write permissions.
+    default: 'false'
+    required: false
+  fail-on-threshold:
+    description: Fail the workflow step when the score is below min-score.
+    default: 'true'
+    required: false
+
+outputs:
+  score:
+    description: Final agent-readiness score (0–100).
+
+runs:
+  using: node20
+  main: dist/index.js
