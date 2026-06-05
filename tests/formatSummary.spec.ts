@@ -130,6 +130,24 @@ describe('formatLogDetail', () => {
     expect(log).not.toContain('Missing items');
     expect(log).not.toContain('Recommendations');
   });
+
+  it('falls back to a bullet for an unknown finding status', () => {
+    const oddStatus = {
+      ...PERFECT_RESULT,
+      categories: [
+        {
+          id: 'x',
+          label: 'Xray',
+          score: 0,
+          maxScore: 20,
+          findings: [{ status: 'unknown', message: 'mystery issue' }],
+        },
+      ],
+    } as unknown as AuditResult;
+    const log = formatLogDetail(oddStatus);
+    expect(log).toContain('•');
+    expect(log).toContain('mystery issue');
+  });
 });
 
 // ---------- formatMarkdownComment ----------
@@ -217,5 +235,38 @@ describe('formatMarkdownComment', () => {
     };
     const md = formatMarkdownComment(manyRecs);
     expect(md).toContain('more');
+  });
+
+  it('caps the issues list at 10 with an overflow indicator', () => {
+    const manyIssues: AuditResult = {
+      ...PERFECT_RESULT,
+      categories: [
+        {
+          id: 'a',
+          label: 'Alpha',
+          score: 0,
+          maxScore: 20,
+          findings: Array.from({ length: 15 }, (_, i) => ({
+            status: 'fail' as const,
+            message: `Problem ${i}`,
+          })),
+        },
+      ],
+    };
+    const md = formatMarkdownComment(manyIssues);
+    expect(md).toContain('### Issues');
+    expect(md).toContain('and 5 more');
+  });
+
+  it('does not divide by zero when a category has maxScore 0', () => {
+    const zeroMax: AuditResult = {
+      ...PERFECT_RESULT,
+      categories: [
+        { id: 'z', label: 'Zero', score: 0, maxScore: 0, findings: [] },
+      ],
+    };
+    const md = formatMarkdownComment(zeroMax);
+    // maxScore 0 → percentage treated as 0 → red bar, no crash.
+    expect(md).toContain('🔴');
   });
 });
