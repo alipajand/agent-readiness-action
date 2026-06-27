@@ -1,5 +1,7 @@
 overrides:
+  esbuild: "0.28.1"
   rollup: "4.61.0"
+  undici: "6.27.0"
 
 allowBuilds:
   esbuild: true
