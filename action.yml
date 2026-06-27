@@ -33,8 +33,9 @@ inputs:
   comment-on-pr:
     description: >
       Post or update a summary comment on the pull request. Only runs on
-      pull_request events. Requires the GITHUB_TOKEN environment variable set
-      with pull-requests: write permission.
+      pull_request events. Comments are created and updated through GitHub's
+      issue-comment API, so the GITHUB_TOKEN environment variable must be set
+      with pull-requests: write and issues: write permissions.
     default: 'false'
     required: false
   fail-on-threshold:

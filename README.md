@@ -79,6 +79,7 @@ jobs:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
 
 steps:
   - uses: actions/checkout@v4
@@ -125,7 +126,7 @@ steps:
 | `min-score` | `0` | Minimum acceptable score (0–100). Checked when `fail-on-threshold` is `true`. |
 | `output` | `''` | Write a Markdown report to this path. Relative paths are resolved under `repo-path`; absolute paths are written as given. |
 | `json` | `false` | Echo the raw JSON audit output to the Actions log. |
-| `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires `GITHUB_TOKEN` with `pull-requests: write`. |
+| `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires `GITHUB_TOKEN` with `pull-requests: write` and `issues: write`. |
 | `fail-on-threshold` | `true` | Fail the step when the score is below `min-score`. |
 
 ## Outputs
@@ -145,15 +146,19 @@ permissions:
 ```
 
 To post PR comments with `comment-on-pr: "true"`, the job additionally needs
-`pull-requests: write`, and the step must set the `GITHUB_TOKEN` environment variable:
+`pull-requests: write` and `issues: write`, and the step must set the `GITHUB_TOKEN`
+environment variable:
 
 ```yaml
 permissions:
   contents: read
   pull-requests: write
+  issues: write
 ```
 
-The action comments on pull requests only, so `issues: write` is not required.
+PR comments are created and updated through GitHub's issue-comment API
+(`issues.listComments` / `issues.createComment` / `issues.updateComment`), which is
+why `issues: write` is included alongside `pull-requests: write`.
 
 ## How it works
 
