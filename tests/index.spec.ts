@@ -89,6 +89,17 @@ describe('index run()', () => {
     expect(setOutput).toHaveBeenCalledWith('score', '72');
   });
 
+  it('sets the report-path output to the output input when provided', async () => {
+    inputs = { output: 'docs/report.md' };
+    await loadIndex();
+    expect(setOutput).toHaveBeenCalledWith('report-path', 'docs/report.md');
+  });
+
+  it('sets an empty report-path output when no output is provided', async () => {
+    await loadIndex();
+    expect(setOutput).toHaveBeenCalledWith('report-path', '');
+  });
+
   it('logs a summary and a detail group', async () => {
     await loadIndex();
     expect(info).toHaveBeenCalled();

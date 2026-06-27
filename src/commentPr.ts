@@ -6,7 +6,7 @@ export const COMMENT_MARKER = '<!-- agent-readiness-action -->';
 
 export interface CommentPrOptions {
   body: string;
-  /** GitHub token with issues:write and pull-requests:write permissions. */
+  /** GitHub token with pull-requests:write permission. */
   token: string;
 }
 

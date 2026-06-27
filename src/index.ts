@@ -28,6 +28,7 @@ async function run(): Promise<void> {
   }
 
   core.setOutput('score', String(result.score));
+  core.setOutput('report-path', output || '');
 
   // Log summary line
   core.info(formatLogSummary(result));

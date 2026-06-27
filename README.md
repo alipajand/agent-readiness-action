@@ -1,15 +1,23 @@
 # agent-readiness-action
 
-A GitHub Action that runs [agent-readiness-kit](https://github.com/agent-readiness-kit/agent-readiness-kit) audits in CI, reports results in the workflow log, and optionally posts a summary comment on pull requests.
+## What it is
 
-## Features
+A GitHub Action that runs [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit)
+audits in CI. It scores how ready a repository is for AI coding agents (Claude Code,
+Cursor, Codex, Copilot, and similar), prints a category breakdown in the workflow log,
+and can optionally fail the build below a threshold, write a Markdown report, or post a
+summary comment on pull requests.
 
-- Audits repository readiness for AI coding agents (Cursor, Codex, Claude Code, Copilot, etc.)
-- Prints a scored category breakdown in the Actions log
-- Optionally writes a Markdown report as a workflow artifact
-- Optionally fails the step when the score falls below a threshold
-- Optionally posts or updates a PR comment with score, category table, missing items, and recommendations
-- No external API calls, no telemetry, no LLM
+It is deterministic and local-first: it shells out to `agent-readiness-kit` in the
+runner. There are no external API calls, no telemetry, and no LLM calls.
+
+## Why use it
+
+- Catch missing or low-quality agent context (instruction files, architecture notes,
+  setup docs) before it slows down day-to-day agent work.
+- Track the readiness score over time and gate pull requests on a minimum score.
+- Give reviewers a concise, deterministic summary on each PR — a complement to human
+  review, not a replacement for it.
 
 ## Quick start
 
@@ -18,94 +26,102 @@ A GitHub Action that runs [agent-readiness-kit](https://github.com/agent-readine
 name: Agent Readiness Audit
 
 on:
+  pull_request:
   push:
     branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: alipajand/agent-readiness-action@v1
+```
+
+## Examples
+
+### Basic audit
+
+```yaml
+name: Agent Readiness Audit
+
+on:
   pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: agent-readiness-kit/agent-readiness-action@v1
+      - uses: alipajand/agent-readiness-action@v1
 ```
 
-## Fail below a minimum score
+### Fail below a minimum score
 
 ```yaml
-- uses: agent-readiness-kit/agent-readiness-action@v1
+- uses: alipajand/agent-readiness-action@v1
   with:
-    min-score: '60'
-    fail-on-threshold: 'true'
+    min-score: "70"
+    fail-on-threshold: "true"
 ```
 
-## Write a Markdown report
+### Comment on pull requests
 
 ```yaml
-- uses: agent-readiness-kit/agent-readiness-action@v1
-  with:
-    output: 'docs/agent-readiness-report.md'
+permissions:
+  contents: read
+  pull-requests: write
 
-- uses: actions/upload-artifact@v4
-  with:
-    name: agent-readiness-report
-    path: docs/agent-readiness-report.md
+steps:
+  - uses: actions/checkout@v4
+  - uses: alipajand/agent-readiness-action@v1
+    with:
+      comment-on-pr: "true"
+      min-score: "70"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## Comment on pull requests
+The action posts a single comment the first time and updates it on subsequent runs, so
+there are no duplicate comments.
 
-Add `pull-requests: write` to the job permissions and set `GITHUB_TOKEN`:
+### Write a Markdown report artifact
 
 ```yaml
-jobs:
-  audit:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+steps:
+  - uses: actions/checkout@v4
 
-    steps:
-      - uses: actions/checkout@v4
+  - uses: alipajand/agent-readiness-action@v1
+    with:
+      output: "docs/agent-readiness-report.md"
 
-      - uses: agent-readiness-kit/agent-readiness-action@v1
-        with:
-          comment-on-pr: 'true'
-          min-score: '70'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  - uses: actions/upload-artifact@v4
+    with:
+      name: agent-readiness-report
+      path: docs/agent-readiness-report.md
 ```
 
-The action posts a single comment the first time and **updates** it on subsequent runs — no duplicate comments.
-
-## Audit a sub-directory
+### Audit a subdirectory or monorepo package
 
 ```yaml
-- uses: agent-readiness-kit/agent-readiness-action@v1
+- uses: alipajand/agent-readiness-action@v1
   with:
-    repo-path: './packages/my-lib'
-```
-
-## Full example with all options
-
-```yaml
-- uses: agent-readiness-kit/agent-readiness-action@v1
-  with:
-    repo-path: '.'
-    min-score: '75'
-    output: 'docs/agent-readiness-report.md'
-    json: 'false'
-    comment-on-pr: 'true'
-    fail-on-threshold: 'true'
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    repo-path: "./packages/web"
 ```
 
 ## Inputs
 
 | Input | Default | Description |
 |-------|---------|-------------|
-| `repo-path` | `.` | Path to the repository to audit. Relative paths are resolved from the GitHub Actions workspace root. |
+| `repo-path` | `.` | Path to the repository or subdirectory to audit. Relative paths are resolved from the GitHub Actions workspace root. |
 | `min-score` | `0` | Minimum acceptable score (0–100). Checked when `fail-on-threshold` is `true`. |
 | `output` | `''` | Write a Markdown report to this path. Relative paths are resolved under `repo-path`; absolute paths are written as given. |
 | `json` | `false` | Echo the raw JSON audit output to the Actions log. |
@@ -117,19 +133,27 @@ The action posts a single comment the first time and **updates** it on subsequen
 | Output | Description |
 |--------|-------------|
 | `score` | Final agent-readiness score (0–100). |
+| `report-path` | Path to the written Markdown report, or empty when `output` was not set. |
 
 ## Permissions
 
-The action itself requires no special permissions for basic use (audit + log + threshold check).
-
-For `comment-on-pr: 'true'`, the job needs:
+Basic use (audit, log, and threshold check) only needs read access:
 
 ```yaml
 permissions:
+  contents: read
+```
+
+To post PR comments with `comment-on-pr: "true"`, the job additionally needs
+`pull-requests: write`, and the step must set the `GITHUB_TOKEN` environment variable:
+
+```yaml
+permissions:
+  contents: read
   pull-requests: write
 ```
 
-and the `GITHUB_TOKEN` environment variable set on the step.
+The action comments on pull requests only, so `issues: write` is not required.
 
 ## How it works
 
@@ -141,6 +165,22 @@ and the `GITHUB_TOKEN` environment variable set on the step.
 6. If `comment-on-pr` is `true` and the event is a `pull_request`, posts or updates a comment.
 7. If `score < min-score` and `fail-on-threshold` is `true`, marks the step as failed.
 
+## Release checklist
+
+Before tagging a release:
+
+1. Run `pnpm test`.
+2. Run `pnpm typecheck`.
+3. Run `pnpm build`.
+4. Commit updated `dist/index.js` and source map if they changed.
+5. Create or move the version tag, for example `v1`.
+
+## Related tools
+
+- [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit) — CLI used by this action.
+- [agent-context-doctor](https://github.com/alipajand/agent-context-doctor) — checks whether agent instruction files are specific, safe, and usable.
+- [agent-pr-reviewer-lite](https://github.com/alipajand/agent-pr-reviewer-lite) — flags risky PR diffs before merge.
+
 ## Development
 
 ```bash
@@ -150,7 +190,8 @@ pnpm typecheck   # tsc --noEmit
 pnpm build       # ncc bundle → dist/index.js
 ```
 
-The built `dist/index.js` (and its source map) must be committed alongside source when publishing a new release.
+The built `dist/index.js` (and its source map) must be committed alongside source when
+publishing a new release.
 
 ## License
 

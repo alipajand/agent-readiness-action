@@ -1,6 +1,6 @@
 name: Agent Readiness Audit
 description: Audit repository readiness for AI coding agents using agent-readiness-kit
-author: agent-readiness-kit
+author: Ali Pajand
 
 branding:
   icon: check-circle
@@ -9,20 +9,21 @@ branding:
 inputs:
   repo-path:
     description: >
-      Path to the repository to audit. Relative paths are resolved from the
-      GitHub Actions workspace root (GITHUB_WORKSPACE).
+      Path to the repository or subdirectory to audit. Relative paths are
+      resolved from the GitHub Actions workspace root (GITHUB_WORKSPACE).
     default: '.'
     required: false
   min-score:
     description: >
-      Minimum acceptable agent-readiness score (0–100). Used when
+      Minimum acceptable agent-readiness score, from 0 to 100. Used when
       fail-on-threshold is true.
     default: '0'
     required: false
   output:
     description: >
       Write a Markdown report to this path. Relative paths are resolved under
-      repo-path; absolute paths are written as given.
+      repo-path; absolute paths are written as given. Leave empty to skip the
+      report.
     default: ''
     required: false
   json:
@@ -31,9 +32,9 @@ inputs:
     required: false
   comment-on-pr:
     description: >
-      Post or update a PR comment with the audit summary. Only runs on
-      pull_request events. Requires the GITHUB_TOKEN environment variable to
-      be set with issues: write and pull-requests: write permissions.
+      Post or update a summary comment on the pull request. Only runs on
+      pull_request events. Requires the GITHUB_TOKEN environment variable set
+      with pull-requests: write permission.
     default: 'false'
     required: false
   fail-on-threshold:
@@ -43,7 +44,11 @@ inputs:
 
 outputs:
   score:
-    description: Final agent-readiness score (0–100).
+    description: Final agent-readiness score, from 0 to 100.
+  report-path:
+    description: >
+      Path to the written Markdown report, or empty when the output input was
+      not set.
 
 runs:
   using: node20
