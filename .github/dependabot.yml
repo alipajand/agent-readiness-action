@@ -5,6 +5,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # TypeScript 7 (the native compiler) has no JS API, which @vercel/ncc's
+      # TypeScript loader needs; stay on 6.x until ncc supports it.
+      - dependency-name: typescript
+        versions: ['>=7']
+      # Types track the node24 Actions runtime declared in action.yml.
+      - dependency-name: '@types/node'
+        versions: ['>=25']
     # One PR per group keeps pnpm-lock.yaml edits from conflicting with each other.
     groups:
       dev-dependencies:
