@@ -33,6 +33,12 @@ First release.
 
   The readiness score's safety category now rewards `.claude/settings.json` deny rules for `.env` and deducts for `bypassPermissions` or unrestricted `Bash`.
 
+- Runs on the `node24` Actions runtime (`node20` is deprecated).
+- `report-path` is the absolute path of the written report.
+- The audit no longer writes `.ark-history.json` into the audited repository.
+- Comment lookup paginates past 100 comments; oversized comments are truncated to GitHub's limit.
+- `min-score` must be an integer; values such as `70abc` are rejected instead of being read as `70`.
+
 ### Added
 
 - `context-audit` and `context-fail-on` inputs: also check agent instruction files with agent-context-doctor, bundled from the `vendor/agent-context-doctor` submodule. Adds its score and top issues to the log, job summary, and PR comment, honors the audited repository's `.acdrc`, and sets `context-score`, `context-grade`, and `context-issue-count` outputs.
@@ -47,14 +53,6 @@ First release.
 - `comment-author` input for teams that comment with a personal access token.
 - CI that runs tests, type checks, verifies the committed `dist/`, and runs the action against this repository.
 - Dependabot for npm, the kit submodule, and GitHub Actions. MIT `LICENSE` file.
-
-### Changed
-
-- Runs on the `node24` Actions runtime (`node20` is deprecated).
-- `report-path` is the absolute path of the written report.
-- The audit no longer writes `.ark-history.json` into the audited repository.
-- Comment lookup paginates past 100 comments; oversized comments are truncated to GitHub's limit.
-- `min-score` must be an integer; values such as `70abc` are rejected instead of being read as `70`.
 
 [Unreleased]: https://github.com/alipajand/agent-readiness-action/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/alipajand/agent-readiness-action/releases/tag/v1.0.0
