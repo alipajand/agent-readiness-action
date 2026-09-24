@@ -73,6 +73,20 @@ inputs:
     description: Write the audit summary to the workflow run's job summary.
     default: 'true'
     required: false
+  context-audit:
+    description: >
+      Also check the agent instruction files (AGENTS.md, CLAUDE.md, Cursor and
+      Copilot rules, MCP config) with the bundled agent-context-doctor, and add
+      its score and top issues to the log, summary, and PR comment. The audited
+      repository's .acdrc is honored.
+    default: 'false'
+    required: false
+  context-fail-on:
+    description: >
+      Fail when agent-context-doctor finds an issue at or above this severity
+      (low, medium, or high). Requires context-audit.
+    default: ''
+    required: false
 
 outputs:
   score:
@@ -89,6 +103,12 @@ outputs:
     description: Score at baseline-ref, when baseline-ref is set.
   score-delta:
     description: Score minus the baseline score, when baseline-ref is set.
+  context-score:
+    description: agent-context-doctor score (0-100), when context-audit is true.
+  context-grade:
+    description: agent-context-doctor grade (excellent, good, needs-work, risky).
+  context-issue-count:
+    description: Number of agent-context-doctor issues, when context-audit is true.
 
 runs:
   using: node24
