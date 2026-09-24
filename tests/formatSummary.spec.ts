@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+  codeSpan,
+  escapeMarkdown,
   formatLogSummary,
   formatLogDetail,
   formatMarkdownComment,
@@ -268,5 +270,50 @@ describe('formatMarkdownComment', () => {
     const md = formatMarkdownComment(zeroMax);
     // maxScore 0 → percentage treated as 0 → red bar, no crash.
     expect(md).toContain('🔴');
+  });
+});
+
+describe('formatMarkdownComment — untrusted text', () => {
+  const hostile = {
+    repoPath: '/repo',
+    score: 40,
+    categories: [
+      {
+        id: 'a',
+        label: 'Alpha <b>|</b>',
+        score: 1,
+        maxScore: 20,
+        findings: [{ status: 'fail' as const, message: 'Placeholder in <!-- hidden -->' }],
+      },
+    ],
+    missing: ['docs/`weird`.md'],
+    recommendations: ['Add <img src=x>'],
+  };
+
+  it('escapes HTML so audit text cannot hide or inject markup', () => {
+    const md = formatMarkdownComment(hostile);
+    expect(md).not.toContain('<!--');
+    expect(md).not.toContain('<img');
+    expect(md).toContain('&lt;!-- hidden --&gt;');
+  });
+
+  it('escapes pipes in table cells', () => {
+    const md = formatMarkdownComment(hostile);
+    expect(md).toContain('Alpha &lt;b&gt;\\|&lt;/b&gt;');
+  });
+
+  it('keeps missing items with backticks inside one code span', () => {
+    const md = formatMarkdownComment(hostile);
+    expect(md).toContain('- ``docs/`weird`.md``');
+  });
+});
+
+describe('codeSpan and escapeMarkdown', () => {
+  it('pads code spans that start or end with a backtick', () => {
+    expect(codeSpan('`a`')).toBe('`` `a` ``');
+  });
+
+  it('flattens control characters', () => {
+    expect(escapeMarkdown('a\nb\u001b')).toBe('a b ');
   });
 });

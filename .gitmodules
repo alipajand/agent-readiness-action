@@ -1,0 +1,3 @@
+[submodule "vendor/agent-readiness-kit"]
+	path = vendor/agent-readiness-kit
+	url = https://github.com/alipajand/agent-readiness-kit.git

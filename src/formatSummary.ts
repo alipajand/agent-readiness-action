@@ -1,5 +1,31 @@
 import type { AuditResult } from './runArk';
 
+// Control characters (newlines included) from audited file names or messages
+// would otherwise break lines in logs and Markdown.
+const CONTROL_CHARS = /[\u0000-\u001f\u007f-\u009f]/g;
+
+function safeText(value: string): string {
+  return value.replace(CONTROL_CHARS, ' ');
+}
+
+/** Escape text from the audit for Markdown prose and table cells. */
+export function escapeMarkdown(value: string): string {
+  return safeText(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\|/g, '\\|');
+}
+
+/** Inline code whose fence is longer than any backtick run in the value. */
+export function codeSpan(value: string): string {
+  const text = safeText(value);
+  const longestRun = Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
+  const fence = '`'.repeat(longestRun + 1);
+  const pad = text.startsWith('`') || text.endsWith('`') ? ' ' : '';
+  return `${fence}${pad}${text}${pad}${fence}`;
+}
+
 const STATUS_EMOJI: Record<string, string> = {
   pass: '✅',
   warn: '⚠️',
@@ -36,11 +62,11 @@ export function formatLogDetail(result: AuditResult): string {
   lines.push('Category breakdown:');
   for (const cat of result.categories) {
     const bar = scoreEmoji(cat.score, cat.maxScore);
-    lines.push(`  ${bar} ${cat.label}: ${cat.score}/${cat.maxScore}`);
+    lines.push(`  ${bar} ${safeText(cat.label)}: ${cat.score}/${cat.maxScore}`);
     for (const f of cat.findings) {
       if (f.status !== 'pass') {
         const icon = STATUS_EMOJI[f.status] ?? '•';
-        lines.push(`      ${icon} ${f.message}`);
+        lines.push(`      ${icon} ${safeText(f.message)}`);
       }
     }
   }
@@ -49,7 +75,7 @@ export function formatLogDetail(result: AuditResult): string {
     lines.push('');
     lines.push('Missing items:');
     for (const item of result.missing) {
-      lines.push(`  • ${item}`);
+      lines.push(`  • ${safeText(item)}`);
     }
   }
 
@@ -57,7 +83,7 @@ export function formatLogDetail(result: AuditResult): string {
     lines.push('');
     lines.push('Recommendations:');
     for (const rec of result.recommendations) {
-      lines.push(`  → ${rec}`);
+      lines.push(`  → ${safeText(rec)}`);
     }
   }
 
@@ -82,7 +108,7 @@ export function formatMarkdownComment(result: AuditResult): string {
   lines.push('|----------|------:|----:|');
   for (const cat of result.categories) {
     const bar = scoreEmoji(cat.score, cat.maxScore);
-    lines.push(`| ${bar} ${cat.label} | ${cat.score} | ${cat.maxScore} |`);
+    lines.push(`| ${bar} ${escapeMarkdown(cat.label)} | ${cat.score} | ${cat.maxScore} |`);
   }
   lines.push('');
 
@@ -97,7 +123,7 @@ export function formatMarkdownComment(result: AuditResult): string {
     lines.push('');
     for (const { category, finding } of failFindings.slice(0, 10)) {
       const icon = STATUS_EMOJI[finding.status] ?? '•';
-      lines.push(`- ${icon} **${category}**: ${finding.message}`);
+      lines.push(`- ${icon} **${escapeMarkdown(category)}**: ${escapeMarkdown(finding.message)}`);
     }
     if (failFindings.length > 10) {
       lines.push(`- _…and ${failFindings.length - 10} more_`);
@@ -109,7 +135,7 @@ export function formatMarkdownComment(result: AuditResult): string {
     lines.push('### Top missing items');
     lines.push('');
     for (const item of result.missing.slice(0, 8)) {
-      lines.push(`- \`${item}\``);
+      lines.push(`- ${codeSpan(item)}`);
     }
     if (result.missing.length > 8) {
       lines.push(`- _…and ${result.missing.length - 8} more_`);
@@ -121,7 +147,7 @@ export function formatMarkdownComment(result: AuditResult): string {
     lines.push('### Recommendations');
     lines.push('');
     for (const rec of result.recommendations.slice(0, 6)) {
-      lines.push(`1. ${rec}`);
+      lines.push(`1. ${escapeMarkdown(rec)}`);
     }
     if (result.recommendations.length > 6) {
       lines.push(`1. _…and ${result.recommendations.length - 6} more_`);

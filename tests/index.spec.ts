@@ -55,7 +55,7 @@ describe('index run()', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     inputs = {};
-    runArk.mockResolvedValue(RESULT);
+    runArk.mockResolvedValue({ result: RESULT });
     commentOnPr.mockResolvedValue(undefined);
     delete process.env.GITHUB_TOKEN;
   });
@@ -89,8 +89,9 @@ describe('index run()', () => {
     expect(setOutput).toHaveBeenCalledWith('score', '72');
   });
 
-  it('sets the report-path output to the output input when provided', async () => {
+  it('sets the report-path output to the resolved report path', async () => {
     inputs = { output: 'docs/report.md' };
+    runArk.mockResolvedValue({ result: RESULT, reportPath: 'docs/report.md' });
     await loadIndex();
     expect(setOutput).toHaveBeenCalledWith('report-path', 'docs/report.md');
   });
@@ -205,9 +206,19 @@ describe('index run()', () => {
       await loadIndex();
 
       expect(warning).toHaveBeenCalledWith(
-        expect.stringContaining('GITHUB_TOKEN is not set'),
+        expect.stringContaining('no token is available'),
       );
       expect(commentOnPr).not.toHaveBeenCalled();
+    });
+
+    it('prefers the github-token input and passes comment-author through', async () => {
+      inputs = { 'comment-on-pr': 'true', 'github-token': 'input-token', 'comment-author': 'ci-user' };
+      process.env.GITHUB_TOKEN = 'env-token';
+      await loadIndex();
+
+      expect(commentOnPr).toHaveBeenCalledWith(
+        expect.objectContaining({ token: 'input-token', authorLogin: 'ci-user' }),
+      );
     });
 
     it('does not comment when the flag is off', async () => {
@@ -238,5 +249,46 @@ describe('index run()', () => {
         expect.stringContaining('comment string failure'),
       );
     });
+  });
+});
+
+describe('index run() — untrusted log output', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    inputs = {};
+    commentOnPr.mockResolvedValue(undefined);
+  });
+
+  it('pauses workflow commands while logging audit details', async () => {
+    runArk.mockResolvedValue({
+      result: {
+        ...RESULT,
+        categories: [
+          {
+            id: 'a',
+            label: 'Alpha',
+            score: 1,
+            maxScore: 20,
+            findings: [{ status: 'fail', message: 'x\n::error::spoofed' }],
+          },
+        ],
+      },
+    });
+    await loadIndex();
+
+    const lines = info.mock.calls.map((c) => String(c[0]));
+    const stop = lines.findIndex((l) => l.startsWith('::stop-commands::'));
+    expect(stop).toBeGreaterThanOrEqual(0);
+    const token = lines[stop].slice('::stop-commands::'.length);
+    expect(lines).toContain(`::${token}::`);
+    expect(lines.some((l) => l.split('\n').some((part) => part.startsWith('::error::')))).toBe(false);
+  });
+
+  it('rejects a non-integer min-score', async () => {
+    inputs = { 'min-score': '70abc' };
+    runArk.mockResolvedValue({ result: RESULT });
+    await loadIndex();
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('Invalid min-score'));
+    expect(runArk).not.toHaveBeenCalled();
   });
 });

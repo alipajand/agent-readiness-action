@@ -11,7 +11,13 @@ vi.mock('@actions/core', () => ({
 const listComments = vi.fn();
 const createComment = vi.fn();
 const updateComment = vi.fn();
+// Mirrors octokit.paginate: returns the flattened `data` of the listing call.
+const paginate = vi.fn(async (method: typeof listComments, params: unknown) => {
+  const response = (await method(params)) as { data: unknown[] };
+  return response.data;
+});
 const getOctokit = vi.fn((_token: string) => ({
+  paginate,
   rest: {
     issues: { listComments, createComment, updateComment },
   },
@@ -34,7 +40,14 @@ vi.mock('@actions/github', () => ({
   getOctokit: (token: string) => getOctokit(token),
 }));
 
-import { commentOnPr, COMMENT_MARKER } from '../src/commentPr';
+import {
+  buildCommentBody,
+  commentOnPr,
+  COMMENT_MARKER,
+  isOwnSummaryComment,
+} from '../src/commentPr';
+
+const BOT = { login: 'github-actions[bot]', type: 'Bot' };
 
 function resetContext(): void {
   context.eventName = 'pull_request';
@@ -102,7 +115,7 @@ describe('commentOnPr', () => {
     listComments.mockResolvedValue({
       data: [
         { id: 1, body: 'unrelated comment' },
-        { id: 7, body: `${COMMENT_MARKER}\nold content` },
+        { id: 7, body: `${COMMENT_MARKER}\nold content`, user: BOT },
       ],
     });
 
@@ -138,7 +151,7 @@ describe('commentOnPr', () => {
 
   it('logs after updating a comment', async () => {
     listComments.mockResolvedValue({
-      data: [{ id: 7, body: `${COMMENT_MARKER}\nold` }],
+      data: [{ id: 7, body: `${COMMENT_MARKER}\nold`, user: BOT }],
     });
     await commentOnPr({ body: 'x', token: 'tok' });
     expect(infoMock).toHaveBeenCalledWith(
@@ -154,5 +167,66 @@ describe('commentOnPr', () => {
     await commentOnPr({ body: 'x', token: 'tok' });
 
     expect(createComment).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('isOwnSummaryComment', () => {
+  it('accepts a bot comment that starts with the marker', () => {
+    expect(isOwnSummaryComment({ id: 1, body: `${COMMENT_MARKER}\nx`, user: BOT })).toBe(true);
+  });
+
+  it('rejects a user comment that pastes the marker', () => {
+    expect(
+      isOwnSummaryComment({
+        id: 1,
+        body: `${COMMENT_MARKER}\nScore: 100`,
+        user: { login: 'mallory', type: 'User' },
+      }),
+    ).toBe(false);
+  });
+
+  it('rejects a comment that only quotes the marker', () => {
+    expect(isOwnSummaryComment({ id: 1, body: `> ${COMMENT_MARKER}`, user: BOT })).toBe(false);
+  });
+
+  it('matches a configured author login', () => {
+    const comment = { id: 1, body: `${COMMENT_MARKER}\nx`, user: { login: 'ci-user', type: 'User' } };
+    expect(isOwnSummaryComment(comment, 'ci-user')).toBe(true);
+    expect(isOwnSummaryComment(comment, 'other')).toBe(false);
+  });
+});
+
+describe('commentOnPr — ownership and paging', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetContext();
+    createComment.mockResolvedValue({ data: { id: 999 } });
+    updateComment.mockResolvedValue({ data: { id: 999 } });
+  });
+
+  it('creates a new comment instead of overwriting a user comment with the marker', async () => {
+    listComments.mockResolvedValue({
+      data: [{ id: 5, body: `${COMMENT_MARKER}\nfake`, user: { login: 'mallory', type: 'User' } }],
+    });
+
+    await commentOnPr({ body: 'real', token: 'tok' });
+
+    expect(updateComment).not.toHaveBeenCalled();
+    expect(createComment).toHaveBeenCalledTimes(1);
+  });
+
+  it('lists comments through octokit.paginate', async () => {
+    listComments.mockResolvedValue({ data: [] });
+    await commentOnPr({ body: 'x', token: 'tok' });
+    expect(paginate).toHaveBeenCalledWith(
+      listComments,
+      expect.objectContaining({ issue_number: 42, per_page: 100 }),
+    );
+  });
+
+  it('truncates bodies over the GitHub comment limit', () => {
+    const body = buildCommentBody('x'.repeat(100_000));
+    expect(body.length).toBeLessThanOrEqual(65_000);
+    expect(body.startsWith(COMMENT_MARKER)).toBe(true);
   });
 });
