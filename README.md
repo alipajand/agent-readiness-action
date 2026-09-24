@@ -2,22 +2,33 @@
 
 ## What it is
 
-A GitHub Action that runs [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit)
-audits in CI. It scores how ready a repository is for AI coding agents (Claude Code,
-Cursor, Codex, Copilot, and similar), prints a category breakdown in the workflow log,
-and can optionally fail the build below a threshold, write a Markdown report, or post a
-summary comment on pull requests.
+A GitHub Action that checks how ready a repository is for AI coding agents (Claude Code,
+Cursor, Codex, Copilot, and similar). It bundles two deterministic engines:
 
-It is deterministic and local-first: the agent-readiness-kit audit engine is bundled into
-the action at a pinned commit, so nothing is downloaded or executed from a package
-registry at run time. There are no external API calls (other than the optional PR
-comment), no telemetry, and no LLM calls.
+- [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit) scores the
+  repository from 0 to 100: instruction files, architecture notes, scripts, tests, safety
+  boundaries, and more. It prints a category breakdown in the log and job summary.
+- [agent-context-doctor](https://github.com/alipajand/agent-context-doctor), with
+  `context-audit: 'true'`, checks the instruction files themselves: placeholders, risky
+  directives, contradictions, stale commands, pasted secrets, hidden Unicode, and risky
+  Claude Code and MCP configuration such as `bypassPermissions`, hooks that run remote
+  scripts, or third-party API endpoints.
+
+It can fail the build below a score, block pull requests that lower the score, write a
+Markdown report, and post a summary comment on pull requests.
+
+Both engines are bundled into the action at pinned commits, so nothing is downloaded or
+executed from a package registry at run time. There are no external API calls (other than
+the optional PR comment), no telemetry, and no LLM calls.
 
 ## Why use it
 
 - Catch missing or low-quality agent context (instruction files, architecture notes,
   setup docs) before it slows down day-to-day agent work.
-- Track the readiness score over time and gate pull requests on a minimum score.
+- Catch instruction files and agent settings that steer agents toward unsafe changes or
+  let them run commands without asking.
+- Track the readiness score over time and gate pull requests on a minimum score or on
+  any drop from the base branch.
 - Give reviewers a concise, deterministic summary on each PR — a complement to human
   review, not a replacement for it.
 
