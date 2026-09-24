@@ -1,133 +1,80 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import type { AuditResult } from '../src/runArk';
-
-vi.mock('@actions/exec', () => ({
-  exec: vi.fn(),
-}));
-
-import * as execModule from '@actions/exec';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { mkdtemp, mkdir, readFile, realpath, rm, symlink, writeFile, access } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { runArk } from '../src/runArk';
 
-const MOCK_RESULT: AuditResult = {
-  repoPath: '/some/repo',
-  score: 72,
-  categories: [
-    {
-      id: 'agent-instructions',
-      label: 'Agent instructions',
-      score: 14,
-      maxScore: 20,
-      findings: [{ status: 'pass', message: 'AGENTS.md found' }],
-    },
-    {
-      id: 'architecture',
-      label: 'Architecture',
-      score: 12,
-      maxScore: 15,
-      findings: [{ status: 'warn', message: 'docs/ARCHITECTURE.md is a template placeholder' }],
-    },
-  ],
-  missing: ['docs/API.md'],
-  recommendations: ['Customise docs/ARCHITECTURE.md'],
-};
+let workspace: string;
+let repo: string;
+
+beforeEach(async () => {
+  workspace = await realpath(await mkdtemp(path.join(tmpdir(), 'ara-runark-')));
+  repo = path.join(workspace, 'repo');
+  await mkdir(repo);
+  await writeFile(
+    path.join(repo, 'AGENTS.md'),
+    '# Agents\n\nRun `pnpm test` before finishing. Ask before auth changes.\n',
+  );
+  await writeFile(
+    path.join(repo, 'package.json'),
+    JSON.stringify({ name: 'fixture', scripts: { test: 'vitest run' } }),
+  );
+});
+
+afterEach(async () => {
+  await rm(workspace, { recursive: true, force: true });
+});
 
 describe('runArk', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  it('audits the repository with the bundled engine', async () => {
+    const { result, reportPath } = await runArk({ repoPath: repo });
+
+    expect(result.repoPath).toBe(repo);
+    expect(result.score).toBeGreaterThan(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.categories.map((c) => c.id)).toContain('agent-instructions');
+    expect(reportPath).toBeUndefined();
   });
 
-  it('calls npx agent-readiness-kit audit with --json', async () => {
-    vi.mocked(execModule.exec).mockImplementation(
-      async (_cmd, _args, opts) => {
-        opts?.listeners?.stdout?.(Buffer.from(JSON.stringify(MOCK_RESULT)));
-        return 0;
-      },
+  it('resolves a relative repo path against the workspace', async () => {
+    const { result } = await runArk({ repoPath: 'repo', workspace });
+    expect(result.repoPath).toBe(repo);
+  });
+
+  it('writes a Markdown report inside the audited repository', async () => {
+    const { reportPath } = await runArk({ repoPath: repo, output: 'docs/report.md' });
+
+    expect(reportPath).toBe(path.join(repo, 'docs', 'report.md'));
+    const report = await readFile(path.join(repo, 'docs', 'report.md'), 'utf8');
+    expect(report).toContain('# Agent Readiness Report');
+  });
+
+  it('rejects a report path that escapes the repository', async () => {
+    await expect(runArk({ repoPath: repo, output: '../escape.md' })).rejects.toThrow(
+      /must resolve to a path inside repo-path/,
     );
+    await expect(access(path.join(workspace, 'escape.md'))).rejects.toThrow();
+  });
 
-    await runArk({ repoPath: '/some/repo' });
+  it('rejects an absolute report path outside the repository', async () => {
+    await expect(
+      runArk({ repoPath: repo, output: path.join(workspace, 'escape.md') }),
+    ).rejects.toThrow(/must resolve to a path inside repo-path/);
+  });
 
-    expect(execModule.exec).toHaveBeenCalledWith(
-      'npx',
-      expect.arrayContaining(['--yes', 'agent-readiness-kit', 'audit', expect.any(String), '--json']),
-      expect.any(Object),
+  it('refuses to write the report through a symlink', async () => {
+    const target = path.join(workspace, 'target.md');
+    await writeFile(target, 'keep');
+    await symlink(target, path.join(repo, 'report.md'));
+
+    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
+      /symbolic link/,
     );
+    expect(await readFile(target, 'utf8')).toBe('keep');
   });
 
-  it('parses and returns audit JSON', async () => {
-    vi.mocked(execModule.exec).mockImplementation(
-      async (_cmd, _args, opts) => {
-        opts?.listeners?.stdout?.(Buffer.from(JSON.stringify(MOCK_RESULT)));
-        return 0;
-      },
-    );
-
-    const result = await runArk({ repoPath: '/some/repo' });
-
-    expect(result.score).toBe(72);
-    expect(result.categories).toHaveLength(2);
-    expect(result.missing).toContain('docs/API.md');
-  });
-
-  it('passes --output when option is set', async () => {
-    vi.mocked(execModule.exec).mockImplementation(
-      async (_cmd, _args, opts) => {
-        opts?.listeners?.stdout?.(Buffer.from(JSON.stringify(MOCK_RESULT)));
-        return 0;
-      },
-    );
-
-    await runArk({ repoPath: '/some/repo', output: 'docs/report.md' });
-
-    expect(execModule.exec).toHaveBeenCalledWith(
-      'npx',
-      expect.arrayContaining(['--output', 'docs/report.md']),
-      expect.any(Object),
-    );
-  });
-
-  it('does not pass --output when option is omitted', async () => {
-    vi.mocked(execModule.exec).mockImplementation(
-      async (_cmd, _args, opts) => {
-        opts?.listeners?.stdout?.(Buffer.from(JSON.stringify(MOCK_RESULT)));
-        return 0;
-      },
-    );
-
-    await runArk({ repoPath: '/some/repo' });
-
-    const callArgs = vi.mocked(execModule.exec).mock.calls[0][1] as string[];
-    expect(callArgs).not.toContain('--output');
-  });
-
-  it('throws when exit code is non-zero', async () => {
-    vi.mocked(execModule.exec).mockImplementation(async (_cmd, _args, opts) => {
-      opts?.listeners?.stderr?.(Buffer.from('something went wrong'));
-      return 1;
-    });
-
-    await expect(runArk({ repoPath: '.' })).rejects.toThrow('exited with code 1');
-  });
-
-  it('throws when stdout is not valid JSON', async () => {
-    vi.mocked(execModule.exec).mockImplementation(async (_cmd, _args, opts) => {
-      opts?.listeners?.stdout?.(Buffer.from('not valid json at all'));
-      return 0;
-    });
-
-    await expect(runArk({ repoPath: '.' })).rejects.toThrow('Failed to parse');
-  });
-
-  it('accumulates stdout across multiple chunks', async () => {
-    const json = JSON.stringify(MOCK_RESULT);
-    const mid = Math.floor(json.length / 2);
-
-    vi.mocked(execModule.exec).mockImplementation(async (_cmd, _args, opts) => {
-      opts?.listeners?.stdout?.(Buffer.from(json.slice(0, mid)));
-      opts?.listeners?.stdout?.(Buffer.from(json.slice(mid)));
-      return 0;
-    });
-
-    const result = await runArk({ repoPath: '.' });
-    expect(result.score).toBe(72);
+  it('does not write score history into the audited repository', async () => {
+    await runArk({ repoPath: repo });
+    await expect(access(path.join(repo, '.ark-history.json'))).rejects.toThrow();
   });
 });

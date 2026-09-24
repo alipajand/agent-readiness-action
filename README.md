@@ -8,8 +8,10 @@ Cursor, Codex, Copilot, and similar), prints a category breakdown in the workflo
 and can optionally fail the build below a threshold, write a Markdown report, or post a
 summary comment on pull requests.
 
-It is deterministic and local-first: it shells out to `agent-readiness-kit` in the
-runner. There are no external API calls, no telemetry, and no LLM calls.
+It is deterministic and local-first: the agent-readiness-kit audit engine is bundled into
+the action at a pinned commit, so nothing is downloaded or executed from a package
+registry at run time. There are no external API calls (other than the optional PR
+comment), no telemetry, and no LLM calls.
 
 ## Why use it
 
@@ -37,7 +39,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: alipajand/agent-readiness-action@v1
 ```
 
@@ -60,7 +62,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: alipajand/agent-readiness-action@v1
 ```
 
@@ -82,29 +84,31 @@ permissions:
   issues: write
 
 steps:
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v7
   - uses: alipajand/agent-readiness-action@v1
     with:
       comment-on-pr: "true"
       min-score: "70"
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      github-token: ${{ github.token }}
 ```
 
 The action posts a single comment the first time and updates it on subsequent runs, so
-there are no duplicate comments.
+there are no duplicate comments. It only updates a comment that starts with its hidden
+marker and was written by a bot account, so pasting the marker into your own comment
+does not make the action overwrite it. When commenting with a personal access token,
+set `comment-author` to that account's login.
 
 ### Write a Markdown report artifact
 
 ```yaml
 steps:
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v7
 
   - uses: alipajand/agent-readiness-action@v1
     with:
       output: "docs/agent-readiness-report.md"
 
-  - uses: actions/upload-artifact@v4
+  - uses: actions/upload-artifact@v7
     with:
       name: agent-readiness-report
       path: docs/agent-readiness-report.md
@@ -124,9 +128,11 @@ steps:
 |-------|---------|-------------|
 | `repo-path` | `.` | Path to the repository or subdirectory to audit. Relative paths are resolved from the GitHub Actions workspace root. |
 | `min-score` | `0` | Minimum acceptable score (0–100). Checked when `fail-on-threshold` is `true`. |
-| `output` | `''` | Write a Markdown report to this path. Relative paths are resolved under `repo-path`; absolute paths are written as given. |
+| `output` | `''` | Write a Markdown report to this path. Relative paths are resolved under `repo-path`, and the result must stay inside `repo-path`. The report is never written through a symlink. |
 | `json` | `false` | Echo the raw JSON audit output to the Actions log. |
-| `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires `GITHUB_TOKEN` with `pull-requests: write` and `issues: write`. |
+| `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires a token with `pull-requests: write` and `issues: write`. |
+| `github-token` | `''` | Token for the PR comment, usually `${{ github.token }}`. Falls back to the `GITHUB_TOKEN` environment variable. |
+| `comment-author` | `''` | Only update an earlier summary comment written by this login. Defaults to any bot account. |
 | `fail-on-threshold` | `true` | Fail the step when the score is below `min-score`. |
 
 ## Outputs
@@ -134,7 +140,7 @@ steps:
 | Output | Description |
 |--------|-------------|
 | `score` | Final agent-readiness score (0–100). |
-| `report-path` | Path to the written Markdown report, or empty when `output` was not set. |
+| `report-path` | Absolute path of the written Markdown report, or empty when `output` was not set. |
 
 ## Permissions
 
@@ -146,8 +152,8 @@ permissions:
 ```
 
 To post PR comments with `comment-on-pr: "true"`, the job additionally needs
-`pull-requests: write` and `issues: write`, and the step must set the `GITHUB_TOKEN`
-environment variable:
+`pull-requests: write` and `issues: write`, and the step must pass a token through the
+`github-token` input (or the `GITHUB_TOKEN` environment variable):
 
 ```yaml
 permissions:
@@ -162,23 +168,43 @@ why `issues: write` is included alongside `pull-requests: write`.
 
 ## How it works
 
-1. Calls `npx agent-readiness-kit audit <repo-path> --json` in the Actions runner.
-2. Parses the JSON output (score, categories, findings, missing items, recommendations).
+1. Runs the bundled agent-readiness-kit audit engine against `repo-path` in the runner.
+   The engine is compiled into `dist/index.js` from the `vendor/agent-readiness-kit`
+   submodule, pinned to a reviewed commit.
+2. Collects the result (score, categories, findings, missing items, recommendations).
 3. Logs a summary and a collapsible detail group.
-4. If `output` is set, writes a Markdown report via the `--output` flag.
+4. If `output` is set, writes the kit's Markdown report inside `repo-path`.
 5. If `json` is `true`, echoes the raw JSON to the log.
 6. If `comment-on-pr` is `true` and the event is a `pull_request`, posts or updates a comment.
 7. If `score < min-score` and `fail-on-threshold` is `true`, marks the step as failed.
+
+## Security
+
+The action is meant to run on pull requests, including ones from contributors you don't
+fully trust:
+
+- **No runtime downloads.** Earlier versions ran `npx --yes agent-readiness-kit`, which
+  fetched whatever package owned that name on npm. That name belongs to an unrelated
+  project. The audit engine is now bundled from a pinned commit of
+  [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit).
+- **Contained writes.** The Markdown report must resolve inside `repo-path` and is never
+  written through a symlink. The audit does not write score history into the repository.
+- **Log and comment safety.** Audit details are logged with workflow commands paused, so a
+  crafted file name cannot emit `::error::` or other commands. PR comments escape HTML and
+  keep file names in inline code.
+- **Comment ownership.** Only a comment that starts with the action's marker and was
+  written by a bot account (or `comment-author`) is updated.
 
 ## Release checklist
 
 Before tagging a release:
 
-1. Run `pnpm test`.
-2. Run `pnpm typecheck`.
-3. Run `pnpm build`.
-4. Commit updated `dist/index.js` and source map if they changed.
-5. Create or move the version tag, for example `v1`.
+1. Run `git submodule update --init` so `vendor/agent-readiness-kit` is present.
+2. Run `pnpm test`.
+3. Run `pnpm typecheck`.
+4. Run `pnpm build`.
+5. Commit the updated `dist/` if it changed. CI fails when `dist/` does not match the source.
+6. Create or move the version tag, for example `v1`.
 
 ## Related tools
 
@@ -189,14 +215,19 @@ Before tagging a release:
 ## Development
 
 ```bash
+git submodule update --init   # fetch the pinned agent-readiness-kit sources
 pnpm install
 pnpm test        # vitest unit tests
 pnpm typecheck   # tsc --noEmit
 pnpm build       # ncc bundle → dist/index.js
 ```
 
-The built `dist/index.js` (and its source map) must be committed alongside source when
-publishing a new release.
+The built `dist/` must be committed alongside source changes.
+
+To move to a newer agent-readiness-kit, check out the commit you want in
+`vendor/agent-readiness-kit`, run `pnpm build`, and commit both the submodule pointer and
+`dist/`. Dependabot opens weekly submodule update PRs; those need a `pnpm build` commit
+before CI passes.
 
 ## License
 
