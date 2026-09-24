@@ -37972,7 +37972,7 @@ var summary_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 };
 
 
-const { access, appendFile, writeFile: summary_writeFile } = external_fs_.promises;
+const { access, appendFile, writeFile } = external_fs_.promises;
 const SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 const SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
 class Summary {
@@ -38033,7 +38033,7 @@ class Summary {
         return summary_awaiter(this, void 0, void 0, function* () {
             const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
             const filePath = yield this.filePath();
-            const writeFunc = overwrite ? summary_writeFile : appendFile;
+            const writeFunc = overwrite ? writeFile : appendFile;
             yield writeFunc(filePath, this._buffer, { encoding: 'utf8' });
             return this.emptyBuffer();
         });
@@ -38295,7 +38295,7 @@ var io_util_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 };
 
 
-const { chmod, copyFile, lstat, mkdir: io_util_mkdir, open: io_util_open, readdir, rename, rm, rmdir, stat, symlink, unlink } = external_fs_.promises;
+const { chmod, copyFile, lstat: io_util_lstat, mkdir: io_util_mkdir, open: io_util_open, readdir, rename, rm, rmdir, stat, symlink, unlink } = external_fs_.promises;
 // export const {open} = 'fs'
 const IS_WINDOWS = process.platform === 'win32';
 /**
@@ -38339,7 +38339,7 @@ function exists(fsPath) {
 }
 function isDirectory(fsPath_1) {
     return io_util_awaiter(this, arguments, void 0, function* (fsPath, useStat = false) {
-        const stats = useStat ? yield stat(fsPath) : yield lstat(fsPath);
+        const stats = useStat ? yield stat(fsPath) : yield io_util_lstat(fsPath);
         return stats.isDirectory();
     });
 }
@@ -39800,7 +39800,7 @@ var external_node_path_default = /*#__PURE__*/__nccwpck_require__.n(external_nod
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/fileExists.ts
 
 
-async function fileExists_fileExists(filePath) {
+async function fileExists(filePath) {
     try {
         await (0,promises_namespaceObject.access)(filePath, external_node_fs_namespaceObject.constants.F_OK);
         return true;
@@ -39822,27 +39822,117 @@ async function dirExists(dirPath) {
 // EXTERNAL MODULE: ./node_modules/.pnpm/fast-glob@3.3.3/node_modules/fast-glob/out/index.js
 var out = __nccwpck_require__(197);
 var out_default = /*#__PURE__*/__nccwpck_require__.n(out);
+;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/safePath.ts
+
+
+/** True when `target` is `root` itself or a descendant of it (lexical check). */
+function safePath_isWithin(root, target) {
+    const rel = external_node_path_default().relative(root, target);
+    if (rel === '')
+        return true;
+    return (rel !== '..' && !rel.startsWith(`..${(external_node_path_default()).sep}`) && !external_node_path_default().isAbsolute(rel));
+}
+/**
+ * Resolve symlinks in the longest existing prefix of `target` and re-append
+ * the components that do not exist yet, to see where a write would land
+ * before any directories are created.
+ */
+function realpathOfExistingPrefix(target) {
+    const missing = [];
+    let current = external_node_path_default().resolve(target);
+    for (;;) {
+        try {
+            return external_node_path_default().join((0,external_node_fs_namespaceObject.realpathSync)(current), ...missing);
+        }
+        catch {
+            const parent = external_node_path_default().dirname(current);
+            if (parent === current)
+                return external_node_path_default().resolve(target);
+            missing.unshift(external_node_path_default().basename(current));
+            current = parent;
+        }
+    }
+}
+/** True when `target`, after resolving symlinks, stays inside `root`. */
+function safePath_isRealpathWithin(root, target) {
+    return safePath_isWithin(realpathOfExistingPrefix(root), realpathOfExistingPrefix(target));
+}
+
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/findFiles.ts
 
 
+
+
+/**
+ * Glob for files under `repoPath`.
+ *
+ * Symlinked directories are never traversed, so a link such as `docs -> /`
+ * cannot walk the audit across the filesystem or list files from outside the
+ * repository in a report. Symlinked files are kept when their target is a
+ * regular file inside the repository (for example `CLAUDE.md -> AGENTS.md`).
+ */
 async function findFiles(repoPath, patterns, options) {
     const patternList = Array.isArray(patterns) ? patterns : [patterns];
-    const cwd = repoPath;
-    const matches = await out_default()(patternList, {
-        cwd,
+    const entries = await out_default()(patternList, {
+        cwd: repoPath,
         absolute: true,
         dot: true,
-        onlyFiles: true,
+        onlyFiles: false,
+        followSymbolicLinks: false,
+        objectMode: true,
         ignore: options?.ignore ?? [
             '**/node_modules/**',
             '**/.git/**',
             '**/dist/**',
         ],
     });
+    const realRepo = await (0,promises_namespaceObject.realpath)(repoPath).catch(() => external_node_path_default().resolve(repoPath));
+    const matches = [];
+    for (const entry of entries) {
+        if (entry.dirent.isFile()) {
+            matches.push(entry.path);
+        }
+        else if (entry.dirent.isSymbolicLink() &&
+            (await isRegularFileInside(realRepo, entry.path))) {
+            matches.push(entry.path);
+        }
+    }
     return matches.sort();
+}
+async function isRegularFileInside(realRepo, linkPath) {
+    try {
+        const target = await (0,promises_namespaceObject.realpath)(linkPath);
+        if (!safePath_isWithin(realRepo, target))
+            return false;
+        return (await (0,promises_namespaceObject.stat)(target)).isFile();
+    }
+    catch {
+        return false;
+    }
 }
 function relativeToRepo(repoPath, absolutePath) {
     return path.relative(repoPath, absolutePath);
+}
+
+;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/readTextFile.ts
+
+/** Files above this size are never read into memory. */
+const MAX_TEXT_FILE_BYTES = 1024 * 1024;
+/**
+ * Read a regular file as UTF-8, or return null. FIFOs, devices, directories,
+ * and files larger than `maxBytes` are not read, so a hostile repository
+ * cannot hang an audit or exhaust memory.
+ */
+async function readTextFile(filePath, maxBytes = MAX_TEXT_FILE_BYTES) {
+    try {
+        const info = await (0,promises_namespaceObject.stat)(filePath);
+        if (!info.isFile() || info.size > maxBytes)
+            return null;
+        return await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
+    }
+    catch {
+        return null;
+    }
 }
 
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/audit/placeholderDetection.ts
@@ -39861,13 +39951,8 @@ function containsPlaceholderContent(content) {
     return PLACEHOLDER_PATTERNS.some((pattern) => content.includes(pattern));
 }
 async function fileHasPlaceholderContent(filePath) {
-    try {
-        const content = await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
-        return containsPlaceholderContent(content);
-    }
-    catch {
-        return false;
-    }
+    const content = await readTextFile(filePath);
+    return content !== null && containsPlaceholderContent(content);
 }
 
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/audit/checks/agentInstructions.ts
@@ -39895,7 +39980,7 @@ async function checkAgentInstructions(repoPath) {
     const agentsMd = external_node_path_default().join(repoPath, 'AGENTS.md');
     const cursorRules = external_node_path_default().join(repoPath, '.cursorrules');
     const copilot = external_node_path_default().join(repoPath, '.github', 'copilot-instructions.md');
-    if (await fileExists_fileExists(agentsMd)) {
+    if (await fileExists(agentsMd)) {
         detected.push('AGENTS.md');
         findings.push({
             status: 'pass',
@@ -39913,7 +39998,7 @@ async function checkAgentInstructions(repoPath) {
     else {
         findings.push({ status: 'fail', message: 'AGENTS.md not found' });
     }
-    if (await fileExists_fileExists(cursorRules)) {
+    if (await fileExists(cursorRules)) {
         detected.push('.cursorrules');
         findings.push({
             status: 'pass',
@@ -39980,7 +40065,7 @@ async function checkAgentInstructions(repoPath) {
             files: relCommands,
         });
     }
-    if (await fileExists_fileExists(copilot)) {
+    if (await fileExists(copilot)) {
         detected.push('.github/copilot-instructions.md');
         findings.push({
             status: 'pass',
@@ -40031,21 +40116,56 @@ async function checkAgentInstructions(repoPath) {
 
 
 
+
+
+// O_NOFOLLOW is undefined on Windows; the lstat check covers it there.
+const WRITE_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY |
+    external_node_fs_namespaceObject.constants.O_CREAT |
+    external_node_fs_namespaceObject.constants.O_TRUNC |
+    (external_node_fs_namespaceObject.constants.O_NOFOLLOW ?? 0);
+/** Write `content` to `filePath` without following a symlink at the final component. */
+async function writeFileNoFollow(filePath, content) {
+    const handle = await open(filePath, WRITE_FLAGS, 0o666);
+    try {
+        await handle.writeFile(content, 'utf8');
+    }
+    finally {
+        await handle.close();
+    }
+}
+/**
+ * Create `filePath` unless it already exists (or `force` is set).
+ *
+ * A symlink at the target counts as existing and is never written through,
+ * even with `force`: otherwise a repository could point `AGENTS.md` (or a
+ * dangling link) at a file elsewhere on the machine and have it overwritten.
+ * With `root`, writes that would land outside it are refused.
+ */
 async function writeFileSafe(filePath, content, options = {}) {
-    const exists = await fileExists(filePath);
-    if (exists && !options.force) {
+    const existing = await lstat(filePath).catch(() => null);
+    if (existing && !options.force) {
         return { path: filePath, status: 'skipped' };
     }
+    if (existing?.isSymbolicLink()) {
+        return { path: filePath, status: 'refused', reason: 'symlink' };
+    }
+    if (options.root !== undefined &&
+        !(isWithin(path.resolve(options.root), path.resolve(filePath)) &&
+            isRealpathWithin(options.root, filePath))) {
+        return { path: filePath, status: 'refused', reason: 'outside-repo' };
+    }
     await mkdir(path.dirname(filePath), { recursive: true });
-    await writeFile(filePath, content, 'utf8');
+    await writeFileNoFollow(filePath, content);
     return {
         path: filePath,
-        status: exists ? 'overwritten' : 'created',
+        status: existing ? 'overwritten' : 'created',
     };
 }
 async function readJsonFile(filePath) {
+    const raw = await readTextFile(filePath);
+    if (raw === null)
+        return null;
     try {
-        const raw = await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
         return JSON.parse(raw);
     }
     catch {
@@ -40063,7 +40183,7 @@ async function checkArchitecture(repoPath) {
     const findings = [];
     let score = 0;
     const readme = external_node_path_default().join(repoPath, 'README.md');
-    const hasReadme = await fileExists_fileExists(readme);
+    const hasReadme = await fileExists(readme);
     if (hasReadme) {
         score += 5;
         findings.push({
@@ -40082,7 +40202,7 @@ async function checkArchitecture(repoPath) {
     let hasArchDoc = false;
     let archDocRel = null;
     for (const rel of archPaths) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             hasArchDoc = true;
             archDocRel = rel;
             findings.push({
@@ -40363,19 +40483,15 @@ async function checkTesting(repoPath) {
             '**/jest.config.*',
         ]);
         for (const f of jestConfigs) {
-            try {
-                const src = await (0,promises_namespaceObject.readFile)(f, 'utf8');
-                if (src.includes('collectCoverage') ||
+            const src = await readTextFile(f);
+            if (src !== null &&
+                (src.includes('collectCoverage') ||
                     src.includes('coverageProvider') ||
                     src.includes('coverageThreshold') ||
-                    src.includes('coverageDirectory')) {
-                    hasCoverage = true;
-                    coverageSource = 'jest';
-                    break;
-                }
-            }
-            catch {
-                // ignore unreadable files
+                    src.includes('coverageDirectory'))) {
+                hasCoverage = true;
+                coverageSource = 'jest';
+                break;
             }
         }
     }
@@ -40426,13 +40542,10 @@ const SAFETY_PATHS = [
     'docs/MIGRATIONS.md',
 ];
 async function fileMentionsSafety(filePath) {
-    try {
-        const content = (await (0,promises_namespaceObject.readFile)(filePath, 'utf8')).toLowerCase();
-        return SAFETY_KEYWORDS.some((kw) => content.includes(kw.toLowerCase()));
-    }
-    catch {
+    const content = (await readTextFile(filePath))?.toLowerCase();
+    if (content === undefined)
         return false;
-    }
+    return SAFETY_KEYWORDS.some((kw) => content.includes(kw.toLowerCase()));
 }
 async function checkSafety(repoPath) {
     const findings = [];
@@ -40440,7 +40553,7 @@ async function checkSafety(repoPath) {
     const foundFiles = [];
     for (const rel of SAFETY_PATHS) {
         const full = external_node_path_default().join(repoPath, rel);
-        if ((await fileExists_fileExists(full)) || (await dirExists(full))) {
+        if ((await fileExists(full)) || (await dirExists(full))) {
             foundFiles.push(rel);
             score += 3;
         }
@@ -40542,7 +40655,7 @@ async function checkNavigability(repoPath) {
     let score = 0;
     const scoredDocGlobs = new Set();
     for (const { rel, points } of PRIMARY_NAV_DOCS) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             score += points;
             scoredDocGlobs.add(rel);
             findings.push({
@@ -40553,7 +40666,7 @@ async function checkNavigability(repoPath) {
         }
     }
     for (const { rel, points } of SECONDARY_NAV_DOCS) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             score += points;
             scoredDocGlobs.add(rel);
             findings.push({
@@ -40629,7 +40742,10 @@ async function checkNavigability(repoPath) {
         const appFeatureDirMatches = await findFiles(repoPath, 'apps/*/features/**/*');
         if (appFeatureDirMatches.length > 0) {
             score += 2;
-            const exampleRel = external_node_path_default().dirname(external_node_path_default().relative(repoPath, appFeatureDirMatches[0])).split((external_node_path_default()).sep).slice(0, 3).join((external_node_path_default()).sep);
+            const exampleRel = external_node_path_default().dirname(external_node_path_default().relative(repoPath, appFeatureDirMatches[0]))
+                .split((external_node_path_default()).sep)
+                .slice(0, 3)
+                .join((external_node_path_default()).sep);
             findings.push({
                 status: 'pass',
                 message: `Feature/module directory (monorepo): ${exampleRel}`,
@@ -40803,7 +40919,7 @@ async function checkDependencies(repoPath) {
     ];
     let foundLockfile = null;
     for (const { rel, label } of lockfiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundLockfile = label;
             break;
         }
@@ -40817,13 +40933,16 @@ async function checkDependencies(repoPath) {
         });
     }
     else {
-        findings.push({ status: 'fail', message: 'No lockfile found (pnpm-lock.yaml / package-lock.json / yarn.lock)' });
+        findings.push({
+            status: 'fail',
+            message: 'No lockfile found (pnpm-lock.yaml / package-lock.json / yarn.lock)',
+        });
     }
     // Node version pin
     const nodeVersionFiles = ['.nvmrc', '.node-version', '.tool-versions'];
     let foundNodePin = null;
     for (const rel of nodeVersionFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundNodePin = rel;
             break;
         }
@@ -40853,13 +40972,10 @@ async function checkDependencies(repoPath) {
         });
     }
     // Dependabot or Renovate
-    const depbotPaths = [
-        '.github/dependabot.yml',
-        '.github/dependabot.yaml',
-    ];
+    const depbotPaths = ['.github/dependabot.yml', '.github/dependabot.yaml'];
     let foundDepbot = null;
     for (const rel of depbotPaths) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundDepbot = rel;
             break;
         }
@@ -40895,7 +41011,7 @@ async function checkDependencies(repoPath) {
     // .npmrc or .pnpmfile.cjs — registry / workspace config
     const registryFiles = ['.npmrc', '.pnpmfile.cjs'];
     for (const rel of registryFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             score += 1;
             findings.push({
                 status: 'pass',
@@ -40908,7 +41024,7 @@ async function checkDependencies(repoPath) {
     // Workspaces root — check for monorepo package manager config
     const hasWorkspaceRoot = (await dirExists(external_node_path_default().join(repoPath, 'packages'))) ||
         (await dirExists(external_node_path_default().join(repoPath, 'apps')));
-    const hasPnpmWorkspace = await fileExists_fileExists(external_node_path_default().join(repoPath, 'pnpm-workspace.yaml'));
+    const hasPnpmWorkspace = await fileExists(external_node_path_default().join(repoPath, 'pnpm-workspace.yaml'));
     if (hasWorkspaceRoot && hasPnpmWorkspace) {
         score += 1;
         findings.push({
@@ -40963,7 +41079,7 @@ async function checkCodeStyle(repoPath) {
     ];
     let foundEslint = null;
     for (const rel of eslintFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundEslint = rel;
             break;
         }
@@ -40996,7 +41112,7 @@ async function checkCodeStyle(repoPath) {
     ];
     let foundPrettier = null;
     for (const rel of prettierFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundPrettier = rel;
             break;
         }
@@ -41013,7 +41129,7 @@ async function checkCodeStyle(repoPath) {
         findings.push({ status: 'warn', message: 'No Prettier config detected' });
     }
     // .editorconfig
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.editorconfig'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.editorconfig'))) {
         score += 2;
         findings.push({
             status: 'pass',
@@ -41027,7 +41143,7 @@ async function checkCodeStyle(repoPath) {
     // .prettierignore or .eslintignore
     const ignoreFiles = ['.prettierignore', '.eslintignore'];
     for (const rel of ignoreFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             score += 1;
             findings.push({
                 status: 'pass',
@@ -41077,20 +41193,12 @@ const README_QUALITY_KEYWORDS = [
     'license',
     'overview',
 ];
-async function readFileSafe(filePath) {
-    try {
-        return await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
-    }
-    catch {
-        return null;
-    }
-}
 async function checkDocumentation(repoPath) {
     const findings = [];
     let score = 0;
     // README quality
     const readmePath = external_node_path_default().join(repoPath, 'README.md');
-    const readmeContent = await readFileSafe(readmePath);
+    const readmeContent = await readTextFile(readmePath);
     if (readmeContent) {
         const lower = readmeContent.toLowerCase();
         const keywordsFound = README_QUALITY_KEYWORDS.filter((kw) => lower.includes(kw));
@@ -41124,10 +41232,15 @@ async function checkDocumentation(repoPath) {
         findings.push({ status: 'fail', message: 'README.md not found' });
     }
     // CHANGELOG
-    const changelogPaths = ['CHANGELOG.md', 'CHANGELOG', 'HISTORY.md', 'docs/CHANGELOG.md'];
+    const changelogPaths = [
+        'CHANGELOG.md',
+        'CHANGELOG',
+        'HISTORY.md',
+        'docs/CHANGELOG.md',
+    ];
     let foundChangelog = null;
     for (const rel of changelogPaths) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundChangelog = rel;
             break;
         }
@@ -41144,10 +41257,14 @@ async function checkDocumentation(repoPath) {
         findings.push({ status: 'warn', message: 'No CHANGELOG.md found' });
     }
     // CONTRIBUTING
-    const contributingPaths = ['CONTRIBUTING.md', 'docs/CONTRIBUTING.md', '.github/CONTRIBUTING.md'];
+    const contributingPaths = [
+        'CONTRIBUTING.md',
+        'docs/CONTRIBUTING.md',
+        '.github/CONTRIBUTING.md',
+    ];
     let foundContributing = null;
     for (const rel of contributingPaths) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundContributing = rel;
             break;
         }
@@ -41166,7 +41283,7 @@ async function checkDocumentation(repoPath) {
     // CODE_OF_CONDUCT
     const cocPaths = ['CODE_OF_CONDUCT.md', '.github/CODE_OF_CONDUCT.md'];
     for (const rel of cocPaths) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             score += 1;
             findings.push({
                 status: 'pass',
@@ -41204,20 +41321,12 @@ const GITIGNORE_QUALITY_PATTERNS = [
     '.env',
     '.DS_Store',
 ];
-async function gitHygiene_readFileSafe(filePath) {
-    try {
-        return await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
-    }
-    catch {
-        return null;
-    }
-}
 async function checkGitHygiene(repoPath) {
     const findings = [];
     let score = 0;
     // .gitignore quality
     const gitignorePath = external_node_path_default().join(repoPath, '.gitignore');
-    const gitignoreContent = await gitHygiene_readFileSafe(gitignorePath);
+    const gitignoreContent = await readTextFile(gitignorePath);
     if (gitignoreContent) {
         const lower = gitignoreContent.toLowerCase();
         const hits = GITIGNORE_QUALITY_PATTERNS.filter((p) => lower.includes(p.toLowerCase()));
@@ -41264,7 +41373,7 @@ async function checkGitHygiene(repoPath) {
     ];
     let foundCommitlint = null;
     for (const rel of commitlintFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundCommitlint = rel;
             break;
         }
@@ -41296,7 +41405,7 @@ async function checkGitHygiene(repoPath) {
         }
     }
     // .gitattributes
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.gitattributes'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.gitattributes'))) {
         score += 2;
         findings.push({
             status: 'pass',
@@ -41316,12 +41425,12 @@ async function checkGitHygiene(repoPath) {
     ];
     let foundRelease = null;
     for (const rel of releaseFiles) {
-        if (await fileExists_fileExists(external_node_path_default().join(repoPath, rel))) {
+        if (await fileExists(external_node_path_default().join(repoPath, rel))) {
             foundRelease = rel;
             break;
         }
     }
-    const changesetDir = await fileExists_fileExists(external_node_path_default().join(repoPath, '.changeset', 'config.json'));
+    const changesetDir = await fileExists(external_node_path_default().join(repoPath, '.changeset', 'config.json'));
     const semRelConfig = await findFiles(repoPath, [
         '.releaserc',
         '.releaserc.json',
@@ -41401,7 +41510,7 @@ async function checkContainerization(repoPath) {
         });
     }
     // .dockerignore
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.dockerignore'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.dockerignore'))) {
         score += 1;
         findings.push({
             status: 'pass',
@@ -41450,7 +41559,7 @@ async function checkIdeConfig(repoPath) {
         });
     }
     // .vscode/settings.json
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.vscode', 'settings.json'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.vscode', 'settings.json'))) {
         score += 1;
         findings.push({
             status: 'pass',
@@ -41459,7 +41568,7 @@ async function checkIdeConfig(repoPath) {
         });
     }
     // .vscode/extensions.json — recommended extensions
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.vscode', 'extensions.json'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.vscode', 'extensions.json'))) {
         score += 1;
         findings.push({
             status: 'pass',
@@ -41468,7 +41577,7 @@ async function checkIdeConfig(repoPath) {
         });
     }
     // .vscode/launch.json — debug configurations
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.vscode', 'launch.json'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.vscode', 'launch.json'))) {
         score += 1;
         findings.push({
             status: 'pass',
@@ -41477,7 +41586,7 @@ async function checkIdeConfig(repoPath) {
         });
     }
     // .vscode/tasks.json
-    if (await fileExists_fileExists(external_node_path_default().join(repoPath, '.vscode', 'tasks.json'))) {
+    if (await fileExists(external_node_path_default().join(repoPath, '.vscode', 'tasks.json'))) {
         score += 1;
         findings.push({
             status: 'pass',
@@ -41561,9 +41670,14 @@ function buildMissingAndRecommendations(categories, repoPath) {
         }
     }
     const agentCat = categories.find((c) => c.id === 'agent-instructions');
-    if (agentCat && agentCat.score < 20) {
-        if (!missing.includes('AGENTS.md')) {
+    if (agentCat && agentCat.score < agentCat.maxScore) {
+        const agentsMissing = agentCat.findings.some((f) => f.status === 'fail' && f.message === 'AGENTS.md not found');
+        const toolSpecificMissing = agentCat.findings.some((f) => f.message.includes('add tool-specific instructions'));
+        if (agentsMissing) {
             add('AGENTS.md', 'Add AGENTS.md');
+        }
+        else if (toolSpecificMissing) {
+            add('tool-specific agent instructions', 'Add tool-specific instructions (CLAUDE.md, .cursor/rules/, or .github/copilot-instructions.md) alongside AGENTS.md');
         }
     }
     const archCat = categories.find((c) => c.id === 'architecture');
@@ -41640,17 +41754,17 @@ const ALL_CHECK_IDS = [
 ];
 const CHECK_MAP = {
     'agent-instructions': checkAgentInstructions,
-    'architecture': checkArchitecture,
-    'workflow': checkWorkflow,
-    'testing': checkTesting,
-    'safety': checkSafety,
-    'navigability': checkNavigability,
+    architecture: checkArchitecture,
+    workflow: checkWorkflow,
+    testing: checkTesting,
+    safety: checkSafety,
+    navigability: checkNavigability,
     'prompt-assets': checkPromptAssets,
-    'dependencies': checkDependencies,
+    dependencies: checkDependencies,
     'code-style': checkCodeStyle,
-    'documentation': checkDocumentation,
+    documentation: checkDocumentation,
     'git-hygiene': checkGitHygiene,
-    'containerization': checkContainerization,
+    containerization: checkContainerization,
     'ide-config': checkIdeConfig,
 };
 async function auditRepo(repoPath) {
@@ -41666,13 +41780,69 @@ async function auditCategory(repoPath, categoryId) {
     return fn(resolved);
 }
 
+;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/report/safeText.ts
+// Zero-width characters, bidi controls, and Unicode tag characters. Kept as
+// numeric ranges so formatters cannot rewrite them into literal characters.
+const INVISIBLE_RANGES = [
+    [0x00ad, 0x00ad],
+    [0x180e, 0x180e],
+    [0x200b, 0x200f],
+    [0x202a, 0x202e],
+    [0x2060, 0x2064],
+    [0x2066, 0x2069],
+    [0xfeff, 0xfeff],
+    [0xe0000, 0xe007f],
+];
+/**
+ * Make untrusted text safe to print on one line: control characters become
+ * spaces and invisible characters are shown as `<U+XXXX>`.
+ */
+function toSafeText(value) {
+    let out = '';
+    for (const char of value) {
+        const code = char.codePointAt(0) ?? 0;
+        if (isControlCode(code)) {
+            out += ' ';
+        }
+        else if (INVISIBLE_RANGES.some(([start, end]) => code >= start && code <= end)) {
+            out += `<U+${code.toString(16).toUpperCase().padStart(4, '0')}>`;
+        }
+        else {
+            out += char;
+        }
+    }
+    return out;
+}
+// All C0/C1 control characters. File names and messages from the audited
+// repository could otherwise carry terminal escape sequences or line breaks.
+function isControlCode(code) {
+    return code <= 0x1f || (code >= 0x7f && code <= 0x9f);
+}
+/** Escape untrusted text for Markdown prose and table cells. */
+function escapeMarkdown(value) {
+    return toSafeText(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\|/g, '\\|');
+}
+/** Inline code whose fence is longer than any backtick run in the value. */
+function codeSpan(value) {
+    const text = toSafeText(value);
+    const longestRun = Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
+    const fence = '`'.repeat(longestRun + 1);
+    const pad = text.startsWith('`') || text.endsWith('`') ? ' ' : '';
+    return `${fence}${pad}${text}${pad}${fence}`;
+}
+
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/report/markdownReport.ts
+
 function formatMarkdownReport(result) {
     const timestamp = new Date().toISOString();
     const lines = [];
     lines.push('# Agent Readiness Report');
     lines.push('');
-    lines.push(`**Repository:** \`${result.repoPath}\``);
+    lines.push(`**Repository:** ${codeSpan(result.repoPath)}`);
     lines.push(`**Score:** ${result.score} / 100`);
     lines.push(`**Generated:** ${timestamp}`);
     lines.push('');
@@ -41681,19 +41851,19 @@ function formatMarkdownReport(result) {
     lines.push('| Category | Score | Max |');
     lines.push('| --- | ---: | ---: |');
     for (const cat of result.categories) {
-        lines.push(`| ${cat.label} | ${cat.score} | ${cat.maxScore} |`);
+        lines.push(`| ${escapeMarkdown(cat.label)} | ${cat.score} | ${cat.maxScore} |`);
     }
     lines.push('');
     lines.push('## Findings');
     lines.push('');
     for (const cat of result.categories) {
-        lines.push(`### ${cat.label} (${cat.score}/${cat.maxScore})`);
+        lines.push(`### ${escapeMarkdown(cat.label)} (${cat.score}/${cat.maxScore})`);
         lines.push('');
         for (const f of cat.findings) {
             const icon = f.status === 'pass' ? '✅' : f.status === 'warn' ? '⚠️' : '❌';
-            lines.push(`- ${icon} ${f.message}`);
+            lines.push(`- ${icon} ${escapeMarkdown(f.message)}`);
             if (f.files?.length) {
-                lines.push(`  - Files: ${f.files.map((x) => `\`${x}\``).join(', ')}`);
+                lines.push(`  - Files: ${f.files.map((x) => codeSpan(x)).join(', ')}`);
             }
         }
         lines.push('');
@@ -41705,7 +41875,7 @@ function formatMarkdownReport(result) {
     }
     else {
         for (const m of result.missing) {
-            lines.push(`- ${m}`);
+            lines.push(`- ${escapeMarkdown(m)}`);
         }
     }
     lines.push('');
@@ -41717,7 +41887,7 @@ function formatMarkdownReport(result) {
     else {
         result.recommendations.forEach((rec, i) => {
             const text = rec.replace(/^\d+\.\s*/, '').trim();
-            lines.push(`${i + 1}. ${text}`);
+            lines.push(`${i + 1}. ${escapeMarkdown(text)}`);
         });
     }
     lines.push('');
@@ -41726,24 +41896,28 @@ function formatMarkdownReport(result) {
 
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/resolveOutputPath.ts
 
+
 class OutputPathError extends Error {
     constructor(message) {
         super(message);
         this.name = 'OutputPathError';
     }
 }
-/** True when `target` is a descendant of `root` (lexical check, no symlink resolution). */
+/**
+ * True when `target` is a descendant of `root`, both lexically and after
+ * resolving symlinks in the part of the path that already exists, so a
+ * symlinked directory inside the repo cannot redirect the write elsewhere.
+ */
 function isInsideRepo(root, target) {
-    const rel = external_node_path_default().relative(root, target);
-    return rel !== '' && !rel.startsWith('..') && !external_node_path_default().isAbsolute(rel);
+    return (target !== root && safePath_isWithin(root, target) && safePath_isRealpathWithin(root, target));
 }
 /**
  * Resolve a user-supplied `--output` path against the audited repository root.
  *
  * Relative paths are resolved under `repoPath`; absolute paths are used as given.
  * Either way the result must stay inside the repository unless `allowOutside` is
- * set, so `../` segments and absolute paths cannot silently overwrite files
- * elsewhere on the machine.
+ * set, so `../` segments, absolute paths, and symlinked directories cannot
+ * silently overwrite files elsewhere on the machine.
  */
 function resolveOutputPath(repoPath, output, options = {}) {
     const root = external_node_path_default().resolve(repoPath);
@@ -41766,14 +41940,14 @@ function resolveOutputPath(repoPath, output, options = {}) {
 
 
 // O_NOFOLLOW is undefined on Windows runners; the lstat check covers them.
-const WRITE_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY | external_node_fs_namespaceObject.constants.O_CREAT | external_node_fs_namespaceObject.constants.O_TRUNC | (external_node_fs_namespaceObject.constants.O_NOFOLLOW ?? 0);
+const runArk_WRITE_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY | external_node_fs_namespaceObject.constants.O_CREAT | external_node_fs_namespaceObject.constants.O_TRUNC | (external_node_fs_namespaceObject.constants.O_NOFOLLOW ?? 0);
 async function writeReportNoFollow(filePath, content) {
     await (0,promises_namespaceObject.mkdir)(external_node_path_namespaceObject.dirname(filePath), { recursive: true });
     const existing = await (0,promises_namespaceObject.lstat)(filePath).catch(() => null);
     if (existing?.isSymbolicLink()) {
         throw new Error(`Refusing to write the report through a symbolic link: ${filePath}`);
     }
-    const handle = await (0,promises_namespaceObject.open)(filePath, WRITE_FLAGS, 0o666);
+    const handle = await (0,promises_namespaceObject.open)(filePath, runArk_WRITE_FLAGS, 0o666);
     try {
         await handle.writeFile(content, 'utf8');
     }
@@ -41812,7 +41986,7 @@ function safeText(value) {
     return value.replace(CONTROL_CHARS, ' ');
 }
 /** Escape text from the audit for Markdown prose and table cells. */
-function escapeMarkdown(value) {
+function formatSummary_escapeMarkdown(value) {
     return safeText(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -41820,7 +41994,7 @@ function escapeMarkdown(value) {
         .replace(/\|/g, '\\|');
 }
 /** Inline code whose fence is longer than any backtick run in the value. */
-function codeSpan(value) {
+function formatSummary_codeSpan(value) {
     const text = safeText(value);
     const longestRun = Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
     const fence = '`'.repeat(longestRun + 1);
@@ -41902,7 +42076,7 @@ function formatMarkdownComment(result) {
     lines.push('|----------|------:|----:|');
     for (const cat of result.categories) {
         const bar = scoreEmoji(cat.score, cat.maxScore);
-        lines.push(`| ${bar} ${escapeMarkdown(cat.label)} | ${cat.score} | ${cat.maxScore} |`);
+        lines.push(`| ${bar} ${formatSummary_escapeMarkdown(cat.label)} | ${cat.score} | ${cat.maxScore} |`);
     }
     lines.push('');
     const failFindings = result.categories.flatMap((c) => c.findings
@@ -41913,7 +42087,7 @@ function formatMarkdownComment(result) {
         lines.push('');
         for (const { category, finding } of failFindings.slice(0, 10)) {
             const icon = STATUS_EMOJI[finding.status] ?? '•';
-            lines.push(`- ${icon} **${escapeMarkdown(category)}**: ${escapeMarkdown(finding.message)}`);
+            lines.push(`- ${icon} **${formatSummary_escapeMarkdown(category)}**: ${formatSummary_escapeMarkdown(finding.message)}`);
         }
         if (failFindings.length > 10) {
             lines.push(`- _…and ${failFindings.length - 10} more_`);
@@ -41924,7 +42098,7 @@ function formatMarkdownComment(result) {
         lines.push('### Top missing items');
         lines.push('');
         for (const item of result.missing.slice(0, 8)) {
-            lines.push(`- ${codeSpan(item)}`);
+            lines.push(`- ${formatSummary_codeSpan(item)}`);
         }
         if (result.missing.length > 8) {
             lines.push(`- _…and ${result.missing.length - 8} more_`);
@@ -41935,7 +42109,7 @@ function formatMarkdownComment(result) {
         lines.push('### Recommendations');
         lines.push('');
         for (const rec of result.recommendations.slice(0, 6)) {
-            lines.push(`1. ${escapeMarkdown(rec)}`);
+            lines.push(`1. ${formatSummary_escapeMarkdown(rec)}`);
         }
         if (result.recommendations.length > 6) {
             lines.push(`1. _…and ${result.recommendations.length - 6} more_`);

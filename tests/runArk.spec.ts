@@ -62,13 +62,24 @@ describe('runArk', () => {
     ).rejects.toThrow(/must resolve to a path inside repo-path/);
   });
 
-  it('refuses to write the report through a symlink', async () => {
-    const target = path.join(workspace, 'target.md');
+  it('refuses to write the report through a symlink inside the repository', async () => {
+    const target = path.join(repo, 'notes.md');
     await writeFile(target, 'keep');
     await symlink(target, path.join(repo, 'report.md'));
 
     await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
       /symbolic link/,
+    );
+    expect(await readFile(target, 'utf8')).toBe('keep');
+  });
+
+  it('rejects a report symlink that points outside the repository', async () => {
+    const target = path.join(workspace, 'target.md');
+    await writeFile(target, 'keep');
+    await symlink(target, path.join(repo, 'report.md'));
+
+    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
+      /must resolve to a path inside repo-path/,
     );
     expect(await readFile(target, 'utf8')).toBe('keep');
   });
