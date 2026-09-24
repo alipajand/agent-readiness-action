@@ -1,5 +1,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtemp, mkdir, readFile, realpath, rm, symlink, writeFile, access } from 'node:fs/promises';
+import {
+  mkdtemp,
+  mkdir,
+  readFile,
+  realpath,
+  rm,
+  symlink,
+  writeFile,
+  access,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { runArk } from '../src/runArk';
@@ -75,9 +84,7 @@ describe('runArk', () => {
     await writeFile(target, 'keep');
     await symlink(target, path.join(repo, 'report.md'));
 
-    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
-      /symbolic link/,
-    );
+    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(/symbolic link/);
     expect(await readFile(target, 'utf8')).toBe('keep');
   });
 
@@ -85,9 +92,7 @@ describe('runArk', () => {
     const target = path.join(workspace, 'created-by-link.md');
     await symlink(target, path.join(repo, 'report.md'));
 
-    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
-      /symbolic link/,
-    );
+    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(/symbolic link/);
     await expect(access(target)).rejects.toThrow();
   });
 

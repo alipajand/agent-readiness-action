@@ -10,28 +10,29 @@ Consumers run the committed `dist/index.js`, so `dist/` must always match the so
 
 ## Layout
 
-| Path | Role |
-| --- | --- |
-| `action.yml` | Inputs, outputs, and the `node24` runtime |
-| `src/index.ts` | Reads inputs, runs the audits, logs, comments, writes the job summary, sets outputs and failures |
-| `src/runArk.ts` | Readiness audit and the confined Markdown report write |
-| `src/runDoctor.ts` | agent-context-doctor audit, honoring the audited repo's `.acdrc` |
-| `src/baseline.ts` | `baseline-ref` audit in a temporary git worktree |
-| `src/commentPr.ts` | Create or update the PR comment |
-| `src/formatSummary.ts` | Log and Markdown formatting (escapes all audited text) |
-| `tests/*.spec.ts` | Vitest tests |
+| Path                   | Role                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| `action.yml`           | Inputs, outputs, and the `node24` runtime                                                        |
+| `src/index.ts`         | Reads inputs, runs the audits, logs, comments, writes the job summary, sets outputs and failures |
+| `src/runArk.ts`        | Readiness audit and the confined Markdown report write                                           |
+| `src/runDoctor.ts`     | agent-context-doctor audit, honoring the audited repo's `.acdrc`                                 |
+| `src/baseline.ts`      | `baseline-ref` audit in a temporary git worktree                                                 |
+| `src/commentPr.ts`     | Create or update the PR comment                                                                  |
+| `src/formatSummary.ts` | Log and Markdown formatting (escapes all audited text)                                           |
+| `tests/*.spec.ts`      | Vitest tests                                                                                     |
 
 ## Commands
 
 ```bash
 git submodule update --init   # vendored engines
 pnpm install
+pnpm format:check             # prettier (pnpm format to fix)
 pnpm typecheck
 pnpm test
 pnpm build                    # rebuilds dist/ — commit the result
 ```
 
-Run `pnpm typecheck`, `pnpm test`, and `pnpm build` before finishing, and commit `dist/` whenever
+Run `pnpm format:check`, `pnpm typecheck`, `pnpm test`, and `pnpm build` before finishing, and commit `dist/` whenever
 source, dependencies, or a submodule changed. CI fails when `dist/` is stale.
 
 ## Rules

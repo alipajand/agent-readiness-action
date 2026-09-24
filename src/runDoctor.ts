@@ -41,7 +41,5 @@ export function hasIssueAtOrAbove(result: ContextAuditResult, severity: Severity
 
 /** Issues ordered high → low, for summaries that only show the first few. */
 export function issuesBySeverity(result: ContextAuditResult): ContextIssue[] {
-  return [...result.issues].sort(
-    (a, b) => SEVERITY_ORDER[b.severity] - SEVERITY_ORDER[a.severity],
-  );
+  return [...result.issues].sort((a, b) => SEVERITY_ORDER[b.severity] - SEVERITY_ORDER[a.severity]);
 }

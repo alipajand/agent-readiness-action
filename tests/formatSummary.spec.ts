@@ -48,9 +48,7 @@ const FULL_RESULT: AuditResult = {
 const PERFECT_RESULT: AuditResult = {
   repoPath: '/perfect',
   score: 100,
-  categories: [
-    { id: 'a', label: 'Alpha', score: 20, maxScore: 20, findings: [] },
-  ],
+  categories: [{ id: 'a', label: 'Alpha', score: 20, maxScore: 20, findings: [] }],
   missing: [],
   recommendations: [],
 };
@@ -264,9 +262,7 @@ describe('formatMarkdownComment', () => {
   it('does not divide by zero when a category has maxScore 0', () => {
     const zeroMax: AuditResult = {
       ...PERFECT_RESULT,
-      categories: [
-        { id: 'z', label: 'Zero', score: 0, maxScore: 0, findings: [] },
-      ],
+      categories: [{ id: 'z', label: 'Zero', score: 0, maxScore: 0, findings: [] }],
     };
     const md = formatMarkdownComment(zeroMax);
     // maxScore 0 → percentage treated as 0 → red bar, no crash.

@@ -57,9 +57,7 @@ vi.mock('../src/commentPr', () => ({
 const RESULT: AuditResult = {
   repoPath: '/repo',
   score: 72,
-  categories: [
-    { id: 'a', label: 'Alpha', score: 15, maxScore: 20, findings: [] },
-  ],
+  categories: [{ id: 'a', label: 'Alpha', score: 15, maxScore: 20, findings: [] }],
   missing: [],
   recommendations: [],
 };
@@ -95,16 +93,12 @@ describe('index run()', () => {
     inputs = { 'repo-path': './my-repo' };
     await loadIndex();
 
-    expect(runArk).toHaveBeenCalledWith(
-      expect.objectContaining({ repoPath: './my-repo' }),
-    );
+    expect(runArk).toHaveBeenCalledWith(expect.objectContaining({ repoPath: './my-repo' }));
   });
 
   it('defaults repo-path to "."', async () => {
     await loadIndex();
-    expect(runArk).toHaveBeenCalledWith(
-      expect.objectContaining({ repoPath: '.' }),
-    );
+    expect(runArk).toHaveBeenCalledWith(expect.objectContaining({ repoPath: '.' }));
   });
 
   it('sets the score output', async () => {
@@ -135,9 +129,7 @@ describe('index run()', () => {
     inputs = { 'min-score': '150' };
     await loadIndex();
 
-    expect(setFailed).toHaveBeenCalledWith(
-      expect.stringContaining('Invalid min-score'),
-    );
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('Invalid min-score'));
     expect(runArk).not.toHaveBeenCalled();
   });
 
@@ -145,18 +137,14 @@ describe('index run()', () => {
     inputs = { 'min-score': 'abc' };
     await loadIndex();
 
-    expect(setFailed).toHaveBeenCalledWith(
-      expect.stringContaining('Invalid min-score'),
-    );
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('Invalid min-score'));
   });
 
   it('fails when score is below the threshold', async () => {
     inputs = { 'min-score': '80' };
     await loadIndex();
 
-    expect(setFailed).toHaveBeenCalledWith(
-      expect.stringContaining('below the required minimum'),
-    );
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('below the required minimum'));
   });
 
   it('does not fail when score meets the threshold', async () => {
@@ -177,9 +165,7 @@ describe('index run()', () => {
     runArk.mockRejectedValue(new Error('boom'));
     await loadIndex();
 
-    expect(setFailed).toHaveBeenCalledWith(
-      expect.stringContaining('agent-readiness-kit failed'),
-    );
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('agent-readiness-kit failed'));
     expect(setOutput).not.toHaveBeenCalled();
   });
 
@@ -187,9 +173,7 @@ describe('index run()', () => {
     runArk.mockRejectedValue('plain string failure');
     await loadIndex();
 
-    expect(setFailed).toHaveBeenCalledWith(
-      expect.stringContaining('plain string failure'),
-    );
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('plain string failure'));
   });
 
   it('emits raw JSON group when json input is true', async () => {
@@ -208,9 +192,7 @@ describe('index run()', () => {
     inputs = { output: 'docs/report.md' };
     await loadIndex();
 
-    expect(runArk).toHaveBeenCalledWith(
-      expect.objectContaining({ output: 'docs/report.md' }),
-    );
+    expect(runArk).toHaveBeenCalledWith(expect.objectContaining({ output: 'docs/report.md' }));
   });
 
   describe('PR commenting', () => {
@@ -219,23 +201,23 @@ describe('index run()', () => {
       process.env.GITHUB_TOKEN = 'tok';
       await loadIndex();
 
-      expect(commentOnPr).toHaveBeenCalledWith(
-        expect.objectContaining({ token: 'tok' }),
-      );
+      expect(commentOnPr).toHaveBeenCalledWith(expect.objectContaining({ token: 'tok' }));
     });
 
     it('warns when commenting is enabled but no token is present', async () => {
       inputs = { 'comment-on-pr': 'true' };
       await loadIndex();
 
-      expect(warning).toHaveBeenCalledWith(
-        expect.stringContaining('no token is available'),
-      );
+      expect(warning).toHaveBeenCalledWith(expect.stringContaining('no token is available'));
       expect(commentOnPr).not.toHaveBeenCalled();
     });
 
     it('prefers the github-token input and passes comment-author through', async () => {
-      inputs = { 'comment-on-pr': 'true', 'github-token': 'input-token', 'comment-author': 'ci-user' };
+      inputs = {
+        'comment-on-pr': 'true',
+        'github-token': 'input-token',
+        'comment-author': 'ci-user',
+      };
       process.env.GITHUB_TOKEN = 'env-token';
       await loadIndex();
 
@@ -257,9 +239,7 @@ describe('index run()', () => {
       commentOnPr.mockRejectedValue(new Error('api down'));
       await loadIndex();
 
-      expect(warning).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to post PR comment'),
-      );
+      expect(warning).toHaveBeenCalledWith(expect.stringContaining('Failed to post PR comment'));
     });
 
     it('stringifies non-Error throws from commenting', async () => {
@@ -268,9 +248,7 @@ describe('index run()', () => {
       commentOnPr.mockRejectedValue('comment string failure');
       await loadIndex();
 
-      expect(warning).toHaveBeenCalledWith(
-        expect.stringContaining('comment string failure'),
-      );
+      expect(warning).toHaveBeenCalledWith(expect.stringContaining('comment string failure'));
     });
   });
 });
@@ -304,7 +282,9 @@ describe('index run() — untrusted log output', () => {
     expect(stop).toBeGreaterThanOrEqual(0);
     const token = lines[stop].slice('::stop-commands::'.length);
     expect(lines).toContain(`::${token}::`);
-    expect(lines.some((l) => l.split('\n').some((part) => part.startsWith('::error::')))).toBe(false);
+    expect(lines.some((l) => l.split('\n').some((part) => part.startsWith('::error::')))).toBe(
+      false,
+    );
   });
 
   it('rejects a non-integer min-score', async () => {

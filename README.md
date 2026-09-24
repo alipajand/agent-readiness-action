@@ -71,8 +71,8 @@ jobs:
 ```yaml
 - uses: alipajand/agent-readiness-action@v1
   with:
-    min-score: "70"
-    fail-on-threshold: "true"
+    min-score: '70'
+    fail-on-threshold: 'true'
 ```
 
 ### Comment on pull requests
@@ -87,8 +87,8 @@ steps:
   - uses: actions/checkout@v7
   - uses: alipajand/agent-readiness-action@v1
     with:
-      comment-on-pr: "true"
-      min-score: "70"
+      comment-on-pr: 'true'
+      min-score: '70'
       github-token: ${{ github.token }}
 ```
 
@@ -114,7 +114,7 @@ jobs:
       - uses: alipajand/agent-readiness-action@v1
         with:
           baseline-ref: ${{ github.event.pull_request.base.sha }}
-          max-score-drop: "0"
+          max-score-drop: '0'
 ```
 
 The action audits the base commit in a temporary git worktree, reports the change (`▼ -5 vs <sha>`) in the log, job summary, and PR comment, and fails when the score drops by more than `max-score-drop`.
@@ -124,8 +124,8 @@ The action audits the base commit in a temporary git worktree, reports the chang
 ```yaml
 - uses: alipajand/agent-readiness-action@v1
   with:
-    context-audit: "true"     # run the bundled agent-context-doctor
-    context-fail-on: "high"   # fail on risky instructions, secrets, hidden characters, ...
+    context-audit: 'true' # run the bundled agent-context-doctor
+    context-fail-on: 'high' # fail on risky instructions, secrets, hidden characters, ...
 ```
 
 With `context-audit`, the action also runs [agent-context-doctor](https://github.com/alipajand/agent-context-doctor) on the same path. Its score and top issues appear in the log, job summary, and PR comment. It honors the audited repository's `.acdrc`.
@@ -138,7 +138,7 @@ steps:
 
   - uses: alipajand/agent-readiness-action@v1
     with:
-      output: "docs/agent-readiness-report.md"
+      output: 'docs/agent-readiness-report.md'
 
   - uses: actions/upload-artifact@v7
     with:
@@ -151,40 +151,40 @@ steps:
 ```yaml
 - uses: alipajand/agent-readiness-action@v1
   with:
-    repo-path: "./packages/web"
+    repo-path: './packages/web'
 ```
 
 ## Inputs
 
-| Input | Default | Description |
-|-------|---------|-------------|
-| `repo-path` | `.` | Path to the repository or subdirectory to audit. Relative paths are resolved from the GitHub Actions workspace root. |
-| `min-score` | `0` | Minimum acceptable score (0–100). Checked when `fail-on-threshold` is `true`. |
-| `output` | `''` | Write a Markdown report to this path. Relative paths are resolved under `repo-path`, and the result must stay inside `repo-path`. The report is never written through a symlink. |
-| `json` | `false` | Echo the raw JSON audit output to the Actions log. |
-| `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires a token with `pull-requests: write` and `issues: write`. |
-| `github-token` | `''` | Token for the PR comment, usually `${{ github.token }}`. Falls back to the `GITHUB_TOKEN` environment variable. |
-| `comment-author` | `''` | Only update an earlier summary comment written by this login. Defaults to any bot account. |
-| `baseline-ref` | `''` | Git ref to compare against, usually `${{ github.event.pull_request.base.sha }}`. Audited in a temporary worktree; needs `fetch-depth: 0`. |
-| `max-score-drop` | `''` | Fail when the score is more than this many points below the `baseline-ref` score (`0` fails on any drop). Requires `baseline-ref`. |
-| `job-summary` | `true` | Write the audit summary to the workflow run's job summary. |
-| `context-audit` | `false` | Also check agent instruction files with the bundled agent-context-doctor. |
-| `context-fail-on` | `''` | Fail when agent-context-doctor finds an issue at or above `low`, `medium`, or `high`. Requires `context-audit`. |
-| `fail-on-threshold` | `true` | Fail the step when the score is below `min-score`. |
+| Input               | Default | Description                                                                                                                                                                      |
+| ------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `repo-path`         | `.`     | Path to the repository or subdirectory to audit. Relative paths are resolved from the GitHub Actions workspace root.                                                             |
+| `min-score`         | `0`     | Minimum acceptable score (0–100). Checked when `fail-on-threshold` is `true`.                                                                                                    |
+| `output`            | `''`    | Write a Markdown report to this path. Relative paths are resolved under `repo-path`, and the result must stay inside `repo-path`. The report is never written through a symlink. |
+| `json`              | `false` | Echo the raw JSON audit output to the Actions log.                                                                                                                               |
+| `comment-on-pr`     | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires a token with `pull-requests: write` and `issues: write`.                                               |
+| `github-token`      | `''`    | Token for the PR comment, usually `${{ github.token }}`. Falls back to the `GITHUB_TOKEN` environment variable.                                                                  |
+| `comment-author`    | `''`    | Only update an earlier summary comment written by this login. Defaults to any bot account.                                                                                       |
+| `baseline-ref`      | `''`    | Git ref to compare against, usually `${{ github.event.pull_request.base.sha }}`. Audited in a temporary worktree; needs `fetch-depth: 0`.                                        |
+| `max-score-drop`    | `''`    | Fail when the score is more than this many points below the `baseline-ref` score (`0` fails on any drop). Requires `baseline-ref`.                                               |
+| `job-summary`       | `true`  | Write the audit summary to the workflow run's job summary.                                                                                                                       |
+| `context-audit`     | `false` | Also check agent instruction files with the bundled agent-context-doctor.                                                                                                        |
+| `context-fail-on`   | `''`    | Fail when agent-context-doctor finds an issue at or above `low`, `medium`, or `high`. Requires `context-audit`.                                                                  |
+| `fail-on-threshold` | `true`  | Fail the step when the score is below `min-score`.                                                                                                                               |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `score` | Final agent-readiness score (0–100). |
-| `report-path` | Absolute path of the written Markdown report, or empty when `output` was not set. |
-| `passed` | `"true"` when the score is at least `min-score`, otherwise `"false"`. |
-| `categories` | JSON array of category scores: `id`, `label`, `score`, `maxScore`. |
-| `baseline-score` | Score at `baseline-ref` (only when `baseline-ref` is set). |
-| `score-delta` | Score minus the baseline score (only when `baseline-ref` is set). |
-| `context-score` | agent-context-doctor score, when `context-audit` is `true`. |
-| `context-grade` | agent-context-doctor grade: `excellent`, `good`, `needs-work`, or `risky`. |
-| `context-issue-count` | Number of agent-context-doctor issues. |
+| Output                | Description                                                                       |
+| --------------------- | --------------------------------------------------------------------------------- |
+| `score`               | Final agent-readiness score (0–100).                                              |
+| `report-path`         | Absolute path of the written Markdown report, or empty when `output` was not set. |
+| `passed`              | `"true"` when the score is at least `min-score`, otherwise `"false"`.             |
+| `categories`          | JSON array of category scores: `id`, `label`, `score`, `maxScore`.                |
+| `baseline-score`      | Score at `baseline-ref` (only when `baseline-ref` is set).                        |
+| `score-delta`         | Score minus the baseline score (only when `baseline-ref` is set).                 |
+| `context-score`       | agent-context-doctor score, when `context-audit` is `true`.                       |
+| `context-grade`       | agent-context-doctor grade: `excellent`, `good`, `needs-work`, or `risky`.        |
+| `context-issue-count` | Number of agent-context-doctor issues.                                            |
 
 ## Permissions
 
@@ -265,8 +265,9 @@ Before tagging a release:
 ## Development
 
 ```bash
-git submodule update --init   # fetch the pinned agent-readiness-kit sources
+git submodule update --init   # fetch the pinned engine sources
 pnpm install
+pnpm format      # prettier (format:check in CI)
 pnpm test        # vitest unit tests
 pnpm typecheck   # tsc --noEmit
 pnpm build       # ncc bundle → dist/index.js
@@ -274,8 +275,8 @@ pnpm build       # ncc bundle → dist/index.js
 
 The built `dist/` must be committed alongside source changes.
 
-To move to a newer agent-readiness-kit, check out the commit you want in
-`vendor/agent-readiness-kit`, run `pnpm build`, and commit both the submodule pointer and
+To move to a newer engine, check out the commit you want in `vendor/agent-readiness-kit` or
+`vendor/agent-context-doctor`, run `pnpm build`, and commit both the submodule pointer and
 `dist/`. Dependabot opens weekly submodule update PRs; those need a `pnpm build` commit
 before CI passes.
 

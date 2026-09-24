@@ -7,14 +7,14 @@ workflow run never downloads or installs anything.
 
 ## Modules
 
-| Module | Responsibility |
-| --- | --- |
-| `src/index.ts` | Reads and validates inputs, runs the audits in order, logs, comments, writes the job summary, sets outputs, and fails the step |
-| `src/runArk.ts` | Calls the kit's `auditRepo` with history off and writes the optional Markdown report |
-| `src/runDoctor.ts` | Calls agent-context-doctor's `auditRepo` with the audited repository's `.acdrc`, and compares issue severities |
-| `src/baseline.ts` | Audits `baseline-ref` in a temporary detached git worktree and removes it afterwards |
-| `src/commentPr.ts` | Finds the action's earlier summary comment and updates it, or creates a new one |
-| `src/formatSummary.ts` | Formats the log summary, log detail, and Markdown comment, escaping all audited text |
+| Module                 | Responsibility                                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `src/index.ts`         | Reads and validates inputs, runs the audits in order, logs, comments, writes the job summary, sets outputs, and fails the step |
+| `src/runArk.ts`        | Calls the kit's `auditRepo` with history off and writes the optional Markdown report                                           |
+| `src/runDoctor.ts`     | Calls agent-context-doctor's `auditRepo` with the audited repository's `.acdrc`, and compares issue severities                 |
+| `src/baseline.ts`      | Audits `baseline-ref` in a temporary detached git worktree and removes it afterwards                                           |
+| `src/commentPr.ts`     | Finds the action's earlier summary comment and updates it, or creates a new one                                                |
+| `src/formatSummary.ts` | Formats the log summary, log detail, and Markdown comment, escaping all audited text                                           |
 
 The engines are imported by deep path (for example
 `vendor/agent-readiness-kit/src/audit/auditRepo.js`) rather than through their package entry
@@ -54,10 +54,10 @@ Everything read from the audited repository is untrusted, including file names, 
 
 ## Engines
 
-| Submodule | Provides | Updated by |
-| --- | --- | --- |
-| `vendor/agent-readiness-kit` | Readiness score, categories, Markdown report, output path confinement | The `bumping-bundled-engines` skill or a Dependabot submodule PR |
-| `vendor/agent-context-doctor` | Instruction file quality score and issues | Same |
+| Submodule                     | Provides                                                              | Updated by                                                       |
+| ----------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `vendor/agent-readiness-kit`  | Readiness score, categories, Markdown report, output path confinement | The `bumping-bundled-engines` skill or a Dependabot submodule PR |
+| `vendor/agent-context-doctor` | Instruction file quality score and issues                             | Same                                                             |
 
 Moving a submodule changes the bundle. CI rebuilds `dist/` and fails when the committed bundle
 does not match, so every bump commits the submodule pointer and the rebuilt `dist/` together.

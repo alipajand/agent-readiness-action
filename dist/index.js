@@ -59358,7 +59358,10 @@ async function run() {
     if (failOnThreshold && result.score < minScore) {
         setFailed(`Agent-readiness score ${result.score} is below the required minimum of ${minScore}.`);
     }
-    if (context && contextFailOn && isSeverity(contextFailOn) && hasIssueAtOrAbove(context, contextFailOn)) {
+    if (context &&
+        contextFailOn &&
+        isSeverity(contextFailOn) &&
+        hasIssueAtOrAbove(context, contextFailOn)) {
         setFailed(`agent-context-doctor found issues at or above "${contextFailOn}" severity (${context.summary.high} high, ${context.summary.medium} medium, ${context.summary.low} low).`);
     }
     if (comparison && maxScoreDrop !== undefined) {

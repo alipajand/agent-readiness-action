@@ -70,9 +70,7 @@ describe('commentOnPr', () => {
     await commentOnPr({ body: 'hello', token: 'tok' });
 
     expect(getOctokit).not.toHaveBeenCalled();
-    expect(infoMock).toHaveBeenCalledWith(
-      expect.stringContaining('Skipping PR comment'),
-    );
+    expect(infoMock).toHaveBeenCalledWith(expect.stringContaining('Skipping PR comment'));
   });
 
   it('runs for pull_request_target events', async () => {
@@ -144,9 +142,7 @@ describe('commentOnPr', () => {
 
   it('logs after creating a comment', async () => {
     await commentOnPr({ body: 'x', token: 'tok' });
-    expect(infoMock).toHaveBeenCalledWith(
-      expect.stringContaining('Created PR comment'),
-    );
+    expect(infoMock).toHaveBeenCalledWith(expect.stringContaining('Created PR comment'));
   });
 
   it('logs after updating a comment', async () => {
@@ -154,9 +150,7 @@ describe('commentOnPr', () => {
       data: [{ id: 7, body: `${COMMENT_MARKER}\nold`, user: BOT }],
     });
     await commentOnPr({ body: 'x', token: 'tok' });
-    expect(infoMock).toHaveBeenCalledWith(
-      expect.stringContaining('Updated PR comment'),
-    );
+    expect(infoMock).toHaveBeenCalledWith(expect.stringContaining('Updated PR comment'));
   });
 
   it('handles comments with null body without throwing', async () => {
@@ -190,7 +184,11 @@ describe('isOwnSummaryComment', () => {
   });
 
   it('matches a configured author login', () => {
-    const comment = { id: 1, body: `${COMMENT_MARKER}\nx`, user: { login: 'ci-user', type: 'User' } };
+    const comment = {
+      id: 1,
+      body: `${COMMENT_MARKER}\nx`,
+      user: { login: 'ci-user', type: 'User' },
+    };
     expect(isOwnSummaryComment(comment, 'ci-user')).toBe(true);
     expect(isOwnSummaryComment(comment, 'other')).toBe(false);
   });

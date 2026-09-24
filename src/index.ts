@@ -52,7 +52,9 @@ async function run(): Promise<void> {
 
   const minScore = Number(minScoreRaw);
   if (!Number.isInteger(minScore) || minScore < 0 || minScore > 100) {
-    core.setFailed(`Invalid min-score value: "${minScoreRaw}". Must be an integer between 0 and 100.`);
+    core.setFailed(
+      `Invalid min-score value: "${minScoreRaw}". Must be an integer between 0 and 100.`,
+    );
     return;
   }
 
@@ -86,7 +88,9 @@ async function run(): Promise<void> {
   try {
     audit = await runArk({ repoPath, output: output || undefined });
   } catch (err) {
-    core.setFailed(`agent-readiness-kit failed: ${err instanceof Error ? err.message : String(err)}`);
+    core.setFailed(
+      `agent-readiness-kit failed: ${err instanceof Error ? err.message : String(err)}`,
+    );
     return;
   }
   const { result, reportPath } = audit;
@@ -100,9 +104,7 @@ async function run(): Promise<void> {
       core.setOutput('score-delta', String(result.score - baselineScore));
       core.info(`Baseline score at ${baselineRef}: ${baselineScore}`);
     } catch (err) {
-      core.setFailed(
-        `Baseline audit failed: ${err instanceof Error ? err.message : String(err)}`,
-      );
+      core.setFailed(`Baseline audit failed: ${err instanceof Error ? err.message : String(err)}`);
       return;
     }
   }
@@ -191,7 +193,12 @@ async function run(): Promise<void> {
     );
   }
 
-  if (context && contextFailOn && isSeverity(contextFailOn) && hasIssueAtOrAbove(context, contextFailOn)) {
+  if (
+    context &&
+    contextFailOn &&
+    isSeverity(contextFailOn) &&
+    hasIssueAtOrAbove(context, contextFailOn)
+  ) {
     core.setFailed(
       `agent-context-doctor found issues at or above "${contextFailOn}" severity (${context.summary.high} high, ${context.summary.medium} medium, ${context.summary.low} low).`,
     );
