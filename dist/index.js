@@ -39919,23 +39919,65 @@ function relativeToRepo(repoPath, absolutePath) {
 
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/fs/readTextFile.ts
 
+
 /** Files above this size are never read into memory. */
 const MAX_TEXT_FILE_BYTES = 1024 * 1024;
+// O_NONBLOCK keeps open() from waiting on a FIFO with no writer; it has no
+// effect on regular files. It is undefined on Windows, which has no FIFOs.
+const READ_FLAGS = external_node_fs_namespaceObject.constants.O_RDONLY | (external_node_fs_namespaceObject.constants.O_NONBLOCK ?? 0);
+/**
+ * Read a regular file as UTF-8. The type and size are checked on the opened
+ * handle, not the path, so the file cannot be swapped for a FIFO, device, or
+ * larger file between the check and the read.
+ */
+async function readRegularFile(filePath, maxBytes = MAX_TEXT_FILE_BYTES) {
+    let handle;
+    try {
+        handle = await (0,promises_namespaceObject.open)(filePath, READ_FLAGS);
+    }
+    catch (error) {
+        const code = error.code;
+        if (code === 'ENOENT' || code === 'ENOTDIR')
+            return { status: 'missing' };
+        if (code === 'EISDIR')
+            return { status: 'not-a-file' };
+        return { status: 'error', error };
+    }
+    try {
+        const info = await handle.stat();
+        if (!info.isFile())
+            return { status: 'not-a-file' };
+        if (info.size > maxBytes)
+            return { status: 'too-large' };
+        // Read at most the size seen above, even if the file grows meanwhile.
+        const buffer = Buffer.alloc(info.size);
+        let offset = 0;
+        while (offset < buffer.length) {
+            const { bytesRead } = await handle.read(buffer, offset, buffer.length - offset, offset);
+            if (bytesRead === 0)
+                break;
+            offset += bytesRead;
+        }
+        return {
+            status: 'ok',
+            content: buffer.subarray(0, offset).toString('utf8'),
+        };
+    }
+    catch (error) {
+        return { status: 'error', error };
+    }
+    finally {
+        await handle.close();
+    }
+}
 /**
  * Read a regular file as UTF-8, or return null. FIFOs, devices, directories,
  * and files larger than `maxBytes` are not read, so a hostile repository
  * cannot hang an audit or exhaust memory.
  */
 async function readTextFile_readTextFile(filePath, maxBytes = MAX_TEXT_FILE_BYTES) {
-    try {
-        const info = await (0,promises_namespaceObject.stat)(filePath);
-        if (!info.isFile() || info.size > maxBytes)
-            return null;
-        return await (0,promises_namespaceObject.readFile)(filePath, 'utf8');
-    }
-    catch {
-        return null;
-    }
+    const result = await readRegularFile(filePath, maxBytes);
+    return result.status === 'ok' ? result.content : null;
 }
 
 ;// CONCATENATED MODULE: ./vendor/agent-readiness-kit/src/audit/placeholderDetection.ts
@@ -41950,6 +41992,7 @@ function isControlCode(code) {
 /** Escape untrusted text for Markdown prose and table cells. */
 function escapeMarkdown(value) {
     return toSafeText(value)
+        .replace(/\\/g, '\\\\')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
@@ -42068,15 +42111,57 @@ function resolveOutputPath(repoPath, output, options = {}) {
 
 
 
-// O_NOFOLLOW is undefined on Windows runners; the lstat check covers them.
-const runArk_WRITE_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY | external_node_fs_namespaceObject.constants.O_CREAT | external_node_fs_namespaceObject.constants.O_TRUNC | (external_node_fs_namespaceObject.constants.O_NOFOLLOW ?? 0);
+// O_NOFOLLOW and O_NONBLOCK are undefined on Windows runners. There, the check
+// after opening an existing file still refuses symlinks.
+const NO_FOLLOW = external_node_fs_namespaceObject.constants.O_NOFOLLOW ?? 0;
+// O_EXCL fails when anything, including a dangling symlink, is already there.
+const CREATE_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY | external_node_fs_namespaceObject.constants.O_CREAT | external_node_fs_namespaceObject.constants.O_EXCL | NO_FOLLOW;
+// No O_CREAT or O_TRUNC: nothing changes until the opened file is verified.
+const EXISTING_FLAGS = external_node_fs_namespaceObject.constants.O_WRONLY | NO_FOLLOW | (external_node_fs_namespaceObject.constants.O_NONBLOCK ?? 0);
+function symlinkError(filePath) {
+    return new Error(`Refusing to write the report through a symbolic link: ${filePath}`);
+}
+function errorCode(error) {
+    return error.code;
+}
+/**
+ * Write the report without following a symlink at the final component and
+ * without a gap between a check and the write. A new file is created
+ * exclusively; an existing one is truncated only after confirming the path
+ * still names that same regular file.
+ */
 async function writeReportNoFollow(filePath, content) {
     await (0,promises_namespaceObject.mkdir)(external_node_path_namespaceObject.dirname(filePath), { recursive: true });
-    const existing = await (0,promises_namespaceObject.lstat)(filePath).catch(() => null);
-    if (existing?.isSymbolicLink()) {
-        throw new Error(`Refusing to write the report through a symbolic link: ${filePath}`);
+    let handle;
+    try {
+        handle = await (0,promises_namespaceObject.open)(filePath, CREATE_FLAGS, 0o666);
     }
-    const handle = await (0,promises_namespaceObject.open)(filePath, runArk_WRITE_FLAGS, 0o666);
+    catch (err) {
+        if (errorCode(err) !== 'EEXIST')
+            throw err;
+        try {
+            handle = await (0,promises_namespaceObject.open)(filePath, EXISTING_FLAGS);
+        }
+        catch (existingErr) {
+            if (errorCode(existingErr) === 'ELOOP')
+                throw symlinkError(filePath);
+            throw existingErr;
+        }
+        try {
+            const opened = await handle.stat();
+            const named = await (0,promises_namespaceObject.lstat)(filePath);
+            if (named.isSymbolicLink() || opened.ino !== named.ino || opened.dev !== named.dev) {
+                throw symlinkError(filePath);
+            }
+            if (!opened.isFile())
+                throw new Error(`The report path is not a regular file: ${filePath}`);
+            await handle.truncate(0);
+        }
+        catch (verifyErr) {
+            await handle.close();
+            throw verifyErr;
+        }
+    }
     try {
         await handle.writeFile(content, 'utf8');
     }
@@ -42219,23 +42304,62 @@ async function findContextFiles(repoPath, extraIgnore = []) {
 
 ;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/fs/readTextFile.ts
 
+
 /** Files above this size are never read into memory. */
 const readTextFile_MAX_TEXT_FILE_BYTES = 1024 * 1024;
+// O_NONBLOCK keeps open() from waiting on a FIFO with no writer; it has no
+// effect on regular files. It is undefined on Windows, which has no FIFOs.
+const readTextFile_READ_FLAGS = external_node_fs_namespaceObject.constants.O_RDONLY | (external_node_fs_namespaceObject.constants.O_NONBLOCK ?? 0);
+/**
+ * Read a regular file as UTF-8. The type and size are checked on the opened
+ * handle, not the path, so the file cannot be swapped for a FIFO, device, or
+ * larger file between the check and the read.
+ */
+async function readTextFile_readRegularFile(filePath, maxBytes = readTextFile_MAX_TEXT_FILE_BYTES) {
+    let handle;
+    try {
+        handle = await promises_default().open(filePath, readTextFile_READ_FLAGS);
+    }
+    catch (error) {
+        const code = error.code;
+        if (code === 'ENOENT' || code === 'ENOTDIR')
+            return { status: 'missing' };
+        if (code === 'EISDIR')
+            return { status: 'not-a-file' };
+        return { status: 'error', error };
+    }
+    try {
+        const stat = await handle.stat();
+        if (!stat.isFile())
+            return { status: 'not-a-file' };
+        if (stat.size > maxBytes)
+            return { status: 'too-large' };
+        // Read at most the size seen above, even if the file grows meanwhile.
+        const buffer = Buffer.alloc(stat.size);
+        let offset = 0;
+        while (offset < buffer.length) {
+            const { bytesRead } = await handle.read(buffer, offset, buffer.length - offset, offset);
+            if (bytesRead === 0)
+                break;
+            offset += bytesRead;
+        }
+        return { status: 'ok', content: buffer.subarray(0, offset).toString('utf-8') };
+    }
+    catch (error) {
+        return { status: 'error', error };
+    }
+    finally {
+        await handle.close();
+    }
+}
 /**
  * Read a regular file as UTF-8. Returns '' for missing files, non-regular files
  * (FIFOs, devices, directories) and files larger than `maxBytes`, so a hostile
  * repository cannot hang or exhaust memory during an audit.
  */
 async function fs_readTextFile_readTextFile(filePath, maxBytes = readTextFile_MAX_TEXT_FILE_BYTES) {
-    try {
-        const stat = await promises_default().stat(filePath);
-        if (!stat.isFile() || stat.size > maxBytes)
-            return '';
-        return await promises_default().readFile(filePath, 'utf-8');
-    }
-    catch {
-        return '';
-    }
+    const result = await readTextFile_readRegularFile(filePath, maxBytes);
+    return result.status === 'ok' ? result.content : '';
 }
 async function getFileBytes(filePath) {
     try {
@@ -54342,24 +54466,21 @@ const AcdRcSchema = object({
 
 
 
-
 async function loadConfig(searchDir) {
     const configPath = external_node_path_default().join(searchDir, '.acdrc');
-    let stat;
-    try {
-        stat = await promises_default().stat(configPath);
-    }
-    catch {
-        // No .acdrc present — not an error
+    const read = await readTextFile_readRegularFile(configPath, readTextFile_MAX_TEXT_FILE_BYTES);
+    // No .acdrc present — not an error
+    if (read.status === 'missing')
         return null;
-    }
-    if (!stat.isFile()) {
+    if (read.status === 'error')
+        throw read.error;
+    if (read.status === 'not-a-file') {
         throw new Error(`.acdrc at ${configPath} is not a regular file`);
     }
-    if (stat.size > readTextFile_MAX_TEXT_FILE_BYTES) {
+    if (read.status === 'too-large') {
         throw new Error(`.acdrc at ${configPath} is larger than ${readTextFile_MAX_TEXT_FILE_BYTES} bytes`);
     }
-    const raw = await promises_default().readFile(configPath, 'utf-8');
+    const raw = read.content;
     let parsed;
     try {
         parsed = JSON.parse(raw);
@@ -54420,10 +54541,23 @@ function safeText(value) {
 /** Escape text from the audit for Markdown prose and table cells. */
 function formatSummary_escapeMarkdown(value) {
     return safeText(value)
+        .replace(/\\/g, '\\\\')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/\|/g, '\\|');
+}
+/**
+ * A code span for a table cell. GFM splits rows on `|` even inside code spans
+ * unless it is escaped, and a backslash run before the pipe would cancel that
+ * escape, so each such run is doubled first. Other backslashes display as written.
+ */
+function tableCodeSpan(value) {
+    return formatSummary_codeSpan(value).replace(/\\+|\|/g, (match, offset, all) => {
+        if (match === '|')
+            return '\\|';
+        return all[offset + match.length] === '|' ? match + match : match;
+    });
 }
 /** Inline code whose fence is longer than any backtick run in the value. */
 function formatSummary_codeSpan(value) {
@@ -54592,7 +54726,7 @@ function formatContextSection(result) {
         for (const issue of issues.slice(0, CONTEXT_ISSUE_LIMIT)) {
             const loc = issue.line ? `:${issue.line}` : '';
             const file = issue.file === result.repoPath ? '(repository)' : `${issue.file}${loc}`;
-            lines.push(`| ${issue.severity} | ${formatSummary_codeSpan(file).replace(/\|/g, '\\|')} | ${formatSummary_escapeMarkdown(issue.message)} |`);
+            lines.push(`| ${issue.severity} | ${tableCodeSpan(file)} | ${formatSummary_escapeMarkdown(issue.message)} |`);
         }
         if (issues.length > CONTEXT_ISSUE_LIMIT) {
             lines.push('');

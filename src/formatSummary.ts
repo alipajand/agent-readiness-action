@@ -13,10 +13,23 @@ function safeText(value: string): string {
 /** Escape text from the audit for Markdown prose and table cells. */
 export function escapeMarkdown(value: string): string {
   return safeText(value)
+    .replace(/\\/g, '\\\\')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/\|/g, '\\|');
+}
+
+/**
+ * A code span for a table cell. GFM splits rows on `|` even inside code spans
+ * unless it is escaped, and a backslash run before the pipe would cancel that
+ * escape, so each such run is doubled first. Other backslashes display as written.
+ */
+export function tableCodeSpan(value: string): string {
+  return codeSpan(value).replace(/\\+|\|/g, (match: string, offset: number, all: string) => {
+    if (match === '|') return '\\|';
+    return all[offset + match.length] === '|' ? match + match : match;
+  });
 }
 
 /** Inline code whose fence is longer than any backtick run in the value. */
@@ -220,7 +233,7 @@ export function formatContextSection(result: ContextAuditResult): string {
       const loc = issue.line ? `:${issue.line}` : '';
       const file = issue.file === result.repoPath ? '(repository)' : `${issue.file}${loc}`;
       lines.push(
-        `| ${issue.severity} | ${codeSpan(file).replace(/\|/g, '\\|')} | ${escapeMarkdown(issue.message)} |`,
+        `| ${issue.severity} | ${tableCodeSpan(file)} | ${escapeMarkdown(issue.message)} |`,
       );
     }
     if (issues.length > CONTEXT_ISSUE_LIMIT) {

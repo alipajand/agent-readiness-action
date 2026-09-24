@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   codeSpan,
   escapeMarkdown,
+  tableCodeSpan,
   formatLogSummary,
   formatLogDetail,
   formatMarkdownComment,
@@ -315,5 +316,17 @@ describe('codeSpan and escapeMarkdown', () => {
 
   it('flattens control characters', () => {
     expect(escapeMarkdown('a\nb\u001b')).toBe('a b ');
+  });
+
+  it('escapes backslashes so they cannot cancel an escaped pipe', () => {
+    expect(escapeMarkdown('a\\|b')).toBe('a\\\\\\|b');
+  });
+
+  it('doubles only backslash runs before a pipe in table code spans', () => {
+    expect(tableCodeSpan('a\\|b')).toBe('`a\\\\\\|b`');
+    expect(tableCodeSpan('src\\x.ts')).toBe('`src\\x.ts`');
+    const start = Date.now();
+    tableCodeSpan('\\'.repeat(200_000));
+    expect(Date.now() - start).toBeLessThan(1000);
   });
 });
