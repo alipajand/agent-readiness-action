@@ -2,3 +2,5 @@ node_modules/
 dist/index.js.map
 coverage/
 .idea/
+.DS_Store
+.serena/
