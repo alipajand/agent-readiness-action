@@ -1,5 +1,5 @@
-name: Agent Readiness Audit
-description: Audit repository readiness for AI coding agents using agent-readiness-kit
+name: Agent Readiness Action
+description: Score how ready a repository is for AI coding agents and check its agent instruction files. Deterministic, no LLM.
 author: Ali Pajand
 
 branding:

@@ -6,6 +6,13 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-24
+
+### Changed
+
+- The action's display name is now `Agent Readiness Action`, for GitHub Marketplace: `Agent Readiness Audit` is taken by an unrelated action. Workflows reference the action by repository (`alipajand/agent-readiness-action@v1`), so nothing needs to change.
+- The description mentions the instruction file checks from the bundled agent-context-doctor.
+
 ## [1.0.0] - 2026-09-24
 
 First release.
@@ -54,5 +61,6 @@ First release.
 - CI that runs tests, type checks, verifies the committed `dist/`, and runs the action against this repository.
 - Dependabot for npm, the kit submodule, and GitHub Actions. MIT `LICENSE` file.
 
-[Unreleased]: https://github.com/alipajand/agent-readiness-action/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/alipajand/agent-readiness-action/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/alipajand/agent-readiness-action/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/alipajand/agent-readiness-action/releases/tag/v1.0.0
