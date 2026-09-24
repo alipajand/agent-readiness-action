@@ -98,6 +98,27 @@ marker and was written by a bot account, so pasting the marker into your own com
 does not make the action overwrite it. When commenting with a personal access token,
 set `comment-author` to that account's login.
 
+### Block pull requests that lower the score
+
+```yaml
+on:
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the base commit must be available
+      - uses: alipajand/agent-readiness-action@v1
+        with:
+          baseline-ref: ${{ github.event.pull_request.base.sha }}
+          max-score-drop: "0"
+```
+
+The action audits the base commit in a temporary git worktree, reports the change (`▼ -5 vs <sha>`) in the log, job summary, and PR comment, and fails when the score drops by more than `max-score-drop`.
+
 ### Write a Markdown report artifact
 
 ```yaml
@@ -133,6 +154,9 @@ steps:
 | `comment-on-pr` | `false` | Post or update a PR comment. Only runs on `pull_request` events. Requires a token with `pull-requests: write` and `issues: write`. |
 | `github-token` | `''` | Token for the PR comment, usually `${{ github.token }}`. Falls back to the `GITHUB_TOKEN` environment variable. |
 | `comment-author` | `''` | Only update an earlier summary comment written by this login. Defaults to any bot account. |
+| `baseline-ref` | `''` | Git ref to compare against, usually `${{ github.event.pull_request.base.sha }}`. Audited in a temporary worktree; needs `fetch-depth: 0`. |
+| `max-score-drop` | `''` | Fail when the score is more than this many points below the `baseline-ref` score (`0` fails on any drop). Requires `baseline-ref`. |
+| `job-summary` | `true` | Write the audit summary to the workflow run's job summary. |
 | `fail-on-threshold` | `true` | Fail the step when the score is below `min-score`. |
 
 ## Outputs
@@ -141,6 +165,10 @@ steps:
 |--------|-------------|
 | `score` | Final agent-readiness score (0–100). |
 | `report-path` | Absolute path of the written Markdown report, or empty when `output` was not set. |
+| `passed` | `"true"` when the score is at least `min-score`, otherwise `"false"`. |
+| `categories` | JSON array of category scores: `id`, `label`, `score`, `maxScore`. |
+| `baseline-score` | Score at `baseline-ref` (only when `baseline-ref` is set). |
+| `score-delta` | Score minus the baseline score (only when `baseline-ref` is set). |
 
 ## Permissions
 
@@ -175,8 +203,10 @@ why `issues: write` is included alongside `pull-requests: write`.
 3. Logs a summary and a collapsible detail group.
 4. If `output` is set, writes the kit's Markdown report inside `repo-path`.
 5. If `json` is `true`, echoes the raw JSON to the log.
-6. If `comment-on-pr` is `true` and the event is a `pull_request`, posts or updates a comment.
-7. If `score < min-score` and `fail-on-threshold` is `true`, marks the step as failed.
+6. If `baseline-ref` is set, audits that commit in a temporary git worktree and computes the score change.
+7. If `comment-on-pr` is `true` and the event is a `pull_request`, posts or updates a comment.
+8. Writes the summary to the job summary (unless `job-summary` is `false`).
+9. Marks the step as failed if `score < min-score` (with `fail-on-threshold`) or the score dropped by more than `max-score-drop`.
 
 ## Security
 

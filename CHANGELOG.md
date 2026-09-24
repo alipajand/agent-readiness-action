@@ -16,6 +16,9 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ### Added
 
+- `baseline-ref` and `max-score-drop` inputs: audit the base commit in a temporary git worktree, report the score change in the log, job summary, and PR comment, and fail when the score drops too far. New outputs `baseline-score` and `score-delta`.
+- The audit summary is written to the workflow run's job summary (`job-summary: false` to turn it off).
+- `passed` and `categories` outputs.
 - `github-token` input as an alternative to the `GITHUB_TOKEN` environment variable.
 - `comment-author` input for teams that comment with a personal access token.
 - CI that runs tests, type checks, verifies the committed `dist/`, and runs the action against this repository.

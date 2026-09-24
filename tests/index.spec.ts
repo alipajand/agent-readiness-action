@@ -11,14 +11,31 @@ const endGroup = vi.fn();
 let inputs: Record<string, string> = {};
 const getInput = vi.fn((name: string) => inputs[name] ?? '');
 
+const summaryAddRaw = vi.fn();
+const summaryWrite = vi.fn();
+const summary = {
+  addRaw: (text: string) => {
+    summaryAddRaw(text);
+    return summary;
+  },
+  write: () => summaryWrite(),
+};
+
 vi.mock('@actions/core', () => ({
   getInput: (name: string) => getInput(name),
   setFailed: (...a: unknown[]) => setFailed(...a),
   setOutput: (...a: unknown[]) => setOutput(...a),
   info: (...a: unknown[]) => info(...a),
   warning: (...a: unknown[]) => warning(...a),
+  debug: () => undefined,
   startGroup: (...a: unknown[]) => startGroup(...a),
   endGroup: (...a: unknown[]) => endGroup(...a),
+  summary,
+}));
+
+const auditAtRef = vi.fn();
+vi.mock('../src/baseline', () => ({
+  auditAtRef: (...a: unknown[]) => auditAtRef(...a),
 }));
 
 const runArk = vi.fn();
@@ -290,5 +307,78 @@ describe('index run() — untrusted log output', () => {
     await loadIndex();
     expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('Invalid min-score'));
     expect(runArk).not.toHaveBeenCalled();
+  });
+});
+
+describe('index run() — summary, outputs, and baseline', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    inputs = {};
+    runArk.mockResolvedValue({ result: RESULT });
+    summaryWrite.mockResolvedValue(undefined);
+  });
+
+  it('writes the job summary by default and can turn it off', async () => {
+    await loadIndex();
+    expect(summaryAddRaw).toHaveBeenCalledWith(expect.stringContaining('Agent Readiness Audit'));
+
+    vi.clearAllMocks();
+    inputs = { 'job-summary': 'false' };
+    await loadIndex();
+    expect(summaryAddRaw).not.toHaveBeenCalled();
+  });
+
+  it('sets passed and categories outputs', async () => {
+    inputs = { 'min-score': '80' };
+    await loadIndex();
+    expect(setOutput).toHaveBeenCalledWith('passed', 'false');
+    expect(setOutput).toHaveBeenCalledWith(
+      'categories',
+      JSON.stringify([{ id: 'a', label: 'Alpha', score: 15, maxScore: 20 }]),
+    );
+  });
+
+  it('reports the score change against baseline-ref', async () => {
+    inputs = { 'baseline-ref': 'base-sha' };
+    auditAtRef.mockResolvedValue(80);
+    await loadIndex();
+    expect(auditAtRef).toHaveBeenCalledWith('.', 'base-sha');
+    expect(setOutput).toHaveBeenCalledWith('baseline-score', '80');
+    expect(setOutput).toHaveBeenCalledWith('score-delta', '-8');
+    expect(summaryAddRaw).toHaveBeenCalledWith(expect.stringContaining('▼ -8 vs'));
+  });
+
+  it('fails when the score drops more than max-score-drop', async () => {
+    inputs = { 'baseline-ref': 'base-sha', 'max-score-drop': '5' };
+    auditAtRef.mockResolvedValue(80);
+    await loadIndex();
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('dropped by 8'));
+  });
+
+  it('passes when the drop is within max-score-drop', async () => {
+    inputs = { 'baseline-ref': 'base-sha', 'max-score-drop': '10' };
+    auditAtRef.mockResolvedValue(80);
+    await loadIndex();
+    expect(setFailed).not.toHaveBeenCalled();
+  });
+
+  it('requires baseline-ref for max-score-drop and validates the value', async () => {
+    inputs = { 'max-score-drop': '5' };
+    await loadIndex();
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('needs baseline-ref'));
+
+    vi.clearAllMocks();
+    inputs = { 'baseline-ref': 'x', 'max-score-drop': 'lots' };
+    await loadIndex();
+    expect(setFailed).toHaveBeenCalledWith(expect.stringContaining('Invalid max-score-drop'));
+  });
+
+  it('fails clearly when the baseline audit fails', async () => {
+    inputs = { 'baseline-ref': 'missing' };
+    auditAtRef.mockRejectedValue(new Error('not available in this checkout'));
+    await loadIndex();
+    expect(setFailed).toHaveBeenCalledWith(
+      expect.stringContaining('Baseline audit failed: not available'),
+    );
   });
 });

@@ -38238,7 +38238,7 @@ const _summary = new Summary();
  * @deprecated use `core.summary`
  */
 const markdownSummary = (/* unused pure expression or super */ null && (_summary));
-const summary = (/* unused pure expression or super */ null && (_summary));
+const summary = _summary;
 //# sourceMappingURL=summary.js.map
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+core@3.0.1/node_modules/@actions/core/lib/path-utils.js
 
@@ -39669,7 +39669,7 @@ function isDebug() {
  * @param message debug message
  */
 function core_debug(message) {
-    issueCommand('debug', {}, message);
+    command_issueCommand('debug', {}, message);
 }
 /**
  * Adds an error issue
@@ -39879,6 +39879,9 @@ async function findFiles(repoPath, patterns, options) {
         onlyFiles: false,
         followSymbolicLinks: false,
         objectMode: true,
+        // A pattern such as `.clinerules/**/*.md` makes fast-glob scan
+        // `.clinerules` as a directory; when it is a file that throws ENOTDIR.
+        suppressErrors: true,
         ignore: options?.ignore ?? [
             '**/node_modules/**',
             '**/.git/**',
@@ -39961,6 +39964,30 @@ async function fileHasPlaceholderContent(filePath) {
 
 
 const MAX_SCORE = 20;
+// Standing instruction files for other agent tools. Each one counts as
+// tool-specific instructions alongside AGENTS.md.
+const OTHER_TOOL_FILES = [
+    { label: 'Gemini', patterns: ['GEMINI.md', '.gemini/styleguide.md'] },
+    { label: 'Amp', patterns: ['AGENT.md'] },
+    {
+        label: 'Windsurf',
+        patterns: ['.windsurfrules', '.windsurf/rules/**/*.md'],
+    },
+    { label: 'Cline', patterns: ['.clinerules', '.clinerules/**/*.md'] },
+    { label: 'Roo Code', patterns: ['.roorules', '.roo/rules*/**/*.md'] },
+    { label: 'Kiro', patterns: ['.kiro/steering/**/*.md'] },
+    { label: 'Junie', patterns: ['.junie/guidelines.md'] },
+    {
+        label: 'Augment',
+        patterns: ['.augment-guidelines', '.augment/rules/**/*.md'],
+    },
+    { label: 'Continue', patterns: ['.continue/rules/**/*.md'] },
+    { label: 'Goose', patterns: ['.goosehints'] },
+    {
+        label: 'Copilot path-specific',
+        patterns: ['.github/instructions/**/*.instructions.md'],
+    },
+];
 // Read a directory's entry names, preserving exact case so we can tell
 // `CLAUDE.md` from `claude.md` even on case-insensitive filesystems (macOS,
 // Windows), where `fileExists` cannot distinguish the two. Returns [] when the
@@ -40070,6 +40097,17 @@ async function checkAgentInstructions(repoPath) {
             status: 'pass',
             message: 'GitHub Copilot instructions found',
             files: ['.github/copilot-instructions.md'],
+        });
+    }
+    for (const { label, patterns } of OTHER_TOOL_FILES) {
+        const found = (await findFiles(repoPath, patterns)).map((f) => external_node_path_default().relative(repoPath, f));
+        if (found.length === 0)
+            continue;
+        detected.push(...found);
+        findings.push({
+            status: 'pass',
+            message: `${label} instructions found`,
+            files: found,
         });
     }
     const hasAgents = detected.includes('AGENTS.md');
@@ -42059,15 +42097,28 @@ function formatLogDetail(result) {
     }
     return lines.join('\n');
 }
+/** "▲ +3 vs main", "▼ -5 vs main", or "no change vs main". */
+function formatDelta(score, comparison) {
+    const delta = score - comparison.baselineScore;
+    const ref = formatSummary_codeSpan(comparison.baselineRef);
+    if (delta > 0)
+        return `▲ +${delta} vs ${ref}`;
+    if (delta < 0)
+        return `▼ ${delta} vs ${ref}`;
+    return `no change vs ${ref}`;
+}
 /**
- * Markdown body for the GitHub PR comment (without the marker line).
+ * Markdown body for the GitHub PR comment and job summary (without the
+ * marker line).
  */
-function formatMarkdownComment(result) {
+function formatMarkdownComment(result, comparison) {
     const emoji = overallEmoji(result.score);
     const lines = [];
     lines.push(`## ${emoji} Agent Readiness Audit`);
     lines.push('');
-    lines.push(`**Score: ${result.score} / 100**`);
+    lines.push(comparison
+        ? `**Score: ${result.score} / 100** (${formatDelta(result.score, comparison)}, was ${comparison.baselineScore})`
+        : `**Score: ${result.score} / 100**`);
     lines.push('');
     lines.push('### Category breakdown');
     lines.push('');
@@ -46510,7 +46561,84 @@ async function commentOnPr(options) {
     }
 }
 
+;// CONCATENATED MODULE: external "node:child_process"
+const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
+;// CONCATENATED MODULE: external "node:os"
+const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
+;// CONCATENATED MODULE: ./src/baseline.ts
+
+
+
+
+
+class BaselineError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'BaselineError';
+    }
+}
+function git(args, cwd) {
+    return (0,external_node_child_process_namespaceObject.execFileSync)('git', args, {
+        cwd,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+    }).trim();
+}
+/** A ref such as `--output=x` must never reach git as an option. */
+function assertSafeRef(ref) {
+    if (!ref.trim() || ref.startsWith('-') || /[\u0000-\u001f\u007f]/.test(ref)) {
+        throw new BaselineError(`baseline-ref must be a git ref, got "${ref}"`);
+    }
+}
+/**
+ * Audit `repoPath` as it was at `ref` and return the score. The audit runs in
+ * a temporary detached worktree, so the checkout used by the rest of the job
+ * is never modified, and the worktree is removed afterwards.
+ */
+async function auditAtRef(repoPath, ref, tempRoot = external_node_os_namespaceObject.tmpdir()) {
+    assertSafeRef(ref);
+    const absRepo = external_node_path_namespaceObject.resolve(repoPath);
+    let top;
+    try {
+        top = git(['rev-parse', '--show-toplevel'], absRepo);
+    }
+    catch {
+        throw new BaselineError(`${absRepo} is not inside a git checkout; baseline-ref needs one.`);
+    }
+    try {
+        git(['rev-parse', '--verify', '--quiet', '--end-of-options', `${ref}^{commit}`], top);
+    }
+    catch {
+        throw new BaselineError(`baseline-ref "${ref}" is not available in this checkout. Fetch it first, for example with actions/checkout and fetch-depth: 0.`);
+    }
+    const dir = (0,external_node_fs_namespaceObject.mkdtempSync)(external_node_path_namespaceObject.join(tempRoot, 'agent-readiness-baseline-'));
+    const worktree = external_node_path_namespaceObject.join(dir, 'tree');
+    try {
+        git(['worktree', 'add', '--detach', worktree, ref], top);
+        const { result } = await runArk({
+            repoPath: external_node_path_namespaceObject.join(worktree, external_node_path_namespaceObject.relative(top, absRepo)),
+        });
+        return result.score;
+    }
+    finally {
+        try {
+            git(['worktree', 'remove', '--force', worktree], top);
+        }
+        catch {
+            // Fall through to deleting the directory and pruning the reference.
+        }
+        (0,external_node_fs_namespaceObject.rmSync)(dir, { recursive: true, force: true });
+        try {
+            git(['worktree', 'prune'], top);
+        }
+        catch {
+            // Nothing left to clean up.
+        }
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/index.ts
+
 
 
 
@@ -46535,9 +46663,22 @@ async function run() {
     const commentOnPrFlag = getInput('comment-on-pr') === 'true';
     const failOnThreshold = getInput('fail-on-threshold') !== 'false';
     const commentAuthor = getInput('comment-author');
+    const baselineRef = getInput('baseline-ref');
+    const maxScoreDropRaw = getInput('max-score-drop');
+    const jobSummary = getInput('job-summary') !== 'false';
     const minScore = Number(minScoreRaw);
     if (!Number.isInteger(minScore) || minScore < 0 || minScore > 100) {
         setFailed(`Invalid min-score value: "${minScoreRaw}". Must be an integer between 0 and 100.`);
+        return;
+    }
+    const maxScoreDrop = maxScoreDropRaw === '' ? undefined : Number(maxScoreDropRaw);
+    if (maxScoreDrop !== undefined &&
+        (!Number.isInteger(maxScoreDrop) || maxScoreDrop < 0 || maxScoreDrop > 100)) {
+        setFailed(`Invalid max-score-drop value: "${maxScoreDropRaw}". Must be an integer between 0 and 100.`);
+        return;
+    }
+    if (maxScoreDrop !== undefined && !baselineRef) {
+        setFailed('max-score-drop needs baseline-ref to compare against.');
         return;
     }
     info(`Running agent-readiness-kit audit on: ${repoPath}`);
@@ -46550,8 +46691,24 @@ async function run() {
         return;
     }
     const { result, reportPath } = audit;
+    let comparison;
+    if (baselineRef) {
+        try {
+            const baselineScore = await auditAtRef(repoPath, baselineRef);
+            comparison = { baselineScore, baselineRef };
+            setOutput('baseline-score', String(baselineScore));
+            setOutput('score-delta', String(result.score - baselineScore));
+            info(`Baseline score at ${baselineRef}: ${baselineScore}`);
+        }
+        catch (err) {
+            setFailed(`Baseline audit failed: ${err instanceof Error ? err.message : String(err)}`);
+            return;
+        }
+    }
     setOutput('score', String(result.score));
     setOutput('report-path', reportPath ?? '');
+    setOutput('passed', String(result.score >= minScore));
+    setOutput('categories', JSON.stringify(result.categories.map(({ id, label, score, maxScore }) => ({ id, label, score, maxScore }))));
     // Log summary line
     info(formatLogSummary(result));
     // Collapsible detail group
@@ -46573,7 +46730,7 @@ async function run() {
         }
         else {
             try {
-                const commentBody = formatMarkdownComment(result);
+                const commentBody = formatMarkdownComment(result, comparison);
                 await commentOnPr({ body: commentBody, token, authorLogin: commentAuthor || undefined });
             }
             catch (err) {
@@ -46581,9 +46738,24 @@ async function run() {
             }
         }
     }
-    // Threshold check — runs last so output and comments still happen even on failure
+    if (jobSummary) {
+        try {
+            await summary.addRaw(formatMarkdownComment(result, comparison)).write();
+        }
+        catch (err) {
+            // Outside GitHub Actions there is no step summary file; that is fine.
+            core_debug(`Skipped job summary: ${err instanceof Error ? err.message : String(err)}`);
+        }
+    }
+    // Threshold checks run last so output, comments, and the summary still happen on failure
     if (failOnThreshold && result.score < minScore) {
         setFailed(`Agent-readiness score ${result.score} is below the required minimum of ${minScore}.`);
+    }
+    if (comparison && maxScoreDrop !== undefined) {
+        const drop = comparison.baselineScore - result.score;
+        if (drop > maxScoreDrop) {
+            setFailed(`Agent-readiness score dropped by ${drop} (from ${comparison.baselineScore} at ${baselineRef} to ${result.score}); the allowed drop is ${maxScoreDrop}.`);
+        }
     }
 }
 run();
