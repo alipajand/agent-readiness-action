@@ -1,6 +1,6 @@
 {
   "name": "agent-readiness-action",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "GitHub Action wrapper for agent-readiness-kit CI audits",
   "type": "module",
   "private": true,

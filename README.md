@@ -249,12 +249,15 @@ See [SECURITY.md](SECURITY.md) to report a vulnerability, and
 
 Before tagging a release:
 
-1. Run `git submodule update --init` so `vendor/agent-readiness-kit` is present.
-2. Run `pnpm test`.
-3. Run `pnpm typecheck`.
-4. Run `pnpm build`.
-5. Commit the updated `dist/` if it changed. CI fails when `dist/` does not match the source.
-6. Create or move the version tag, for example `v1`.
+1. Run `git submodule update --init` so both engines under `vendor/` are present.
+2. Run `pnpm format:check`, `pnpm test`, and `pnpm typecheck`.
+3. Run `pnpm build`.
+4. Commit the updated `dist/` if it changed. CI fails when `dist/` does not match the source.
+5. Set `version` in `package.json` and move the `Unreleased` notes in `CHANGELOG.md` under
+   the new version.
+6. Tag the release commit with its full version (for example `v1.2.0`) and move the major tag to
+   it: `git tag -f v1 v1.2.0`, then push both tags (`git push -f origin v1`). Workflows that use
+   `@v1` pick up the release; pin a full commit SHA to review every change first.
 
 ## Related tools
 
