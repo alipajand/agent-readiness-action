@@ -242,6 +242,9 @@ fully trust. Both engines are bundled from pinned submodules
 - **Comment ownership.** Only a comment that starts with the action's marker and was
   written by a bot account (or `comment-author`) is updated.
 
+See [SECURITY.md](SECURITY.md) to report a vulnerability, and
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the module layout and trust boundaries.
+
 ## Release checklist
 
 Before tagging a release:
