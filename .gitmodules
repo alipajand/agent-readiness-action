@@ -1,3 +1,6 @@
 [submodule "vendor/agent-readiness-kit"]
 	path = vendor/agent-readiness-kit
 	url = https://github.com/alipajand/agent-readiness-kit.git
+[submodule "vendor/agent-context-doctor"]
+	path = vendor/agent-context-doctor
+	url = https://github.com/alipajand/agent-context-doctor.git
