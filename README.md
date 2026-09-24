@@ -119,6 +119,17 @@ jobs:
 
 The action audits the base commit in a temporary git worktree, reports the change (`▼ -5 vs <sha>`) in the log, job summary, and PR comment, and fails when the score drops by more than `max-score-drop`.
 
+### Also check the agent instruction files
+
+```yaml
+- uses: alipajand/agent-readiness-action@v1
+  with:
+    context-audit: "true"     # run the bundled agent-context-doctor
+    context-fail-on: "high"   # fail on risky instructions, secrets, hidden characters, ...
+```
+
+With `context-audit`, the action also runs [agent-context-doctor](https://github.com/alipajand/agent-context-doctor) on the same path. Its score and top issues appear in the log, job summary, and PR comment. It honors the audited repository's `.acdrc`.
+
 ### Write a Markdown report artifact
 
 ```yaml
@@ -157,6 +168,8 @@ steps:
 | `baseline-ref` | `''` | Git ref to compare against, usually `${{ github.event.pull_request.base.sha }}`. Audited in a temporary worktree; needs `fetch-depth: 0`. |
 | `max-score-drop` | `''` | Fail when the score is more than this many points below the `baseline-ref` score (`0` fails on any drop). Requires `baseline-ref`. |
 | `job-summary` | `true` | Write the audit summary to the workflow run's job summary. |
+| `context-audit` | `false` | Also check agent instruction files with the bundled agent-context-doctor. |
+| `context-fail-on` | `''` | Fail when agent-context-doctor finds an issue at or above `low`, `medium`, or `high`. Requires `context-audit`. |
 | `fail-on-threshold` | `true` | Fail the step when the score is below `min-score`. |
 
 ## Outputs
@@ -169,6 +182,9 @@ steps:
 | `categories` | JSON array of category scores: `id`, `label`, `score`, `maxScore`. |
 | `baseline-score` | Score at `baseline-ref` (only when `baseline-ref` is set). |
 | `score-delta` | Score minus the baseline score (only when `baseline-ref` is set). |
+| `context-score` | agent-context-doctor score, when `context-audit` is `true`. |
+| `context-grade` | agent-context-doctor grade: `excellent`, `good`, `needs-work`, or `risky`. |
+| `context-issue-count` | Number of agent-context-doctor issues. |
 
 ## Permissions
 
@@ -211,7 +227,8 @@ why `issues: write` is included alongside `pull-requests: write`.
 ## Security
 
 The action is meant to run on pull requests, including ones from contributors you don't
-fully trust:
+fully trust. Both engines are bundled from pinned submodules
+(`vendor/agent-readiness-kit`, `vendor/agent-context-doctor`):
 
 - **No runtime downloads.** Earlier versions ran `npx --yes agent-readiness-kit`, which
   fetched whatever package owned that name on npm. That name belongs to an unrelated

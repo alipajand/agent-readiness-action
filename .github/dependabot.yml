@@ -26,7 +26,7 @@ updates:
           - minor
           - patch
 
-  # Bumps the pinned agent-readiness-kit commit that is bundled into dist/.
+  # Bumps the pinned agent-readiness-kit and agent-context-doctor commits bundled into dist/.
   - package-ecosystem: gitsubmodule
     directory: /
     schedule:

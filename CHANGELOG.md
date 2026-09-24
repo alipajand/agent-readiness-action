@@ -16,6 +16,8 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ### Added
 
+- `context-audit` and `context-fail-on` inputs: also check agent instruction files with agent-context-doctor, bundled from the `vendor/agent-context-doctor` submodule. Adds its score and top issues to the log, job summary, and PR comment, honors the audited repository's `.acdrc`, and sets `context-score`, `context-grade`, and `context-issue-count` outputs.
+- `AGENTS.md` and `CLAUDE.md` for agents working on this repository.
 - `baseline-ref` and `max-score-drop` inputs: audit the base commit in a temporary git worktree, report the score change in the log, job summary, and PR comment, and fail when the score drops too far. New outputs `baseline-score` and `score-delta`.
 - The audit summary is written to the workflow run's job summary (`job-summary: false` to turn it off).
 - `passed` and `categories` outputs.
