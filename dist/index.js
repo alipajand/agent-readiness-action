@@ -40092,6 +40092,19 @@ async function checkAgentInstructions(repoPath) {
             files: relCommands,
         });
     }
+    const claudeExtras = (await findFiles(repoPath, [
+        '.claude/agents/**/*.md',
+        '.claude/skills/**/SKILL.md',
+        '.claude/rules/**/*.md',
+    ])).map((f) => external_node_path_default().relative(repoPath, f));
+    if (claudeExtras.length > 0) {
+        detected.push(...claudeExtras);
+        findings.push({
+            status: 'pass',
+            message: 'Claude subagents, skills, or rules found (.claude/)',
+            files: claudeExtras,
+        });
+    }
     if (await fileExists(copilot)) {
         detected.push('.github/copilot-instructions.md');
         findings.push({
@@ -40555,6 +40568,7 @@ async function checkTesting(repoPath) {
 
 
 
+
 const safety_MAX_SCORE = 15;
 const SAFETY_KEYWORDS = [
     'security',
@@ -40579,6 +40593,80 @@ const SAFETY_PATHS = [
     'docs/migrations',
     'docs/MIGRATIONS.md',
 ];
+const UNRESTRICTED_SHELL = /^Bash(?:\((?:\*|:\*)?\))?$/;
+function strings(value) {
+    return Array.isArray(value)
+        ? value.filter((v) => typeof v === 'string')
+        : [];
+}
+/**
+ * Committed Claude Code settings: deny rules that keep secrets out of reach
+ * earn points, and settings that let the agent act without asking cost them.
+ */
+async function claudeSettings(repoPath) {
+    const rel = '.claude/settings.json';
+    const full = external_node_path_default().join(repoPath, rel);
+    if (!safePath_isRealpathWithin(repoPath, full))
+        return { points: 0, findings: [] };
+    const text = await readTextFile_readTextFile(full);
+    if (text === null)
+        return { points: 0, findings: [] };
+    let settings;
+    try {
+        settings = JSON.parse(text);
+    }
+    catch {
+        return {
+            points: 0,
+            findings: [
+                { status: 'warn', message: `${rel} is not valid JSON`, files: [rel] },
+            ],
+        };
+    }
+    const root = typeof settings === 'object' && settings !== null
+        ? settings
+        : {};
+    const permissions = typeof root.permissions === 'object' && root.permissions !== null
+        ? root.permissions
+        : {};
+    const findings = [];
+    let points = 0;
+    if (strings(permissions.deny).some((rule) => rule.includes('.env'))) {
+        points += 2;
+        findings.push({
+            status: 'pass',
+            message: 'Claude Code settings deny reading .env files',
+            files: [rel],
+        });
+    }
+    else {
+        findings.push({
+            status: 'warn',
+            message: 'Claude Code settings do not deny reading .env files — add "Read(./.env)" to permissions.deny',
+            files: [rel],
+        });
+    }
+    const bypass = permissions.defaultMode === 'bypassPermissions';
+    const openShell = strings(permissions.allow).some((rule) => UNRESTRICTED_SHELL.test(rule.replace(/\s+/g, '')));
+    if (bypass || openShell) {
+        points -= 5;
+        findings.push({
+            status: 'fail',
+            message: bypass
+                ? 'Claude Code settings bypass every permission prompt (defaultMode: bypassPermissions)'
+                : 'Claude Code settings allow any shell command without asking',
+            files: [rel],
+        });
+    }
+    if (root.enableAllProjectMcpServers === true) {
+        findings.push({
+            status: 'warn',
+            message: 'Claude Code settings auto-approve every MCP server in the repository (enableAllProjectMcpServers)',
+            files: [rel],
+        });
+    }
+    return { points, findings };
+}
 async function fileMentionsSafety(filePath) {
     const content = (await readTextFile_readTextFile(filePath))?.toLowerCase();
     if (content === undefined)
@@ -40645,6 +40733,9 @@ async function checkSafety(repoPath) {
             });
         }
     }
+    const claude = await claudeSettings(repoPath);
+    score = Math.max(0, score + claude.points);
+    findings.push(...claude.findings);
     if (score < 5) {
         findings.push({
             status: 'warn',
@@ -42035,6 +42126,8 @@ const CONTEXT_PATTERNS = [
     '.claude/commands/**/*.md',
     '.claude/agents/**/*.md',
     '.claude/skills/**/SKILL.md',
+    '.claude/rules/**/*.md',
+    '.claude/output-styles/**/*.md',
     // Cursor
     '.cursorrules',
     '.cursor/rules/**/*.mdc',
@@ -42291,6 +42384,7 @@ const PRIMARY_FILES = new Set([
     '.junie/guidelines.md',
 ]);
 const PRIMARY_DIRECTORIES = [
+    '.claude/rules/',
     '.cursor/rules/',
     '.windsurf/rules/',
     '.clinerules/',
@@ -43313,7 +43407,437 @@ function checkFileSize(filePath, content, maxBytes) {
     ];
 }
 
+;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/checks/shellRisk.ts
+const REMOTE_SCRIPT = 'downloads and runs a remote script';
+const SENDS_DATA = 'sends data to a remote server';
+const RAW_SOCKET = 'opens a raw network connection';
+const HIDDEN_CODE = 'decodes and runs hidden code';
+const DELETES_HOME = 'deletes the root or home directory';
+const READS_CREDENTIALS = 'reads credential files from the home directory';
+const UNPINNED_RUNNER = 'runs a package from the registry without a pinned version';
+const SEVERITY = {
+    [REMOTE_SCRIPT]: 'high',
+    [SENDS_DATA]: 'high',
+    [RAW_SOCKET]: 'high',
+    [HIDDEN_CODE]: 'high',
+    [DELETES_HOME]: 'high',
+    [READS_CREDENTIALS]: 'medium',
+    [UNPINNED_RUNNER]: 'medium',
+};
+// Commands are split into pipeline stages first, so every pattern below only
+// looks at one stage and none of them needs an unbounded run across the whole
+// command. That keeps matching linear on hostile input.
+const DOWNLOADER = /\b(?:curl|wget)\b/i;
+const SHELL_STAGE = /^\s*(?:sudo\s+)?(?:(?:ba|z|da|k)?sh|python3?|node|perl|ruby)\b/i;
+const SHELL_OF_DOWNLOAD = /\b(?:ba|z)?sh\s+(?:-c\s+)?["']?(?:\$\(|<\()\s*(?:curl|wget)\b/i;
+const CURL_UPLOAD = /\s(?:-d|--data(?:-binary|-raw|-urlencode)?|-F|--form|-T|--upload-file)(?:\s|=)/i;
+const WGET_POST = /\s--post-(?:data|file)\b/i;
+const DEV_SOCKET = /\/dev\/(?:tcp|udp)\//;
+const NETCAT = /(?:^|\s)(?:nc|ncat|netcat)\s/;
+const PORT_ARGUMENT = /\s\d{2,5}(?:\s|$)/;
+const BASE64_DECODE = /\bbase64\s+(?:-d|-D|--decode)\b/i;
+const RM_HOME = /\brm\s+((?:-\S+\s+)+)["']?(?:\/|~\/?|\$HOME\/?|\$\{HOME\}\/?)\*?["']?(?=\s|$)/;
+const HOME_CREDENTIALS = /(?:~|\$HOME|\$\{HOME\})\/\.(?:ssh|aws|gnupg|kube|netrc|docker\/config\.json|config\/gh|npmrc)\b/i;
+const RUNNER = /\b(?:npx|bunx|pnpx)\s+(?:(?:-y|--yes)\s+)*(\S+)/i;
+function stagesOf(command) {
+    return command
+        .split(/\n|;|&&|\|\|/)
+        .map((sequence) => sequence.split('|'))
+        .filter((stages) => stages.some((s) => s.trim() !== ''));
+}
+function isUnpinnedRunner(stage) {
+    const spec = RUNNER.exec(stage)?.[1]?.replace(/^["']|["']$/g, '');
+    if (!spec || spec.startsWith('-'))
+        return false;
+    const version = /^(?:@[^/@]+\/)?[^@]+@(.+)$/.exec(spec)?.[1];
+    return version === undefined || !/^\d/.test(version);
+}
+/** Risky behaviour in a shell command or script, one entry per kind. */
+function findShellRisks(command) {
+    const labels = new Set();
+    if (HOME_CREDENTIALS.test(command))
+        labels.add(READS_CREDENTIALS);
+    if (SHELL_OF_DOWNLOAD.test(command))
+        labels.add(REMOTE_SCRIPT);
+    if (DEV_SOCKET.test(command))
+        labels.add(RAW_SOCKET);
+    for (const stages of stagesOf(command)) {
+        const sequence = stages.join('|');
+        if (/\beval\b/.test(sequence) && /base64/i.test(sequence))
+            labels.add(HIDDEN_CODE);
+        let shellLater = false;
+        for (let i = stages.length - 1; i >= 0; i--) {
+            const stage = stages[i];
+            if (DOWNLOADER.test(stage) && shellLater)
+                labels.add(REMOTE_SCRIPT);
+            if (BASE64_DECODE.test(stage) && shellLater)
+                labels.add(HIDDEN_CODE);
+            shellLater ||= SHELL_STAGE.test(stage);
+            if (/\bcurl\b/i.test(stage) && CURL_UPLOAD.test(stage))
+                labels.add(SENDS_DATA);
+            if (/\bwget\b/i.test(stage) && WGET_POST.test(stage))
+                labels.add(SENDS_DATA);
+            if (NETCAT.test(stage) && PORT_ARGUMENT.test(stage))
+                labels.add(RAW_SOCKET);
+            const rm = RM_HOME.exec(stage);
+            if (rm && /(?:^|\s)-(?:[a-zA-Z]*[rR]|-recursive\b)/.test(` ${rm[1]}`)) {
+                labels.add(DELETES_HOME);
+            }
+            if (isUnpinnedRunner(stage))
+                labels.add(UNPINNED_RUNNER);
+        }
+    }
+    return Object.keys(SEVERITY)
+        .filter((label) => labels.has(label))
+        .map((label) => ({ severity: SEVERITY[label], label }));
+}
+
+;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/checks/claudeSettings.ts
+
+function asRecord(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value)
+        ? value
+        : null;
+}
+function asStrings(value) {
+    return Array.isArray(value) ? value.filter((v) => typeof v === 'string') : [];
+}
+// Programs that run whatever they are given, so allowing them with open
+// arguments is the same as allowing every shell command. git and the package
+// managers belong here too: `git -c core.pager=...` and `npm exec` run code.
+const RUNS_ANYTHING = new Set([
+    'sh',
+    'bash',
+    'zsh',
+    'fish',
+    'dash',
+    'eval',
+    'exec',
+    'env',
+    'xargs',
+    'node',
+    'deno',
+    'bun',
+    'python',
+    'python3',
+    'ruby',
+    'perl',
+    'php',
+    'npx',
+    'bunx',
+    'pnpx',
+    'npm',
+    'pnpm',
+    'yarn',
+    'git',
+    'make',
+    'find',
+    'docker',
+]);
+const RUNNER_SUBCOMMANDS = new Set(['exec', 'dlx', 'x']);
+const NETWORK = new Set(['curl', 'wget', 'nc', 'ncat', 'netcat', 'ssh', 'scp', 'rsync', 'ftp']);
+/** Inner command of a `Bash(...)` rule with trailing wildcards removed; '' means any command. */
+function bashRuleCommand(rule) {
+    const compact = rule.trim();
+    if (compact === 'Bash')
+        return '';
+    const inner = /^Bash\((.*)\)$/s.exec(compact)?.[1];
+    if (inner === undefined)
+        return null;
+    return inner.replace(/(?::\*|\s*\*)+\s*$/, '').trim();
+}
+function runsAnything(words) {
+    const program = (words[0] ?? '').replace(/^.*\//, '');
+    if (program === '' || program === '*' || program === 'sudo' || program === 'su')
+        return true;
+    if (!RUNS_ANYTHING.has(program))
+        return false;
+    // Only flags after the program (`node`, `bash -c`, `python -c`) leave the code open.
+    const positional = words.slice(1).find((w) => !w.startsWith('-'));
+    return positional === undefined || RUNNER_SUBCOMMANDS.has(positional);
+}
+function allowRuleFindings(rule) {
+    const command = bashRuleCommand(rule);
+    if (command !== null) {
+        const words = command.split(/\s+/).filter(Boolean);
+        const program = (words[0] ?? '').replace(/^.*\//, '');
+        if (runsAnything(words)) {
+            return [
+                {
+                    severity: 'high',
+                    message: `Claude Code permission "${clip(rule)}" lets the agent run any code without asking`,
+                    recommendation: 'Allow specific commands instead, for example "Bash(pnpm test:*)". Shells, interpreters, sudo, package runners, and bare git or package manager rules can run anything they are given.',
+                    needle: rule,
+                },
+            ];
+        }
+        if (NETWORK.has(program)) {
+            return [
+                {
+                    severity: 'medium',
+                    message: `Claude Code permission "${clip(rule)}" allows network requests without asking`,
+                    recommendation: 'Keep network commands behind a prompt: an agent following injected instructions could send code or secrets out.',
+                    needle: rule,
+                },
+            ];
+        }
+        const destructive = (program === 'rm' && words.slice(1).every((w) => w.startsWith('-'))) ||
+            (program === 'git' && /^git\s+(?:push|reset\s+--hard|clean\s+-\w*f)/.test(command)) ||
+            program === 'dd' ||
+            program === 'mkfs';
+        if (destructive) {
+            return [
+                {
+                    severity: 'medium',
+                    message: `Claude Code permission "${clip(rule)}" allows destructive or publishing commands without asking`,
+                    recommendation: 'Move this rule to permissions.ask so a person confirms deletions, pushes, and history rewrites.',
+                    needle: rule,
+                },
+            ];
+        }
+        return [];
+    }
+    if (/^WebFetch(?:\(\s*\*?\s*\))?$/.test(rule.trim())) {
+        return [
+            {
+                severity: 'medium',
+                message: `Claude Code permission "${clip(rule)}" fetches any URL without asking`,
+                recommendation: 'Allow specific domains instead, for example "WebFetch(domain:docs.example.com)". Fetched pages can carry injected instructions, and URLs can carry data out.',
+                needle: rule,
+            },
+        ];
+    }
+    const fileRule = /^(Read|Edit|Write|MultiEdit|NotebookEdit)\((.*)\)$/s.exec(rule.trim());
+    if (fileRule && /^(?:~|\/\/|\$HOME)|(?:^|\/)\.\.(?:\/|$)/.test(fileRule[2].trim())) {
+        const writes = fileRule[1] !== 'Read';
+        return [
+            {
+                severity: writes ? 'high' : 'medium',
+                message: `Claude Code permission "${clip(rule)}" lets the agent ${writes ? 'change' : 'read'} files outside the project without asking`,
+                recommendation: 'Scope file permissions to the project. Home and absolute paths expose SSH keys, cloud credentials, and other projects.',
+                needle: rule,
+            },
+        ];
+    }
+    return [];
+}
+function additionalDirectoryFindings(dirs) {
+    return dirs.flatMap((dir) => {
+        const trimmed = dir.trim().replace(/\/+$/, '');
+        if (/^(?:|\/|~|\$HOME|\$\{HOME\}|[A-Za-z]:)$/.test(trimmed)) {
+            return [
+                {
+                    severity: 'high',
+                    message: `Claude Code additionalDirectories includes "${clip(dir)}", which opens the whole ${trimmed === '/' || trimmed === '' ? 'filesystem' : 'home directory'} to the agent`,
+                    recommendation: 'Remove it, or name the specific sibling directory the agent needs.',
+                    needle: dir,
+                },
+            ];
+        }
+        if (/^(?:\/|~|\$HOME)|(?:^|\/)\.\.(?:\/|$)/.test(trimmed)) {
+            return [
+                {
+                    severity: 'medium',
+                    message: `Claude Code additionalDirectories gives the agent access to "${clip(dir)}", outside the repository`,
+                    recommendation: 'Committed settings apply to everyone who opens the project. Keep extra directories in .claude/settings.local.json instead.',
+                    needle: dir,
+                },
+            ];
+        }
+        return [];
+    });
+}
+const ENDPOINT_VARS = /^(?:ANTHROPIC(?:_BEDROCK|_VERTEX)?_BASE_URL|CLAUDE_CODE_API_BASE_URL)$/i;
+const PROXY_VARS = /^(?:https?_proxy|all_proxy)$/i;
+const ANTHROPIC_HOST = /^https:\/\/(?:[\w-]+\.)*anthropic\.com(?::\d+)?(?:\/|$)/i;
+const LOCAL_HOST = /^(?:https?:\/\/)?(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(?:\/|$)/i;
+function isEnvReference(value) {
+    return /^\$\{?[A-Za-z_]\w*(?::-[^}]*)?\}?$/.test(value.trim());
+}
+function envFindings(env) {
+    const findings = [];
+    for (const [key, raw] of Object.entries(env)) {
+        if (typeof raw !== 'string' || raw.trim() === '' || isEnvReference(raw))
+            continue;
+        const value = raw.trim();
+        const where = `Claude Code settings set ${key}`;
+        if (ENDPOINT_VARS.test(key)) {
+            if (LOCAL_HOST.test(value) || ANTHROPIC_HOST.test(value))
+                continue;
+            findings.push({
+                severity: 'high',
+                message: `${where}, sending every prompt and the code it contains to ${clip(value)}`,
+                recommendation: 'Do not set API endpoints in committed settings. Anyone who opens the project would route their session through this host.',
+                needle: key,
+            });
+        }
+        else if (PROXY_VARS.test(key) && !LOCAL_HOST.test(value)) {
+            findings.push({
+                severity: 'high',
+                message: `${where}, routing the agent's network traffic through ${clip(value)}`,
+                recommendation: 'Remove the proxy from committed settings; configure it per machine.',
+                needle: key,
+            });
+        }
+        else if (key === 'NODE_TLS_REJECT_UNAUTHORIZED' && value === '0') {
+            findings.push({
+                severity: 'high',
+                message: `${where}=0, turning off TLS certificate checks`,
+                recommendation: 'Remove it. Without certificate checks, traffic can be intercepted.',
+                needle: key,
+            });
+        }
+        else if (key === 'NODE_OPTIONS' &&
+            /(?:^|\s)(?:--require|-r|--import|--loader|--experimental-loader)(?:\s|=)/.test(value)) {
+            findings.push({
+                severity: 'high',
+                message: `${where} to preload code into every Node.js process the agent starts`,
+                recommendation: 'Remove the preload from committed settings.',
+                needle: key,
+            });
+        }
+        else if (/^(?:BASH_ENV|ENV|ZDOTDIR|PROMPT_COMMAND)$/.test(key)) {
+            findings.push({
+                severity: 'high',
+                message: `${where}, which runs code every time the agent starts a shell`,
+                recommendation: 'Remove it from committed settings.',
+                needle: key,
+            });
+        }
+        else if (key === 'PATH') {
+            findings.push({
+                severity: 'medium',
+                message: `${where}, changing which programs run when the agent calls a command`,
+                recommendation: 'Avoid overriding PATH in committed settings; a repository directory early in PATH can shadow git, node, or pnpm.',
+                needle: key,
+            });
+        }
+    }
+    return findings;
+}
+// Settings that run a command to obtain credentials or headers.
+const CREDENTIAL_HELPERS = [
+    'apiKeyHelper',
+    'awsCredentialExport',
+    'awsAuthRefresh',
+    'gcpAuthRefresh',
+    'otelHeadersHelper',
+];
+/** Shorten repository-provided text quoted in a message. */
+function clip(text, max = 80) {
+    const flat = text.replace(/\s+/g, ' ').trim();
+    return flat.length > max ? `${flat.slice(0, max - 1)}…` : flat;
+}
+/** Every command that Claude Code runs on its own because of these settings. */
+function settingsCommands(settings) {
+    const commands = [];
+    const hooks = asRecord(settings.hooks) ?? {};
+    for (const [event, entries] of Object.entries(hooks)) {
+        if (!Array.isArray(entries))
+            continue;
+        for (const entry of entries) {
+            const hookList = asRecord(entry)?.hooks;
+            if (!Array.isArray(hookList))
+                continue;
+            for (const hook of hookList) {
+                const command = asRecord(hook)?.command;
+                if (typeof command === 'string')
+                    commands.push({ source: `${event} hook`, command });
+            }
+        }
+    }
+    const statusLine = settings.statusLine;
+    const statusCommand = typeof statusLine === 'string' ? statusLine : asRecord(statusLine)?.command;
+    if (typeof statusCommand === 'string')
+        commands.push({ source: 'statusLine', command: statusCommand });
+    for (const key of CREDENTIAL_HELPERS) {
+        const value = settings[key];
+        if (typeof value === 'string')
+            commands.push({ source: key, command: value });
+    }
+    return commands;
+}
+function commandFindings(settings) {
+    const findings = [];
+    for (const { source, command } of settingsCommands(settings)) {
+        if (CREDENTIAL_HELPERS.includes(source)) {
+            findings.push({
+                severity: 'medium',
+                message: `Claude Code settings define ${source}, which runs "${clip(command)}" to produce credentials`,
+                recommendation: 'Credential helpers belong in user settings. In committed project settings, the repository decides what runs with your credentials.',
+                needle: source,
+            });
+        }
+        for (const risk of findShellRisks(command)) {
+            findings.push({
+                severity: risk.severity,
+                message: `Claude Code ${source} ${risk.label}: "${clip(command)}"`,
+                recommendation: 'Commands in settings run automatically. Keep them to local, reviewed scripts in the repository.',
+                needle: command,
+            });
+        }
+    }
+    return findings;
+}
+function claudeSettingsFindings(settings) {
+    const findings = [];
+    const permissions = asRecord(settings.permissions);
+    if (permissions?.defaultMode === 'bypassPermissions') {
+        findings.push({
+            severity: 'high',
+            message: 'Claude Code is set to bypassPermissions: every tool runs without asking',
+            recommendation: 'Remove defaultMode "bypassPermissions" from the shared settings. Grant specific tools with permissions.allow instead.',
+            needle: 'bypassPermissions',
+        });
+    }
+    for (const rule of asStrings(permissions?.allow))
+        findings.push(...allowRuleFindings(rule));
+    findings.push(...additionalDirectoryFindings(asStrings(permissions?.additionalDirectories)));
+    const guarded = [...asStrings(permissions?.deny), ...asStrings(permissions?.ask)];
+    if (permissions && !guarded.some((rule) => rule.includes('.env'))) {
+        findings.push({
+            severity: 'low',
+            message: 'Claude Code settings do not deny reading .env files',
+            recommendation: 'Add deny rules such as "Read(./.env)" and "Read(./.env.*)" so secrets stay out of the agent context.',
+            needle: '"permissions"',
+        });
+    }
+    findings.push(...envFindings(asRecord(settings.env) ?? {}));
+    findings.push(...commandFindings(settings));
+    if (settings.enableAllProjectMcpServers === true) {
+        findings.push({
+            severity: 'medium',
+            message: 'Claude Code auto-approves every MCP server defined in the repository',
+            recommendation: 'Remove enableAllProjectMcpServers and approve servers individually (enabledMcpjsonServers), so a new server added in a pull request is not trusted automatically.',
+            needle: 'enableAllProjectMcpServers',
+        });
+    }
+    return findings;
+}
+const SCRIPT_TOKEN = /(?:["']?\$\{?CLAUDE_PROJECT_DIR\}?["']?\/|\.\/)?((?:[\w.-]+\/)*[\w.-]+\.(?:sh|bash|zsh|py|js|mjs|cjs|ts|rb|pl))\b/g;
+/**
+ * Repository-relative scripts that settings commands run, such as
+ * `"$CLAUDE_PROJECT_DIR"/.claude/hooks/format.sh`, so their contents can be
+ * checked too. Absolute and home paths are left out.
+ */
+function referencedScripts(settings) {
+    const scripts = new Set();
+    for (const { command } of settingsCommands(settings)) {
+        for (const match of command.matchAll(SCRIPT_TOKEN)) {
+            const before = command.slice(0, match.index);
+            if (/(?:^|[\s"'=])(?:\/|~)$/.test(before) || /(?:~|\$HOME)\/?$/.test(before))
+                continue;
+            const rel = match[1].replace(/^\.\//, '');
+            if (!rel.startsWith('..') && !rel.startsWith('/'))
+                scripts.add(rel);
+        }
+    }
+    return [...scripts];
+}
+
 ;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/checks/agentConfig.ts
+
+
 
 
 /** Agent configuration files checked by `checkAgentConfig`, relative to the repo root. */
@@ -43372,47 +43896,6 @@ function stripJsonComments(text) {
     }
     return out;
 }
-function asRecord(value) {
-    return typeof value === 'object' && value !== null && !Array.isArray(value)
-        ? value
-        : null;
-}
-function asStrings(value) {
-    return Array.isArray(value) ? value.filter((v) => typeof v === 'string') : [];
-}
-const UNRESTRICTED_SHELL = /^Bash(?:\((?:\*|:\*|\*:\*)?\))?$/;
-function claudeSettingsFindings(settings) {
-    const findings = [];
-    const permissions = asRecord(settings.permissions);
-    if (permissions?.defaultMode === 'bypassPermissions') {
-        findings.push({
-            severity: 'high',
-            message: 'Claude Code is set to bypassPermissions: every tool runs without asking',
-            recommendation: 'Remove defaultMode "bypassPermissions" from the shared settings. Grant specific tools with permissions.allow instead.',
-            needle: 'bypassPermissions',
-        });
-    }
-    for (const rule of asStrings(permissions?.allow)) {
-        if (UNRESTRICTED_SHELL.test(rule.replace(/\s+/g, ''))) {
-            findings.push({
-                severity: 'high',
-                message: `Claude Code permission "${rule}" allows any shell command without asking`,
-                recommendation: 'Allow specific commands instead, for example "Bash(pnpm test:*)", and keep destructive commands behind a prompt.',
-                needle: rule,
-            });
-        }
-    }
-    findings.push(...credentialFindings('Claude Code settings', asRecord(settings.env)));
-    if (settings.enableAllProjectMcpServers === true) {
-        findings.push({
-            severity: 'medium',
-            message: 'Claude Code auto-approves every MCP server defined in the repository',
-            recommendation: 'Remove enableAllProjectMcpServers and approve servers individually (enabledMcpjsonServers), so a new server added in a pull request is not trusted automatically.',
-            needle: 'enableAllProjectMcpServers',
-        });
-    }
-    return findings;
-}
 // Launchers that download and run a package by name at start-up.
 const PACKAGE_RUNNERS = new Set(['npx', 'bunx', 'pnpx', 'uvx', 'pipx']);
 function packageArgument(command, args) {
@@ -43446,6 +43929,7 @@ function credentialFindings(where, entries) {
             message: `${where} hardcodes a credential in "${key}"`,
             recommendation: 'Reference the credential through an environment variable (for example "${env:API_KEY}") instead of committing it, and rotate the exposed value.',
             needle: value,
+            secret: true,
         });
     }
     return findings;
@@ -43470,6 +43954,34 @@ function mcpServerFindings(name, server) {
             });
         }
     }
+    const commandLine = [typeof server.command === 'string' ? server.command : '', ...args].join(' ');
+    for (const risk of findShellRisks(commandLine)) {
+        if (risk.label.startsWith('runs a package'))
+            continue;
+        findings.push({
+            severity: risk.severity,
+            message: `MCP server "${name}" ${risk.label} when it starts`,
+            recommendation: 'Start MCP servers from a pinned package or a reviewed local script.',
+            needle: typeof server.command === 'string' ? server.command : undefined,
+        });
+    }
+    const headersHelper = typeof server.headersHelper === 'string' ? server.headersHelper : undefined;
+    if (headersHelper) {
+        findings.push({
+            severity: 'medium',
+            message: `MCP server "${name}" runs "${clip(headersHelper)}" to produce request headers`,
+            recommendation: 'A headers helper runs on your machine each time the server connects. Keep it in user settings, or make sure it only reads a local credential.',
+            needle: 'headersHelper',
+        });
+        for (const risk of findShellRisks(headersHelper)) {
+            findings.push({
+                severity: risk.severity,
+                message: `MCP server "${name}" headersHelper ${risk.label}`,
+                recommendation: 'Remove the command, or replace it with a reviewed local script.',
+                needle: 'headersHelper',
+            });
+        }
+    }
     const url = typeof server.url === 'string' ? server.url : undefined;
     if (url &&
         /^http:\/\//i.test(url) &&
@@ -43490,9 +44002,10 @@ function lineOf(content, needle) {
     return idx === -1 ? undefined : idx + 1;
 }
 /**
- * Risky settings in committed agent configuration: Claude Code permissions and
- * MCP server definitions. Hardcoded credentials are reported through the
- * secrets patterns, with redacted evidence.
+ * Risky settings in committed agent configuration: Claude Code permissions,
+ * hooks, environment, and credential helpers, and MCP server definitions.
+ * Hardcoded credentials are reported through the secrets patterns, with
+ * redacted evidence.
  */
 function checkAgentConfig(filePath, content) {
     let parsed;
@@ -43515,6 +44028,7 @@ function checkAgentConfig(filePath, content) {
     const findings = [];
     if (filePath.replace(/\\/g, '/').endsWith('.claude/settings.json')) {
         findings.push(...claudeSettingsFindings(root));
+        findings.push(...credentialFindings('Claude Code settings', asRecord(root.env)));
     }
     const servers = asRecord(root.mcpServers) ?? asRecord(root.servers) ?? {};
     for (const [name, value] of Object.entries(servers)) {
@@ -43533,7 +44047,7 @@ function checkAgentConfig(filePath, content) {
     const issues = [];
     findings.forEach((finding, i) => {
         const line = lineOf(content, finding.needle);
-        const isCredential = finding.severity === 'high' && finding.message.includes('hardcodes');
+        const isCredential = finding.secret === true;
         if (isCredential && line !== undefined && secretLines.has(line))
             return;
         issues.push({
@@ -43557,6 +44071,16 @@ function evidenceFor(content, line, secret) {
         return evidence;
     const masked = `${secret.slice(0, 4)}${'*'.repeat(Math.min(12, Math.max(0, secret.length - 4)))}`;
     return evidence.split(secret).join(masked);
+}
+/** Repository scripts that `.claude/settings.json` runs from hooks or the status line. */
+function claudeSettingsScripts(content) {
+    try {
+        const settings = asRecord(JSON.parse(stripJsonComments(content)));
+        return settings ? referencedScripts(settings) : [];
+    }
+    catch {
+        return [];
+    }
 }
 
 ;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/checks/frontmatter.ts
@@ -43686,6 +44210,235 @@ function checkFrontmatter(filePath, content) {
     ];
 }
 
+;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/checks/claudeArtifacts.ts
+
+
+
+
+
+const RUNS_SHELL = /^\.claude\/(?:commands\/.+\.md|skills\/.+\.md)$/;
+const SUBAGENT = /^\.claude\/agents\/.+\.md$/;
+const MEMORY_FILE = /(?:^|\/)CLAUDE\.md$/i;
+/**
+ * Tools a command or skill pre-approves, from `allowed-tools` as a comma
+ * separated string or a YAML list. Commas inside `Bash(...)` stay with their rule.
+ */
+function allowedTools(content) {
+    const lines = content.split('\n');
+    const fm = parseFrontmatter(content);
+    if (!fm || fm.endLine === -1)
+        return [];
+    const at = lines.findIndex((l, i) => i < fm.endLine && /^allowed-tools\s*:/.test(l));
+    if (at === -1)
+        return [];
+    const inline = lines[at].replace(/^allowed-tools\s*:\s*/, '').replace(/^\[|\]$/g, '');
+    const rules = [];
+    for (const rule of splitRules(inline))
+        rules.push({ rule, line: at + 1 });
+    for (let i = at + 1; i < fm.endLine - 1; i++) {
+        const item = /^\s+-\s+(.+)$/.exec(lines[i]);
+        if (!item)
+            break;
+        rules.push({ rule: unquote(item[1]), line: i + 1 });
+    }
+    return rules;
+}
+function splitRules(text) {
+    const rules = [];
+    let depth = 0;
+    let current = '';
+    for (const char of text) {
+        if (char === '(')
+            depth++;
+        if (char === ')')
+            depth = Math.max(0, depth - 1);
+        if (depth === 0 && (char === ',' || char === ' ')) {
+            if (current.trim())
+                rules.push(unquote(current));
+            current = '';
+            continue;
+        }
+        current += char;
+    }
+    if (current.trim())
+        rules.push(unquote(current));
+    return rules;
+}
+function unquote(value) {
+    return value.trim().replace(/^(["'])(.*)\1$/, '$2');
+}
+/**
+ * Shell commands a command or skill runs before the model sees it: inline
+ * !`cmd` and ```! fenced blocks. They run without a permission prompt.
+ */
+function injectedCommands(content) {
+    const commands = [];
+    const lines = content.split('\n');
+    let block = null;
+    let fence = null;
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (block) {
+            if (/^\s*```\s*$/.test(line)) {
+                commands.push({ command: block.body.join('\n'), line: block.start });
+                block = null;
+            }
+            else {
+                block.body.push(line);
+            }
+            continue;
+        }
+        const opener = /^\s*(```+|~~~+)(.*)$/.exec(line);
+        if (opener) {
+            if (fence === null && opener[2].trim() === '!') {
+                block = { start: i + 1, body: [] };
+            }
+            else if (fence === null) {
+                fence = opener[1];
+            }
+            else if (line.trim().startsWith(fence)) {
+                fence = null;
+            }
+            continue;
+        }
+        if (fence !== null)
+            continue;
+        for (const match of line.matchAll(/!`([^`\n]+)`/g)) {
+            commands.push({ command: match[1], line: i + 1 });
+        }
+    }
+    return commands;
+}
+// Home-directory files that hold credentials; importing one puts it in context.
+const CREDENTIAL_PATH = /(?:^|\/)(?:\.ssh|\.aws|\.gnupg|\.kube|\.docker|\.config\/gh|\.config\/gcloud)(?:\/|$)|(?:^|\/)(?:\.netrc|\.npmrc|\.pypirc|\.git-credentials|\.env(?!\.(?:example|sample|template)$)(?:\.[\w.-]+)?|id_(?:rsa|ed25519|ecdsa)\w*|[\w.-]+\.pem)$/i;
+/** `@path` imports in a CLAUDE.md, outside code spans and fences. */
+function memoryImports(content) {
+    const imports = [];
+    let fence = null;
+    content.split('\n').forEach((raw, i) => {
+        const opener = /^\s*(```+|~~~+)/.exec(raw);
+        if (opener) {
+            if (fence === null)
+                fence = opener[1];
+            else if (raw.trim().startsWith(fence))
+                fence = null;
+            return;
+        }
+        if (fence !== null)
+            return;
+        const line = raw.replace(/`[^`]*`/g, '');
+        for (const match of line.matchAll(/(?:^|[\s(])@((?:~|\.{1,2})?\/?[\w.~/-]*[\w~-])/g)) {
+            imports.push({ target: match[1], line: i + 1 });
+        }
+    });
+    return imports;
+}
+function importFindings(rel, content) {
+    const findings = [];
+    for (const { target, line } of memoryImports(content)) {
+        const outside = target.startsWith('~') ||
+            target.startsWith('/') ||
+            external_node_path_default().posix.normalize(external_node_path_default().posix.join(external_node_path_default().posix.dirname(rel), target)).startsWith('..');
+        if (CREDENTIAL_PATH.test(target)) {
+            findings.push({
+                line,
+                severity: 'high',
+                message: `CLAUDE.md imports @${clip(target)}, loading a credential file into the agent context`,
+                recommendation: 'Remove the import. Anything imported is sent to the model and can end up in logs and output.',
+            });
+        }
+        else if (outside) {
+            findings.push({
+                line,
+                severity: 'low',
+                message: `CLAUDE.md imports @${clip(target)} from outside the repository, so the instructions differ per machine and cannot be reviewed`,
+                recommendation: 'Keep shared instructions in the repository. Personal imports belong in CLAUDE.local.md or ~/.claude/CLAUDE.md.',
+            });
+        }
+    }
+    return findings;
+}
+/**
+ * Claude Code commands, skills, subagents, and CLAUDE.md files that grant
+ * more than their text suggests: shell commands that run on invocation,
+ * blanket tool approval, subagents that skip permission prompts, and imports
+ * of files outside the repository.
+ */
+function checkClaudeArtifact(filePath, content) {
+    const rel = filePath.replace(/\\/g, '/');
+    const findings = [];
+    if (RUNS_SHELL.test(rel)) {
+        for (const { rule, line } of allowedTools(content)) {
+            for (const finding of allowRuleFindings(rule)) {
+                findings.push({
+                    line,
+                    severity: finding.severity,
+                    message: `allowed-tools ${finding.message.replace(/^Claude Code permission /, '')}`,
+                    recommendation: finding.recommendation,
+                });
+            }
+        }
+        for (const { command, line } of injectedCommands(content)) {
+            for (const risk of findShellRisks(command)) {
+                findings.push({
+                    line,
+                    severity: risk.severity,
+                    message: `Command runs when invoked and ${risk.label}`,
+                    recommendation: '!`...` commands run before the model reads the file, without a permission prompt. Keep them to local, read-only commands.',
+                });
+            }
+        }
+    }
+    if (SUBAGENT.test(rel)) {
+        const mode = parseFrontmatter(content)?.fields.get('permissionMode');
+        if (mode && unquote(mode) === 'bypassPermissions') {
+            const line = content.split('\n').findIndex((l) => /^permissionMode\s*:/.test(l)) + 1;
+            findings.push({
+                line,
+                severity: 'high',
+                message: 'Subagent runs with permissionMode: bypassPermissions, so its tools never ask',
+                recommendation: 'Remove permissionMode or use a narrower mode, and limit the subagent with a tools list.',
+            });
+        }
+    }
+    if (MEMORY_FILE.test(rel))
+        findings.push(...importFindings(rel, content));
+    return findings.map((f, i) => ({
+        id: `agent-config-${rel}-${f.line}-${i}`,
+        severity: f.severity,
+        category: 'agent-config',
+        file: filePath,
+        line: f.line,
+        evidence: getLineEvidence(content, f.line),
+        message: f.message,
+        recommendation: f.recommendation,
+    }));
+}
+/**
+ * Scripts referenced from settings (hooks, status line) run on every matching
+ * event, so each line is checked like an inline command.
+ */
+function checkClaudeScript(filePath, content) {
+    const issues = [];
+    content.split('\n').forEach((line, i) => {
+        if (/^\s*#/.test(line))
+            return;
+        for (const risk of findShellRisks(line)) {
+            issues.push({
+                id: `agent-config-${filePath.replace(/\\/g, '/')}-${i + 1}-${risk.label}`,
+                severity: risk.severity,
+                category: 'agent-config',
+                file: filePath,
+                line: i + 1,
+                evidence: getLineEvidence(content, i + 1),
+                message: `Script run by Claude Code settings ${risk.label}`,
+                recommendation: 'Hooks and status line scripts run automatically. Keep them local and reviewed; never fetch and run remote code from them.',
+            });
+        }
+    });
+    return issues;
+}
+
 ;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/score.ts
 const DEDUCTIONS = {
     high: 20,
@@ -43747,6 +44500,7 @@ const KNOWN_SUPPRESSION_CATEGORIES = new Set([
     'broken-references',
     'file-size',
     'frontmatter',
+    'agent-config',
 ]);
 const NEXT_LINE_RE = /<!--\s*acd-disable-next-line\s+(\S+)\s*-->/;
 const FILE_RE = /<!--\s*acd-disable-file\s+(\S+)\s*-->/;
@@ -43808,6 +44562,7 @@ function filterSuppressedIssues(filePath, content, issues) {
 }
 
 ;// CONCATENATED MODULE: ./vendor/agent-context-doctor/src/audit/auditRepo.ts
+
 
 
 
@@ -43948,6 +44703,9 @@ async function auditRepo_auditRepo(repoPath, opts = {}) {
         if (!disabled.has('frontmatter')) {
             fileIssues.push(...checkFrontmatter(filePath, content));
         }
+        if (!disabled.has('agent-config')) {
+            fileIssues.push(...checkClaudeArtifact(filePath, content));
+        }
         if (!disabled.has('placeholder-content')) {
             fileIssues.push(...checkPlaceholderContent(filePath, content));
         }
@@ -43993,8 +44751,17 @@ async function auditRepo_auditRepo(repoPath, opts = {}) {
     if (!disabled.has('agent-config')) {
         for (const rel of AGENT_CONFIG_FILES) {
             const content = await readRepoFile(absoluteRepo, rel);
-            if (content !== '')
-                issues.push(...checkAgentConfig(external_node_path_default().normalize(rel), content));
+            if (content === '')
+                continue;
+            issues.push(...checkAgentConfig(external_node_path_default().normalize(rel), content));
+            if (rel !== '.claude/settings.json')
+                continue;
+            for (const script of claudeSettingsScripts(content)) {
+                const scriptContent = await readRepoFile(absoluteRepo, script);
+                if (scriptContent !== '') {
+                    issues.push(...checkClaudeScript(external_node_path_default().normalize(script), scriptContent));
+                }
+            }
         }
     }
     // Cross-file contradiction check runs after all files are collected
