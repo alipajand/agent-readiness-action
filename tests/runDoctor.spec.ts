@@ -51,7 +51,9 @@ describe('formatContextSection', () => {
     expect(md).toContain('`AGENTS.md:2`');
     expect(md).not.toContain('<!--');
 
-    const empty = formatContextSection(await runContextAudit(path.join(workspace, 'none'), workspace));
+    const empty = formatContextSection(
+      await runContextAudit(path.join(workspace, 'none'), workspace),
+    );
     expect(empty).toContain('(repository)');
   });
 });

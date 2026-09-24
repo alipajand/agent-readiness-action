@@ -6,6 +6,10 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-24
+
+First release.
+
 ### Security
 
 - The report is written without a check-then-open gap. It is created with `O_EXCL`, and an existing file is opened without truncation and replaced only after confirming the path still names that same regular file, not a symlink. This also covers Windows runners, which have no `O_NOFOLLOW`.
@@ -35,6 +39,7 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 - `AGENTS.md` and `CLAUDE.md` for agents working on this repository.
 - Claude Code setup: `/verify` command, read-only `security-reviewer` subagent, a `bumping-bundled-engines` skill, and a least-privilege `.claude/settings.json` (pnpm scripts and read-only git allowed; commits, pushes, dependency changes, and git inside `vendor/` ask; `.env` reads, `vendor/` edits, and network and destructive commands denied).
 - `SECURITY.md`, `docs/ARCHITECTURE.md` (modules, run order, trust boundaries), and `.editorconfig`.
+- Prettier (`pnpm format`, `pnpm format:check`), checked in CI.
 - `baseline-ref` and `max-score-drop` inputs: audit the base commit in a temporary git worktree, report the score change in the log, job summary, and PR comment, and fail when the score drops too far. New outputs `baseline-score` and `score-delta`.
 - The audit summary is written to the workflow run's job summary (`job-summary: false` to turn it off).
 - `passed` and `categories` outputs.
@@ -50,3 +55,6 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 - The audit no longer writes `.ark-history.json` into the audited repository.
 - Comment lookup paginates past 100 comments; oversized comments are truncated to GitHub's limit.
 - `min-score` must be an integer; values such as `70abc` are rejected instead of being read as `70`.
+
+[Unreleased]: https://github.com/alipajand/agent-readiness-action/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/alipajand/agent-readiness-action/releases/tag/v1.0.0

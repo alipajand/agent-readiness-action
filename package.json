@@ -1,6 +1,6 @@
 {
   "name": "agent-readiness-action",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "GitHub Action wrapper for agent-readiness-kit CI audits",
   "type": "module",
   "private": true,
@@ -11,6 +11,8 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -23,6 +25,7 @@
     "@types/node": "^24.13.6",
     "@vercel/ncc": "^0.45.0",
     "@vitest/coverage-v8": "^4.1.11",
+    "prettier": "^3.9.9",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },

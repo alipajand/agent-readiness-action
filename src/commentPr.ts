@@ -53,9 +53,7 @@ export async function commentOnPr(options: CommentPrOptions): Promise<void> {
   const ctx = github.context;
 
   if (ctx.eventName !== 'pull_request' && ctx.eventName !== 'pull_request_target') {
-    core.info(
-      `Skipping PR comment: event is "${ctx.eventName}", not pull_request.`,
-    );
+    core.info(`Skipping PR comment: event is "${ctx.eventName}", not pull_request.`);
     return;
   }
 

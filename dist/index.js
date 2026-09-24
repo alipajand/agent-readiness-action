@@ -44119,11 +44119,18 @@ function mcpServerFindings(name, server) {
     }
     return findings;
 }
+// The quoted JSON form finds the value itself: a bare "~" would also match
+// "Edit(~/.zshrc)" on an earlier line.
 function lineOf(content, needle) {
     if (!needle)
         return undefined;
-    const idx = content.split('\n').findIndex((line) => line.includes(needle));
-    return idx === -1 ? undefined : idx + 1;
+    const lines = content.split('\n');
+    for (const form of [JSON.stringify(needle), needle]) {
+        const idx = lines.findIndex((line) => line.includes(form));
+        if (idx !== -1)
+            return idx + 1;
+    }
+    return undefined;
 }
 /**
  * Risky settings in committed agent configuration: Claude Code permissions,
@@ -59358,7 +59365,10 @@ async function run() {
     if (failOnThreshold && result.score < minScore) {
         setFailed(`Agent-readiness score ${result.score} is below the required minimum of ${minScore}.`);
     }
-    if (context && contextFailOn && isSeverity(contextFailOn) && hasIssueAtOrAbove(context, contextFailOn)) {
+    if (context &&
+        contextFailOn &&
+        isSeverity(contextFailOn) &&
+        hasIssueAtOrAbove(context, contextFailOn)) {
         setFailed(`agent-context-doctor found issues at or above "${contextFailOn}" severity (${context.summary.high} high, ${context.summary.medium} medium, ${context.summary.low} low).`);
     }
     if (comparison && maxScoreDrop !== undefined) {

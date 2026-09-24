@@ -123,10 +123,7 @@ export function formatDelta(score: number, comparison: ScoreComparison): string 
  * Markdown body for the GitHub PR comment and job summary (without the
  * marker line).
  */
-export function formatMarkdownComment(
-  result: AuditResult,
-  comparison?: ScoreComparison,
-): string {
+export function formatMarkdownComment(result: AuditResult, comparison?: ScoreComparison): string {
   const emoji = overallEmoji(result.score);
   const lines: string[] = [];
 
