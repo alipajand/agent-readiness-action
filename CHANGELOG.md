@@ -8,6 +8,9 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ### Security
 
+- The report is written without a check-then-open gap. It is created with `O_EXCL`, and an existing file is opened without truncation and replaced only after confirming the path still names that same regular file, not a symlink. This also covers Windows runners, which have no `O_NOFOLLOW`.
+- Markdown escaping also escapes backslashes, and table code spans double a backslash run before `|`, so a file name cannot cancel an escaped pipe and split a table cell.
+- Bundled engines read files by checking type and size on the opened handle, so a file cannot be swapped between the check and the read.
 - The action no longer runs `npx --yes agent-readiness-kit`. The npm package with that name is published by an unrelated author, so every run downloaded and executed third-party code, with `GITHUB_TOKEN` in its environment when PR comments were enabled. The audit engine is now bundled from the `vendor/agent-readiness-kit` submodule at a pinned commit, and the action makes no registry requests.
 - The `output` report must resolve inside `repo-path` and is never written through a symlink.
 - Audit details are logged with workflow commands paused (`::stop-commands::`), so file names or messages from the audited repository cannot inject workflow commands.

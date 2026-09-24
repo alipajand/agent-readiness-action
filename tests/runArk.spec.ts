@@ -49,6 +49,14 @@ describe('runArk', () => {
     expect(report).toContain('# Agent Readiness Report');
   });
 
+  it('replaces an existing report completely', async () => {
+    await writeFile(path.join(repo, 'report.md'), 'x'.repeat(100_000));
+    await runArk({ repoPath: repo, output: 'report.md' });
+    const content = await readFile(path.join(repo, 'report.md'), 'utf8');
+    expect(content.startsWith('# Agent Readiness Report')).toBe(true);
+    expect(content).not.toContain('xxxx');
+  });
+
   it('rejects a report path that escapes the repository', async () => {
     await expect(runArk({ repoPath: repo, output: '../escape.md' })).rejects.toThrow(
       /must resolve to a path inside repo-path/,
@@ -71,6 +79,16 @@ describe('runArk', () => {
       /symbolic link/,
     );
     expect(await readFile(target, 'utf8')).toBe('keep');
+  });
+
+  it('refuses a dangling report symlink without creating its target', async () => {
+    const target = path.join(workspace, 'created-by-link.md');
+    await symlink(target, path.join(repo, 'report.md'));
+
+    await expect(runArk({ repoPath: repo, output: 'report.md' })).rejects.toThrow(
+      /symbolic link/,
+    );
+    await expect(access(target)).rejects.toThrow();
   });
 
   it('rejects a report symlink that points outside the repository', async () => {

@@ -1,5 +1,6 @@
 import { constants } from 'node:fs';
 import { lstat, mkdir, open } from 'node:fs/promises';
+import type { FileHandle } from 'node:fs/promises';
 import * as path from 'node:path';
 import { auditRepo } from '../vendor/agent-readiness-kit/src/audit/auditRepo.js';
 import { formatMarkdownReport } from '../vendor/agent-readiness-kit/src/report/markdownReport.js';
@@ -28,17 +29,56 @@ export interface RunArkResult {
   reportPath?: string;
 }
 
-// O_NOFOLLOW is undefined on Windows runners; the lstat check covers them.
-const WRITE_FLAGS =
-  constants.O_WRONLY | constants.O_CREAT | constants.O_TRUNC | (constants.O_NOFOLLOW ?? 0);
+// O_NOFOLLOW and O_NONBLOCK are undefined on Windows runners. There, the check
+// after opening an existing file still refuses symlinks.
+const NO_FOLLOW = constants.O_NOFOLLOW ?? 0;
+// O_EXCL fails when anything, including a dangling symlink, is already there.
+const CREATE_FLAGS = constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | NO_FOLLOW;
+// No O_CREAT or O_TRUNC: nothing changes until the opened file is verified.
+const EXISTING_FLAGS = constants.O_WRONLY | NO_FOLLOW | (constants.O_NONBLOCK ?? 0);
 
+function symlinkError(filePath: string): Error {
+  return new Error(`Refusing to write the report through a symbolic link: ${filePath}`);
+}
+
+function errorCode(error: unknown): string | undefined {
+  return (error as NodeJS.ErrnoException).code;
+}
+
+/**
+ * Write the report without following a symlink at the final component and
+ * without a gap between a check and the write. A new file is created
+ * exclusively; an existing one is truncated only after confirming the path
+ * still names that same regular file.
+ */
 async function writeReportNoFollow(filePath: string, content: string): Promise<void> {
   await mkdir(path.dirname(filePath), { recursive: true });
-  const existing = await lstat(filePath).catch(() => null);
-  if (existing?.isSymbolicLink()) {
-    throw new Error(`Refusing to write the report through a symbolic link: ${filePath}`);
+
+  let handle: FileHandle;
+  try {
+    handle = await open(filePath, CREATE_FLAGS, 0o666);
+  } catch (err) {
+    if (errorCode(err) !== 'EEXIST') throw err;
+    try {
+      handle = await open(filePath, EXISTING_FLAGS);
+    } catch (existingErr) {
+      if (errorCode(existingErr) === 'ELOOP') throw symlinkError(filePath);
+      throw existingErr;
+    }
+    try {
+      const opened = await handle.stat();
+      const named = await lstat(filePath);
+      if (named.isSymbolicLink() || opened.ino !== named.ino || opened.dev !== named.dev) {
+        throw symlinkError(filePath);
+      }
+      if (!opened.isFile()) throw new Error(`The report path is not a regular file: ${filePath}`);
+      await handle.truncate(0);
+    } catch (verifyErr) {
+      await handle.close();
+      throw verifyErr;
+    }
   }
-  const handle = await open(filePath, WRITE_FLAGS, 0o666);
+
   try {
     await handle.writeFile(content, 'utf8');
   } finally {
