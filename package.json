@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@vercel/ncc": "^0.38.3",
+    "@vercel/ncc": "^0.45.0",
     "@vitest/coverage-v8": "^4.1.11",
     "typescript": "^5.8.2",
     "vitest": "^4.1.11"
