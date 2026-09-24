@@ -14,10 +14,24 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 - PR comments escape HTML and keep file names in code spans. Only a comment that starts with the marker and was written by a bot (or `comment-author`) is updated. Previously any comment containing the marker could be overwritten.
 - Bumped `vitest` to 4.1.11 for the `@vitest/mocker` path-traversal advisory.
 
+### Changed
+
+- Bundled engines updated. With `context-audit`, agent-context-doctor now reports risky Claude Code settings, including:
+  - allow rules that run any code
+  - `bypassPermissions`, API endpoint and proxy overrides
+  - hooks and status line commands that fetch and run code, and the scripts they run
+  - commands and skills with `!` shell injection
+  - subagents that bypass permissions
+  - `CLAUDE.md` imports of credential files
+
+  The readiness score's safety category now rewards `.claude/settings.json` deny rules for `.env` and deducts for `bypassPermissions` or unrestricted `Bash`.
+
 ### Added
 
 - `context-audit` and `context-fail-on` inputs: also check agent instruction files with agent-context-doctor, bundled from the `vendor/agent-context-doctor` submodule. Adds its score and top issues to the log, job summary, and PR comment, honors the audited repository's `.acdrc`, and sets `context-score`, `context-grade`, and `context-issue-count` outputs.
 - `AGENTS.md` and `CLAUDE.md` for agents working on this repository.
+- Claude Code setup: `/verify` command, read-only `security-reviewer` subagent, a `bumping-bundled-engines` skill, and a least-privilege `.claude/settings.json` (pnpm scripts and read-only git allowed; commits, pushes, dependency changes, and git inside `vendor/` ask; `.env` reads, `vendor/` edits, and network and destructive commands denied).
+- `SECURITY.md`, `docs/ARCHITECTURE.md` (modules, run order, trust boundaries), and `.editorconfig`.
 - `baseline-ref` and `max-score-drop` inputs: audit the base commit in a temporary git worktree, report the score change in the log, job summary, and PR comment, and fail when the score drops too far. New outputs `baseline-score` and `score-delta`.
 - The audit summary is written to the workflow run's job summary (`job-summary: false` to turn it off).
 - `passed` and `categories` outputs.
