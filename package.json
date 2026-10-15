@@ -25,12 +25,12 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/node": "^24.19.1",
+    "@types/node": "^24.19.2",
     "@vercel/ncc": "^0.45.0",
     "@vitest/coverage-v8": "^4.1.11",
     "commander": "15.0.0",
     "picocolors": "1.1.1",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },

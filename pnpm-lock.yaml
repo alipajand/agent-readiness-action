@@ -28,8 +28,8 @@ importers:
         version: 4.6.5
     devDependencies:
       '@types/node':
-        specifier: ^24.19.1
-        version: 24.19.1
+        specifier: ^24.19.2
+        version: 24.19.2
       '@vercel/ncc':
         specifier: ^0.45.0
         version: 0.45.0
@@ -43,14 +43,14 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       prettier:
-        specifier: ^3.9.9
-        version: 3.9.9
+        specifier: ^3.9.10
+        version: 3.9.10
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
       vitest:
         specifier: ^4.1.11
-        version: 4.1.11(@types/node@24.19.1)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.1))
+        version: 4.1.11(@types/node@24.19.2)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.2))
 
   integrations:
     dependencies:
@@ -62,11 +62,11 @@ importers:
         version: 4.6.5
     devDependencies:
       '@modelcontextprotocol/client':
-        specifier: 2.2.0
-        version: 2.2.0
+        specifier: 2.3.1
+        version: 2.3.1
       ajv:
-        specifier: 8.18.0
-        version: 8.18.0
+        specifier: 8.20.0
+        version: 8.20.0
 
 packages:
 
@@ -275,12 +275,16 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@modelcontextprotocol/client@2.2.0':
-    resolution: {integrity: sha512-LxCou/CSYQ6dwEnjhLZY0KnEuc8V4UJ3IEQCl/uR2yHobSQIEdJKUlKLRYRF5i5FqRGHy1eK7une3aAWDHLtig==}
+  '@modelcontextprotocol/client@2.3.1':
+    resolution: {integrity: sha512-mIGZXpHsjnZ6lD+gD/WCMpR5k8yVQQ8nNFH1N0Srf7AvnwTUMYD6pvTY8ng2+He5FfV7YMZLmrjL7cLa/cc3dQ==}
     engines: {node: '>=20'}
 
   '@modelcontextprotocol/core@2.2.0':
     resolution: {integrity: sha512-iLhmprRmWI8EcosOA3wVvww22z02NkgqhV4fBH6f/odQBsi7xnJc0HGmi21yWO+/iKw2yzqVE127Zhna5/+JXw==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/core@2.3.1':
+    resolution: {integrity: sha512-laVmIhPGpWi7rG9q+0UigblRN0Hws/Yjlb6qLFtVqryXVLkc4h+yN8z731POD2LnAGQlFe7/tXhUm7Bi0YB91g==}
     engines: {node: '>=20'}
 
   '@modelcontextprotocol/server@2.2.0':
@@ -479,8 +483,8 @@ packages:
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
-  '@types/node@24.19.1':
-    resolution: {integrity: sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==}
+  '@types/node@24.19.2':
+    resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
 
   '@vercel/ncc@0.45.0':
     resolution: {integrity: sha512-8zPi1yO2mHpoKTD+e+Bf0ZT3e+sWHSOyGapm9s7b5R0gxJi3CiFTqmeQiMEyu6ejrz2s09M8JkEoUaTWjBJPQQ==}
@@ -524,8 +528,8 @@ packages:
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
 
-  ajv@8.18.0:
-    resolution: {integrity: sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==}
+  ajv@8.20.0:
+    resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -673,8 +677,8 @@ packages:
     resolution: {integrity: sha512-DTPx3RWSSnWyzLxQnlH0rJP+EW5ekl16ZU4/psbIhA0e53kJfdgaN5vKM+xP7yJtXVu+nfdVFmlgFDEKAe4Pyw==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prettier@3.9.9:
-    resolution: {integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==}
+  prettier@3.9.10:
+    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -980,9 +984,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@modelcontextprotocol/client@2.2.0':
+  '@modelcontextprotocol/client@2.3.1':
     dependencies:
-      '@modelcontextprotocol/core': 2.2.0
+      '@modelcontextprotocol/core': 2.3.1
       cross-spawn: 7.0.6
       eventsource: 3.0.7
       eventsource-parser: 3.1.1
@@ -991,6 +995,10 @@ snapshots:
       zod: 4.6.5
 
   '@modelcontextprotocol/core@2.2.0':
+    dependencies:
+      zod: 4.6.5
+
+  '@modelcontextprotocol/core@2.3.1':
     dependencies:
       zod: 4.6.5
 
@@ -1137,7 +1145,7 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
-  '@types/node@24.19.1':
+  '@types/node@24.19.2':
     dependencies:
       undici-types: 7.24.6
 
@@ -1155,7 +1163,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@types/node@24.19.1)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.1))
+      vitest: 4.1.11(@types/node@24.19.2)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.2))
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -1166,13 +1174,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.11(vite@7.3.5(@types/node@24.19.1))':
+  '@vitest/mocker@4.1.11(vite@7.3.5(@types/node@24.19.2))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.5(@types/node@24.19.1)
+      vite: 7.3.5(@types/node@24.19.2)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -1198,7 +1206,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
 
-  ajv@8.18.0:
+  ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
       fast-uri: 3.1.8
@@ -1344,7 +1352,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  prettier@3.9.9: {}
+  prettier@3.9.10: {}
 
   require-from-string@2.0.2: {}
 
@@ -1420,7 +1428,7 @@ snapshots:
 
   universal-user-agent@7.0.3: {}
 
-  vite@7.3.5(@types/node@24.19.1):
+  vite@7.3.5(@types/node@24.19.2):
     dependencies:
       esbuild: 0.28.1
       fdir: 6.5.0(picomatch@4.0.5)
@@ -1429,13 +1437,13 @@ snapshots:
       rollup: 4.61.0
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 24.19.1
+      '@types/node': 24.19.2
       fsevents: 2.3.3
 
-  vitest@4.1.11(@types/node@24.19.1)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.1)):
+  vitest@4.1.11(@types/node@24.19.2)(@vitest/coverage-v8@4.1.11)(vite@7.3.5(@types/node@24.19.2)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@24.19.1))
+      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@24.19.2))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -1452,10 +1460,10 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 7.3.5(@types/node@24.19.1)
+      vite: 7.3.5(@types/node@24.19.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.19.1
+      '@types/node': 24.19.2
       '@vitest/coverage-v8': 4.1.11(vitest@4.1.11)
     transitivePeerDependencies:
       - msw
