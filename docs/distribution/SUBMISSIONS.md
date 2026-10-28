@@ -5,12 +5,12 @@ on 2026-10-12 against each destination's own pages, linked below; no listing exi
 four destinations that day. Current states, as recorded in
 [PUBLISHING-MATRIX.md](../PUBLISHING-MATRIX.md):
 
-| Order | Destination                | Status                          | Needs from the owner                                              | Blocker                                                       |
-| ----- | -------------------------- | ------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------- |
-| 1     | mcpserver.dev              | **PUBLISHED** — origin unknown  | Nothing; do not resubmit                                          | None; listed despite the two HTTP 500 answers                 |
-| 2     | Glama                      | **SUBMITTED — Awaiting review** | Await review; follow Glama's Dockerfile instructions if requested | None                                                          |
-| 3     | Anthropic plugin directory | **SUBMITTED — Scanning**        | Await the scan; answer any requested changes                      | None                                                          |
-| 4     | Cursor Marketplace         | **SUBMITTED — Awaiting review** | Await Cursor's email; answer any requested changes                | None; the acceptance test passed 2026-10-13, including step 6 |
+| Order | Destination                | Status                                 | Needs from the owner                               | Blocker                                                       |
+| ----- | -------------------------- | -------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| 1     | mcpserver.dev              | **PUBLISHED** — origin unknown         | Nothing; do not resubmit                           | None; listed despite the two HTTP 500 answers                 |
+| 2     | Glama                      | **REJECTED** — Clarification requested | Await Glama's answer to the clarification request  | Second rejection gave no reason                               |
+| 3     | Anthropic plugin directory | **SUBMITTED — Scanning**               | Await the scan; answer any requested changes       | None                                                          |
+| 4     | Cursor Marketplace         | **SUBMITTED — Awaiting review**        | Await Cursor's email; answer any requested changes | None; the acceptance test passed 2026-10-13, including step 6 |
 
 The plugin fixes for blockers 3 and 4 are released in integrations 0.1.2 (tag
 `integrations-v0.1.2`, npm and MCP Registry 0.1.2). The Cursor acceptance test, including the
@@ -121,6 +121,11 @@ adding one to avoid a duplicate.
 GitHub account claim the listing. Not verified: whether Glama's health test starts this server.
 It runs with `--root` (or the working directory) and has no Dockerfile; if the test fails, the
 listing still exists but scores lower.
+
+Outcome: Glama rejected the 2026-10-13 submission on 2026-10-15 because the repository was
+presented as a GitHub Action. Glama confirmed that subdirectory submissions are supported, and a
+corrected submission was received and rejected on 2026-10-17 with no reason given. The owner has
+asked Glama for clarification; nothing is listed.
 
 ## 3. Anthropic plugin directory
 
@@ -325,7 +330,9 @@ tested.
 
 1. mcpserver.dev: submitted twice on 2026-10-13, both answered HTTP 500; a public page was found
    on 2026-10-14 (origin unknown). Nothing further; do not resubmit.
-2. Glama: submitted 2026-10-13, awaiting review.
+2. Glama: submitted 2026-10-13, rejected 2026-10-15 (presented as a GitHub Action); a corrected
+   submission was rejected 2026-10-17 with no reason given. Await Glama's answer to the
+   clarification request.
 3. Done: the coordinated 0.1.2 release (tag, GitHub release, npm, MCP Registry).
 4. Anthropic: submitted 2026-10-13 from tag `integrations-v0.1.2`, scanning. Answer any requested
    changes.
