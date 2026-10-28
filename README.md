@@ -311,6 +311,13 @@ offline; the agent that runs it may send the results to its model provider
 
 See [docs/distribution/README.md](docs/distribution/README.md) for what is published where.
 
+## Community references
+
+Integration work from this repository (the integrations 0.1.2 commit) was selected for the
+[XERJ Corpus Hub](https://hub.xerj.org/contributors/alipajand), a catalogue of attributed
+open-source code references for AI coding agents. The listing is a third-party reference, not a
+review or endorsement of this action.
+
 ## Related tools
 
 - [agent-readiness-kit](https://github.com/alipajand/agent-readiness-kit) — CLI used by this action.
