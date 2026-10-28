@@ -1,7 +1,7 @@
 # Publishing matrix
 
 Checked on 2026-10-13, after the integrations 0.1.2 release, and updated on 2026-10-14 for two
-directory listings found that day
+directory listings found that day and on 2026-10-28 for the XERJ Corpus Hub reference
 ([`integrations-v0.1.2`](https://github.com/alipajand/agent-readiness-action/releases/tag/integrations-v0.1.2); 0.1.1 evidence below is kept as it was recorded). Status values: **PUBLISHED** (live), **READY** (all technical
 work done and verified; only owner steps remain), **NEEDS WORK** (technical work or a verification
 step is missing), **BLOCKED** (an external requirement prevents it), **SUBMITTED** (accepted by the destination, not yet listed; the stage follows the dash), **SUBMISSION FAILED** (the destination returned an error; the stage follows the dash), **PUBLISHED — Auto-indexed** (the public page is verified, but the destination added it from a public index rather than from an owner submission; any later claim follows the comma), **NOT TESTED** (the client was not available to test).
@@ -53,6 +53,41 @@ check (step 6) with command approval required, and the application was then subm
 | agent-hub.dev                           | None found                                                                      | —                                                 | **BLOCKED**                                  | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | No community submission mechanism exists; recheck later                                                                                                                                  | —                                                    | —           |
 | HubSpot                                 | —                                                                               | —                                                 | Not pursued                                  | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | No product use case                                                                                                                                                                      | —                                                    | —           |
 
+## Community references
+
+Third-party catalogues that reference this repository's source. They are not distribution channels:
+nothing is installed from them, they are not npm, MCP registry, Cursor Marketplace, or Anthropic
+listings, and they release no package or version of the action or the integrations.
+
+| Platform        | Recognition                         | Repository                         | Contributor page                              | Notification | Licence | Status                                                       | Owner action                                                                                               |
+| --------------- | ----------------------------------- | ---------------------------------- | --------------------------------------------- | ------------ | ------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| XERJ Corpus Hub | Selected open-source implementation | `alipajand/agent-readiness-action` | <https://hub.xerj.org/contributors/alipajand> | October 2026 | MIT     | Contributor page published; corpus availability not verified | None for the existing selection. Optional: confirm the email agreement XERJ records; further contributions |
+
+Verified 2026-10-28 by reading the public pages only (no sign-in, no XERJ CLI run, nothing submitted):
+
+- **Contributor page** <https://hub.xerj.org/contributors/alipajand>: names Ali Pajand (`@alipajand`),
+  links <https://github.com/alipajand> and <https://github.com/alipajand/agent-readiness-action>,
+  says "Corpus Hub contributor since 2026-10-13", and shows the repository as selected for the
+  XERJ Corpus Hub with the licence MIT. Attribution to the repository and author is correct.
+- **Selected work:** commit `ffce68a` ("Prepare integrations 0.1.2 for the Anthropic and Cursor
+  directories"), which is on `main` and in tag `integrations-v0.1.2`. XERJ reports it as 8 files
+  and 373 lines in `integrations/` and `plugins/`; git reports 21 files (522 insertions, 34
+  deletions), so XERJ counts a subset (373 is the insertion count of the commit's code and JSON
+  files). The snapshot predates later changes on `main`.
+- **Corpus page** <https://hub.xerj.org/corpus/alipajand--agent-readiness-action>: labels the
+  corpus "licence cleared", gives the corpus licence as "MIT, with credit", and states that the
+  author agreed to inclusion by email on 2026-10-13. These are XERJ's statements: its "What's
+  this" page says a person reviewed each licence but not who, and does not define "selected",
+  "licence cleared", or the agreement. The owner should confirm the agreement against their own
+  mail; it is not recorded anywhere in this repository.
+- **Searchability:** not independently verified. The corpus page has no search box and points to
+  cloning the pinned commit and indexing it with the XERJ CLI, or to `xerj hub pull`. On
+  2026-10-28 the corpus did not appear in the live catalogue at <https://hub.xerj.org/llms.txt> or
+  among the corpus files of XERJ's registry of record (`xerj-org/xerj`, branch `corpus-hub`,
+  `tools/xerj-code/hub/`). Do not describe it as searchable until a pack is listed there.
+- **Not done:** no XERJ sign-in or OAuth grant, no further repository submitted, no source
+  uploaded, and no XERJ badge added (the contributor page offers one).
+
 ## Owner-only actions, in order
 
 1. Done: action release v1.2.0, with `v1` on it.
@@ -69,3 +104,7 @@ check (step 6) with command approval required, and the application was then subm
    including step 6 (denial) with command approval required. Submitted 2026-10-13 at
    <https://cursor.com/marketplace/publish>; await Cursor's review email and mark PUBLISHED only
    after the public listing is verified.
+7. XERJ Corpus Hub (community reference, not a release channel): nothing further is required for
+   the existing selection. Confirm the 2026-10-13 email agreement XERJ records; further
+   contributions are optional. Do not sign in to XERJ with GitHub or submit repositories as part
+   of a release.

@@ -14,7 +14,10 @@ them are built from this repository.
 
 Status per directory: [../PUBLISHING-MATRIX.md](../PUBLISHING-MATRIX.md). Submission material
 for the remaining directories: [SUBMISSIONS.md](SUBMISSIONS.md). Release steps:
-[../RELEASE-CHECKLIST.md](../RELEASE-CHECKLIST.md).
+[../RELEASE-CHECKLIST.md](../RELEASE-CHECKLIST.md). Third-party catalogues that reference the
+source but distribute nothing, such as the XERJ Corpus Hub, are recorded separately under
+[Community references](../PUBLISHING-MATRIX.md#community-references); none of them is a channel in
+the table above.
 
 ## Claims we make
 
