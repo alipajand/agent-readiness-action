@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Generated from integrations/src/mcp/main.ts by integrations/scripts/build.mjs. Do not edit.
-// Engines: agent-readiness-kit@1.0.0 (f15924b31777ab33237a07a444816f202cc9447f), agent-context-doctor@1.0.0 (034a74c88b8fd2599c61d9292e2605b405484707)
+// Engines: agent-readiness-kit@1.0.0 (daa257b103b63a0a006c94421f770ab19198c9e9), agent-context-doctor@1.0.0 (a60f53e044e7714875dc6929fc3f5b55ed25e349)
 import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
 /******/ // The require scope
 /******/ var __nccwpck_require__ = {};
@@ -45,7 +45,7 @@ const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(impo
 var external_node_path_default = /*#__PURE__*/__nccwpck_require__.n(external_node_path_namespaceObject);
 ;// CONCATENATED MODULE: external "node:url"
 const external_node_url_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:url");
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/chunk-Br0eD_fh.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/chunk-vYduTEsO.mjs
 //#region rolldown:runtime
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -88,7 +88,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 
 //#endregion
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/dialects-DoSzNhcb.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/dialects-CDpMbily.mjs
 //#region ../core-internal/src/validators/dialects.ts
 /**
 * Canonical `$schema` URIs per supported dialect (http + https variants, trailing-`#` stripped).
@@ -122,7 +122,7 @@ function declaredDialect(schema, remedy) {
 
 //#endregion
 
-//# sourceMappingURL=dialects-DoSzNhcb.mjs.map
+//# sourceMappingURL=dialects-CDpMbily.mjs.map
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js
 
 // functions
@@ -9675,65 +9675,13 @@ function iso_duration(params) {
     return core._isoDuration(ZodISODuration, params);
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/compat.js
-// Zod 3 compat layer
-
-/** @deprecated Use the raw string literal codes instead, e.g. "invalid_type". */
-const ZodIssueCode = {
-    invalid_type: "invalid_type",
-    too_big: "too_big",
-    too_small: "too_small",
-    invalid_format: "invalid_format",
-    not_multiple_of: "not_multiple_of",
-    unrecognized_keys: "unrecognized_keys",
-    invalid_union: "invalid_union",
-    invalid_key: "invalid_key",
-    invalid_element: "invalid_element",
-    invalid_value: "invalid_value",
-    custom: "custom",
-};
-
-/** @deprecated Use `z.config(params)` instead. */
-function setErrorMap(map) {
-    core.config({
-        customError: map,
-    });
-}
-/** @deprecated Use `z.config()` instead. */
-function getErrorMap() {
-    return core.config().customError;
-}
-/** @deprecated Do not use. Stub definition, only included for zod-to-json-schema compatibility. */
-var ZodFirstPartyTypeKind;
-(function (ZodFirstPartyTypeKind) {
-})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
-
-;// CONCATENATED MODULE: ./node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/coerce.js
-
-
-function coerce_string(params) {
-    return core._coercedString(schemas.ZodString, params);
-}
-function coerce_number(params) {
-    return _coercedNumber(ZodNumber, params);
-}
-function coerce_boolean(params) {
-    return core._coercedBoolean(schemas.ZodBoolean, params);
-}
-function coerce_bigint(params) {
-    return core._coercedBigint(schemas.ZodBigInt, params);
-}
-function coerce_date(params) {
-    return core._coercedDate(schemas.ZodDate, params);
-}
-
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+core@2.3.1/node_modules/@modelcontextprotocol/core/dist/auth-BNDyLTqp.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core/dist/schemas-DscsoNZN.mjs
 
 
 //#region src/constants.ts
 const LATEST_PROTOCOL_VERSION = "2025-11-25";
-const auth_BNDyLTqp_DEFAULT_NEGOTIATED_PROTOCOL_VERSION = "2025-03-26";
-const auth_BNDyLTqp_SUPPORTED_PROTOCOL_VERSIONS = [
+const schemas_DscsoNZN_DEFAULT_NEGOTIATED_PROTOCOL_VERSION = "2025-03-26";
+const schemas_DscsoNZN_SUPPORTED_PROTOCOL_VERSIONS = [
 	LATEST_PROTOCOL_VERSION,
 	"2025-06-18",
 	"2025-03-26",
@@ -9751,7 +9699,7 @@ const RELATED_TASK_META_KEY = "io.modelcontextprotocol/related-task";
 *
 * For the HTTP transport, the value must match the `MCP-Protocol-Version` header.
 */
-const auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY = "io.modelcontextprotocol/protocolVersion";
+const schemas_DscsoNZN_PROTOCOL_VERSION_META_KEY = "io.modelcontextprotocol/protocolVersion";
 /**
 * `_meta` key identifying the client software making a request.
 *
@@ -9759,7 +9707,7 @@ const auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY = "io.modelcontextprotocol/protoco
 * intended for display, logging, and debugging — servers should not rely on
 * it for behavior or security decisions.
 */
-const auth_BNDyLTqp_CLIENT_INFO_META_KEY = "io.modelcontextprotocol/clientInfo";
+const schemas_DscsoNZN_CLIENT_INFO_META_KEY = "io.modelcontextprotocol/clientInfo";
 /**
 * `_meta` key identifying the server software producing a response.
 *
@@ -9767,14 +9715,14 @@ const auth_BNDyLTqp_CLIENT_INFO_META_KEY = "io.modelcontextprotocol/clientInfo";
 * intended for display, logging, and debugging — clients should not rely on
 * it for behavior or security decisions.
 */
-const auth_BNDyLTqp_SERVER_INFO_META_KEY = "io.modelcontextprotocol/serverInfo";
+const schemas_DscsoNZN_SERVER_INFO_META_KEY = "io.modelcontextprotocol/serverInfo";
 /**
 * `_meta` key carrying the client's capabilities for a request.
 *
 * Capabilities are declared per request rather than once at initialization;
 * servers must not infer capabilities from prior requests.
 */
-const auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY = "io.modelcontextprotocol/clientCapabilities";
+const schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY = "io.modelcontextprotocol/clientCapabilities";
 /**
 * `_meta` key carrying the JSON-RPC ID of the `subscriptions/listen` request
 * that opened the stream a notification was delivered on.
@@ -9786,7 +9734,7 @@ const auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY = "io.modelcontextprotocol/clie
 * originating subscription. The value is the listen request's JSON-RPC ID
 * verbatim.
 */
-const auth_BNDyLTqp_SUBSCRIPTION_ID_META_KEY = "io.modelcontextprotocol/subscriptionId";
+const schemas_DscsoNZN_SUBSCRIPTION_ID_META_KEY = "io.modelcontextprotocol/subscriptionId";
 /**
 * `_meta` key carrying the desired log level for a request.
 *
@@ -9873,7 +9821,7 @@ const BaseRequestParamsSchema = object({ _meta: RequestMetaSchema.optional() });
 *
 * @deprecated 2025-11-25 wire vocabulary with no SDK runtime; kept importable for interoperability only.
 */
-const auth_BNDyLTqp_TaskAugmentedRequestParamsSchema = BaseRequestParamsSchema.extend({ task: TaskMetadataSchema.optional() });
+const schemas_DscsoNZN_TaskAugmentedRequestParamsSchema = BaseRequestParamsSchema.extend({ task: TaskMetadataSchema.optional() });
 const RequestSchema = object({
 	method: schemas_string(),
 	params: BaseRequestParamsSchema.loose().optional()
@@ -9892,7 +9840,7 @@ const NotificationSchema = object({
 * and intended for display, logging, and debugging). The getter defers the
 * `ImplementationSchema` reference, which is declared later in this file.
 */
-const ResultMetaObjectSchema = looseObject({ get [auth_BNDyLTqp_SERVER_INFO_META_KEY]() {
+const ResultMetaObjectSchema = looseObject({ get [schemas_DscsoNZN_SERVER_INFO_META_KEY]() {
 	return ImplementationSchema.optional().catch(void 0);
 } });
 const ResultSchema = looseObject({ _meta: ResultMetaObjectSchema.optional() });
@@ -9935,13 +9883,13 @@ const JSONRPCErrorResponseSchema = object({
 		data: unknown().optional()
 	})
 }).strict();
-const auth_BNDyLTqp_JSONRPCMessageSchema = union([
+const schemas_DscsoNZN_JSONRPCMessageSchema = union([
 	JSONRPCRequestSchema,
 	JSONRPCNotificationSchema,
 	JSONRPCResultResponseSchema,
 	JSONRPCErrorResponseSchema
 ]);
-const auth_BNDyLTqp_JSONRPCResponseSchema = union([JSONRPCResultResponseSchema, JSONRPCErrorResponseSchema]);
+const schemas_DscsoNZN_JSONRPCResponseSchema = union([JSONRPCResultResponseSchema, JSONRPCErrorResponseSchema]);
 /**
 * A response that indicates success but carries no data.
 */
@@ -10047,7 +9995,7 @@ const InitializeRequestParamsSchema = BaseRequestParamsSchema.extend({
 /**
 * This request is sent from the client to the server when it first connects, asking it to begin initialization.
 */
-const auth_BNDyLTqp_InitializeRequestSchema = RequestSchema.extend({
+const schemas_DscsoNZN_InitializeRequestSchema = RequestSchema.extend({
 	method: literal("initialize"),
 	params: InitializeRequestParamsSchema
 });
@@ -10079,7 +10027,7 @@ const InitializeResultSchema = ResultSchema.extend({
 /**
 * This notification is sent from the client to the server after initialization has finished.
 */
-const auth_BNDyLTqp_InitializedNotificationSchema = NotificationSchema.extend({
+const schemas_DscsoNZN_InitializedNotificationSchema = NotificationSchema.extend({
 	method: literal("notifications/initialized"),
 	params: NotificationsParamsSchema.optional()
 });
@@ -10283,7 +10231,7 @@ const SubscriptionsAcknowledgedNotificationSchema = NotificationSchema.extend({
 * {@linkcode ResultMetaObjectSchema}, so the optional serverInfo key is typed
 * here too.
 */
-const SubscriptionsListenResultMetaSchema = ResultMetaObjectSchema.extend({ [auth_BNDyLTqp_SUBSCRIPTION_ID_META_KEY]: RequestIdSchema });
+const SubscriptionsListenResultMetaSchema = ResultMetaObjectSchema.extend({ [schemas_DscsoNZN_SUBSCRIPTION_ID_META_KEY]: RequestIdSchema });
 /**
 * The response to a `subscriptions/listen` request, signalling that the
 * subscription has ended gracefully (for example, during server shutdown).
@@ -10486,7 +10434,7 @@ const ListToolsResultSchema = PaginatedResultSchema.extend({ tools: array(ToolSc
 /**
 * The server's response to a tool call.
 */
-const auth_BNDyLTqp_CallToolResultSchema = ResultSchema.extend({
+const schemas_DscsoNZN_CallToolResultSchema = ResultSchema.extend({
 	content: array(ContentBlockSchema).default([]),
 	structuredContent: unknown().optional(),
 	isError: schemas_boolean().optional()
@@ -10494,11 +10442,11 @@ const auth_BNDyLTqp_CallToolResultSchema = ResultSchema.extend({
 /**
 * {@linkcode CallToolResultSchema} extended with backwards compatibility to protocol version 2024-10-07.
 */
-const CompatibilityCallToolResultSchema = auth_BNDyLTqp_CallToolResultSchema.or(ResultSchema.extend({ toolResult: unknown() }));
+const CompatibilityCallToolResultSchema = schemas_DscsoNZN_CallToolResultSchema.or(ResultSchema.extend({ toolResult: unknown() }));
 /**
 * Parameters for a `tools/call` request.
 */
-const CallToolRequestParamsSchema = auth_BNDyLTqp_TaskAugmentedRequestParamsSchema.extend({
+const CallToolRequestParamsSchema = schemas_DscsoNZN_TaskAugmentedRequestParamsSchema.extend({
 	name: schemas_string(),
 	arguments: record(schemas_string(), unknown()).optional()
 });
@@ -10679,7 +10627,7 @@ const SamplingMessageSchema = object({
 * in the specification for at least twelve months. Migrate to calling LLM
 * provider APIs directly.
 */
-const CreateMessageRequestParamsSchema = auth_BNDyLTqp_TaskAugmentedRequestParamsSchema.extend({
+const CreateMessageRequestParamsSchema = schemas_DscsoNZN_TaskAugmentedRequestParamsSchema.extend({
 	messages: array(SamplingMessageSchema),
 	modelPreferences: ModelPreferencesSchema.optional(),
 	systemPrompt: schemas_string().optional(),
@@ -10871,7 +10819,7 @@ const PrimitiveSchemaDefinitionSchema = union([
 /**
 * Parameters for an `elicitation/create` request for form-based elicitation.
 */
-const ElicitRequestFormParamsSchema = auth_BNDyLTqp_TaskAugmentedRequestParamsSchema.extend({
+const ElicitRequestFormParamsSchema = schemas_DscsoNZN_TaskAugmentedRequestParamsSchema.extend({
 	mode: literal("form").optional(),
 	message: schemas_string(),
 	requestedSchema: object({
@@ -10883,7 +10831,7 @@ const ElicitRequestFormParamsSchema = auth_BNDyLTqp_TaskAugmentedRequestParamsSc
 /**
 * Parameters for an {@linkcode ElicitRequest | elicitation/create} request for URL-based elicitation.
 */
-const ElicitRequestURLParamsSchema = auth_BNDyLTqp_TaskAugmentedRequestParamsSchema.extend({
+const ElicitRequestURLParamsSchema = schemas_DscsoNZN_TaskAugmentedRequestParamsSchema.extend({
 	mode: literal("url"),
 	message: schemas_string(),
 	elicitationId: schemas_string(),
@@ -11141,7 +11089,7 @@ const CancelTaskRequestSchema = RequestSchema.extend({
 const CancelTaskResultSchema = ResultSchema.merge(TaskSchema);
 const ClientRequestSchema = union([
 	PingRequestSchema,
-	auth_BNDyLTqp_InitializeRequestSchema,
+	schemas_DscsoNZN_InitializeRequestSchema,
 	DiscoverRequestSchema,
 	CompleteRequestSchema,
 	SetLevelRequestSchema,
@@ -11159,7 +11107,7 @@ const ClientRequestSchema = union([
 const ClientNotificationSchema = union([
 	CancelledNotificationSchema,
 	ProgressNotificationSchema,
-	auth_BNDyLTqp_InitializedNotificationSchema,
+	schemas_DscsoNZN_InitializedNotificationSchema,
 	RootsListChangedNotificationSchema
 ]);
 const ClientResultSchema = union([
@@ -11196,12 +11144,69 @@ const ServerResultSchema = union([
 	ListResourcesResultSchema,
 	ListResourceTemplatesResultSchema,
 	ReadResourceResultSchema,
-	auth_BNDyLTqp_CallToolResultSchema,
+	schemas_DscsoNZN_CallToolResultSchema,
 	ListToolsResultSchema,
 	SubscriptionsListenResultSchema
 ]);
 
 //#endregion
+
+//# sourceMappingURL=schemas-DscsoNZN.mjs.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/compat.js
+// Zod 3 compat layer
+
+/** @deprecated Use the raw string literal codes instead, e.g. "invalid_type". */
+const ZodIssueCode = {
+    invalid_type: "invalid_type",
+    too_big: "too_big",
+    too_small: "too_small",
+    invalid_format: "invalid_format",
+    not_multiple_of: "not_multiple_of",
+    unrecognized_keys: "unrecognized_keys",
+    invalid_union: "invalid_union",
+    invalid_key: "invalid_key",
+    invalid_element: "invalid_element",
+    invalid_value: "invalid_value",
+    custom: "custom",
+};
+
+/** @deprecated Use `z.config(params)` instead. */
+function setErrorMap(map) {
+    core.config({
+        customError: map,
+    });
+}
+/** @deprecated Use `z.config()` instead. */
+function getErrorMap() {
+    return core.config().customError;
+}
+/** @deprecated Do not use. Stub definition, only included for zod-to-json-schema compatibility. */
+var ZodFirstPartyTypeKind;
+(function (ZodFirstPartyTypeKind) {
+})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/classic/coerce.js
+
+
+function coerce_string(params) {
+    return core._coercedString(schemas.ZodString, params);
+}
+function coerce_number(params) {
+    return _coercedNumber(ZodNumber, params);
+}
+function coerce_boolean(params) {
+    return core._coercedBoolean(schemas.ZodBoolean, params);
+}
+function coerce_bigint(params) {
+    return core._coercedBigint(schemas.ZodBigInt, params);
+}
+function coerce_date(params) {
+    return core._coercedDate(schemas.ZodDate, params);
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core/dist/auth-UMQCo-ad.mjs
+
+
 //#region src/auth.ts
 /**
 * Reusable URL validation that disallows `javascript:` scheme
@@ -11408,12 +11413,13 @@ const OAuthTokenRevocationRequestSchema = object({
 
 //#endregion
 
-//# sourceMappingURL=auth-BNDyLTqp.mjs.map
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+core@2.3.1/node_modules/@modelcontextprotocol/core/dist/internal.mjs
+//# sourceMappingURL=auth-UMQCo-ad.mjs.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core/dist/internal.mjs
 
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/src-Cqbh3MYc.mjs
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/src-DdvbAHrR.mjs
 
 
 
@@ -11516,7 +11522,7 @@ function brandedHasInstance(cls, value) {
 * OAuth error codes as defined by {@link https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 | RFC 6749}
 * and extensions.
 */
-let src_Cqbh3MYc_OAuthErrorCode = /* @__PURE__ */ function(OAuthErrorCode$1) {
+let src_DdvbAHrR_OAuthErrorCode = /* @__PURE__ */ function(OAuthErrorCode$1) {
 	/**
 	* The request is missing a required parameter, includes an invalid parameter value,
 	* includes a parameter more than once, or is otherwise malformed.
@@ -11607,7 +11613,7 @@ let src_Cqbh3MYc_OAuthErrorCode = /* @__PURE__ */ function(OAuthErrorCode$1) {
 /**
 * OAuth error class for all OAuth-related errors.
 */
-var src_Cqbh3MYc_OAuthError = class OAuthError extends Error {
+var src_DdvbAHrR_OAuthError = class OAuthError extends Error {
 	static {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.OAuthError" });
 	}
@@ -11663,7 +11669,7 @@ var src_Cqbh3MYc_OAuthError = class OAuthError extends Error {
 * These errors are thrown locally by the SDK and are never serialized as
 * JSON-RPC error responses.
 */
-let src_Cqbh3MYc_SdkErrorCode = /* @__PURE__ */ function(SdkErrorCode$1) {
+let src_DdvbAHrR_SdkErrorCode = /* @__PURE__ */ function(SdkErrorCode$1) {
 	/** Transport is not connected */
 	SdkErrorCode$1["NotConnected"] = "NOT_CONNECTED";
 	/** Transport is already connected */
@@ -11765,7 +11771,7 @@ let src_Cqbh3MYc_SdkErrorCode = /* @__PURE__ */ function(SdkErrorCode$1) {
 * }
 * ```
 */
-var src_Cqbh3MYc_SdkError = class extends Error {
+var src_DdvbAHrR_SdkError = class extends Error {
 	static {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.SdkError" });
 	}
@@ -11819,7 +11825,7 @@ var src_Cqbh3MYc_SdkError = class extends Error {
 * }
 * ```
 */
-var SdkHttpError = class extends src_Cqbh3MYc_SdkError {
+var SdkHttpError = class extends src_DdvbAHrR_SdkError {
 	static {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.SdkHttpError" });
 	}
@@ -11893,7 +11899,7 @@ const REQUIRED_CLIENT_CAPABILITIES_BY_METHOD = {};
 * The client capabilities a request method structurally requires, or
 * `undefined` when the method has no static requirement.
 */
-function src_Cqbh3MYc_requiredClientCapabilitiesForRequest(method) {
+function src_DdvbAHrR_requiredClientCapabilitiesForRequest(method) {
 	return Object.hasOwn(REQUIRED_CLIENT_CAPABILITIES_BY_METHOD, method) ? REQUIRED_CLIENT_CAPABILITIES_BY_METHOD[method] : void 0;
 }
 function isPlainObject$7(value) {
@@ -11956,7 +11962,7 @@ function requiredClientCapabilitiesForInputRequest(entry) {
 * nothing is declared — every required capability is missing (the structural
 * clean-refusal posture for sessions with no per-request capability view).
 */
-function src_Cqbh3MYc_missingClientCapabilities(required, declared) {
+function src_DdvbAHrR_missingClientCapabilities(required, declared) {
 	const missing = {};
 	for (const [capability, requirement] of Object.entries(required)) {
 		if (requirement === void 0) continue;
@@ -11987,7 +11993,7 @@ const FIRST_MODERN_PROTOCOL_VERSION = "2026-07-28";
 * `initialize` list), so adding a revision here can never leak a modern version
 * string into a 2025-era handshake. Internal — not part of the public API surface.
 */
-const src_Cqbh3MYc_SUPPORTED_MODERN_PROTOCOL_VERSIONS = [FIRST_MODERN_PROTOCOL_VERSION];
+const src_DdvbAHrR_SUPPORTED_MODERN_PROTOCOL_VERSIONS = [FIRST_MODERN_PROTOCOL_VERSION];
 /** Whether the given protocol revision belongs to the modern (2026-07-28+) era. */
 function isModernProtocolVersion(version) {
 	return version >= FIRST_MODERN_PROTOCOL_VERSION;
@@ -14300,9 +14306,9 @@ function build() {
 	*/
 	const RequestMetaEnvelopeSchema = looseObject({
 		progressToken: ProgressTokenSchema$1.optional(),
-		[auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY]: schemas_string(),
-		[auth_BNDyLTqp_CLIENT_INFO_META_KEY]: ImplementationSchema$1.optional(),
-		[auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY]: ClientCapabilities2026Schema,
+		[schemas_DscsoNZN_PROTOCOL_VERSION_META_KEY]: schemas_string(),
+		[schemas_DscsoNZN_CLIENT_INFO_META_KEY]: ImplementationSchema$1.optional(),
+		[schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY]: ClientCapabilities2026Schema,
 		[LOG_LEVEL_META_KEY]: LoggingLevelSchema$1.optional()
 	});
 	/** 2026-era Tool: anchor-exact — no `execution` (deleted vocabulary). */
@@ -14348,7 +14354,7 @@ function build() {
 	* loose, with the serverInfo key typed when present; the outbound stamp
 	* is the encode contract's `stampServerInfoMeta` step.
 	*/
-	const ResultMetaSchema = looseObject({ [auth_BNDyLTqp_SERVER_INFO_META_KEY]: ImplementationSchema$1.optional().catch(void 0) });
+	const ResultMetaSchema = looseObject({ [schemas_DscsoNZN_SERVER_INFO_META_KEY]: ImplementationSchema$1.optional().catch(void 0) });
 	const wireMeta = ResultMetaSchema.optional();
 	function wireResult(shape) {
 		return looseObject({
@@ -14857,7 +14863,7 @@ function build() {
 		SubscriptionsListenResultResponseSchema: wireResultResponse(SubscriptionsListenResultSchema$1)
 	};
 }
-let src_Cqbh3MYc_memo;
+let src_DdvbAHrR_memo;
 /**
 * Builds the era wire-schema set on first call and returns the same object
 * thereafter. Module evaluation stays construction-free so importing the
@@ -14867,7 +14873,7 @@ let src_Cqbh3MYc_memo;
 * every consumer.
 */
 function buildSchemas2026() {
-	return src_Cqbh3MYc_memo ??= build();
+	return src_DdvbAHrR_memo ??= build();
 }
 
 //#endregion
@@ -14955,7 +14961,7 @@ function assertValidCacheHint(hint, context) {
 * Error codes for protocol errors that cross the wire as JSON-RPC error responses.
 * These follow the JSON-RPC specification and MCP-specific extensions.
 */
-let src_Cqbh3MYc_ProtocolErrorCode = /* @__PURE__ */ function(ProtocolErrorCode$1) {
+let src_DdvbAHrR_ProtocolErrorCode = /* @__PURE__ */ function(ProtocolErrorCode$1) {
 	ProtocolErrorCode$1[ProtocolErrorCode$1["ParseError"] = -32700] = "ParseError";
 	ProtocolErrorCode$1[ProtocolErrorCode$1["InvalidRequest"] = -32600] = "InvalidRequest";
 	ProtocolErrorCode$1[ProtocolErrorCode$1["MethodNotFound"] = -32601] = "MethodNotFound";
@@ -15029,24 +15035,24 @@ var ProtocolError = class ProtocolError extends Error {
 	* Factory method to create the appropriate error type based on the error code and data
 	*/
 	static fromError(code, message, data) {
-		if (code === src_Cqbh3MYc_ProtocolErrorCode.UrlElicitationRequired && data) {
+		if (code === src_DdvbAHrR_ProtocolErrorCode.UrlElicitationRequired && data) {
 			const errorData = data;
 			if (errorData.elicitations) return new UrlElicitationRequiredError(errorData.elicitations, message);
 		}
-		if (code === src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion && data) {
+		if (code === src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion && data) {
 			const errorData = data;
-			if (Array.isArray(errorData.supported) && typeof errorData.requested === "string") return new src_Cqbh3MYc_UnsupportedProtocolVersionError({
+			if (Array.isArray(errorData.supported) && typeof errorData.requested === "string") return new src_DdvbAHrR_UnsupportedProtocolVersionError({
 				supported: errorData.supported,
 				requested: errorData.requested
 			}, message);
 		}
-		if (code === src_Cqbh3MYc_ProtocolErrorCode.InvalidParams || code === src_Cqbh3MYc_ProtocolErrorCode.ResourceNotFound) {
+		if (code === src_DdvbAHrR_ProtocolErrorCode.InvalidParams || code === src_DdvbAHrR_ProtocolErrorCode.ResourceNotFound) {
 			const errorData = data;
-			if (typeof errorData?.uri === "string" && (code === src_Cqbh3MYc_ProtocolErrorCode.ResourceNotFound || Object.keys(errorData).length === 1)) return new ResourceNotFoundError(errorData.uri, message);
+			if (typeof errorData?.uri === "string" && (code === src_DdvbAHrR_ProtocolErrorCode.ResourceNotFound || Object.keys(errorData).length === 1)) return new ResourceNotFoundError(errorData.uri, message);
 		}
-		if (code === src_Cqbh3MYc_ProtocolErrorCode.MissingRequiredClientCapability && data) {
+		if (code === src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability && data) {
 			const errorData = data;
-			if (errorData.requiredCapabilities !== null && typeof errorData.requiredCapabilities === "object" && !Array.isArray(errorData.requiredCapabilities)) return new src_Cqbh3MYc_MissingRequiredClientCapabilityError({ requiredCapabilities: errorData.requiredCapabilities }, message);
+			if (errorData.requiredCapabilities !== null && typeof errorData.requiredCapabilities === "object" && !Array.isArray(errorData.requiredCapabilities)) return new src_DdvbAHrR_MissingRequiredClientCapabilityError({ requiredCapabilities: errorData.requiredCapabilities }, message);
 		}
 		return new ProtocolError(code, message, data);
 	}
@@ -15072,7 +15078,7 @@ var ResourceNotFoundError = class extends ProtocolError {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.ResourceNotFoundError" });
 	}
 	constructor(uri, message = `Resource not found: ${uri}`) {
-		super(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, message, { uri });
+		super(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, message, { uri });
 	}
 	/** The URI that was requested and not found. */
 	get uri() {
@@ -15088,7 +15094,7 @@ var UrlElicitationRequiredError = class extends ProtocolError {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.UrlElicitationRequiredError" });
 	}
 	constructor(elicitations, message = `URL elicitation${elicitations.length > 1 ? "s" : ""} required`) {
-		super(src_Cqbh3MYc_ProtocolErrorCode.UrlElicitationRequired, message, { elicitations });
+		super(src_DdvbAHrR_ProtocolErrorCode.UrlElicitationRequired, message, { elicitations });
 	}
 	get elicitations() {
 		return this.data?.elicitations ?? [];
@@ -15103,12 +15109,12 @@ var UrlElicitationRequiredError = class extends ProtocolError {
 * so the sender can choose a mutually supported version and retry, and echoes the
 * version that was requested (`requested`).
 */
-var src_Cqbh3MYc_UnsupportedProtocolVersionError = class extends ProtocolError {
+var src_DdvbAHrR_UnsupportedProtocolVersionError = class extends ProtocolError {
 	static {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.UnsupportedProtocolVersionError" });
 	}
 	constructor(data, message = `Unsupported protocol version: ${data.requested}`) {
-		super(src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion, message, data);
+		super(src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion, message, data);
 	}
 	/**
 	* Protocol versions the receiver supports.
@@ -15137,12 +15143,12 @@ var src_Cqbh3MYc_UnsupportedProtocolVersionError = class extends ProtocolError {
 * `instanceof` — checks are brand-matched and work across separately bundled
 * copies of the SDK.
 */
-var src_Cqbh3MYc_MissingRequiredClientCapabilityError = class extends ProtocolError {
+var src_DdvbAHrR_MissingRequiredClientCapabilityError = class extends ProtocolError {
 	static {
 		Object.defineProperty(this, "mcpBrand", { value: "mcp.MissingRequiredClientCapabilityError" });
 	}
 	constructor(data, message = `Missing required client capabilities: ${Object.keys(data.requiredCapabilities).join(", ")}`) {
-		super(src_Cqbh3MYc_ProtocolErrorCode.MissingRequiredClientCapability, message, data);
+		super(src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability, message, data);
 	}
 	/**
 	* The capabilities the server requires from the client to process the
@@ -15195,7 +15201,7 @@ function stampResultType(method, result) {
 	};
 	if (provided === "complete") return result;
 	if (EXTENDED_RESULT_TYPE_METHODS.includes(method)) return result;
-	throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned resultType '${String(provided)}', but results of ${method} only support 'complete' on protocol revision 2026-07-28`);
+	throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned resultType '${String(provided)}', but results of ${method} only support 'complete' on protocol revision 2026-07-28`);
 }
 /**
 * Step 2 of the encode contract: fill the required `ttlMs`/`cacheScope` fields
@@ -15250,15 +15256,15 @@ function stampServerInfoMeta(result, serverInfo) {
 	const meta = result["_meta"];
 	if (meta === void 0) return {
 		...result,
-		_meta: { [auth_BNDyLTqp_SERVER_INFO_META_KEY]: serverInfo }
+		_meta: { [schemas_DscsoNZN_SERVER_INFO_META_KEY]: serverInfo }
 	};
 	if (!isPlainObject$5(meta)) return result;
-	if (meta[auth_BNDyLTqp_SERVER_INFO_META_KEY] !== void 0) return result;
+	if (meta[schemas_DscsoNZN_SERVER_INFO_META_KEY] !== void 0) return result;
 	return {
 		...result,
 		_meta: {
 			...meta,
-			[auth_BNDyLTqp_SERVER_INFO_META_KEY]: serverInfo
+			[schemas_DscsoNZN_SERVER_INFO_META_KEY]: serverInfo
 		}
 	};
 }
@@ -15426,7 +15432,7 @@ const NOT_IN_ERA = {
 * request without it is accepted (a present-but-malformed value still fails
 * the envelope schema parse below).
 */
-const REQUIRED_ENVELOPE_KEYS = [auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY, auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY];
+const REQUIRED_ENVELOPE_KEYS = [schemas_DscsoNZN_PROTOCOL_VERSION_META_KEY, schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY];
 /** Strip the known deleted-field set from an outbound result (Q1-SD3 iii). */
 function enforceDeletedFields(method, result) {
 	let next = result;
@@ -15466,9 +15472,9 @@ const rev2026Codec = {
 	samplingResultVariant: () => NOT_IN_ERA,
 	outboundEnvelope(material) {
 		return {
-			[auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY]: material.protocolVersion,
-			[auth_BNDyLTqp_CLIENT_INFO_META_KEY]: material.clientInfo,
-			[auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY]: material.clientCapabilities,
+			[schemas_DscsoNZN_PROTOCOL_VERSION_META_KEY]: material.protocolVersion,
+			[schemas_DscsoNZN_CLIENT_INFO_META_KEY]: material.clientInfo,
+			[schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY]: material.clientCapabilities,
 			...material.logLevel !== void 0 && { [LOG_LEVEL_META_KEY]: material.logLevel }
 		};
 	},
@@ -15495,19 +15501,19 @@ const rev2026Codec = {
 	decodeResult(method, raw) {
 		if (!isPlainObject$4(raw)) return {
 			kind: "invalid",
-			error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${method}: not an object`, { method })
+			error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${method}: not an object`, { method })
 		};
 		const rawResultType = raw["resultType"];
 		if (rawResultType === void 0) return {
 			kind: "invalid",
-			error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${method}: missing required resultType — servers implementing protocol revision 2026-07-28 MUST include it (the absent-means-complete bridge applies only to earlier-revision servers)`, {
+			error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${method}: missing required resultType — servers implementing protocol revision 2026-07-28 MUST include it (the absent-means-complete bridge applies only to earlier-revision servers)`, {
 				method,
 				violation: "missing-resultType"
 			})
 		};
 		if (typeof rawResultType !== "string") return {
 			kind: "invalid",
-			error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${method}: non-string resultType`, {
+			error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${method}: non-string resultType`, {
 				method,
 				resultType: rawResultType
 			})
@@ -15520,7 +15526,7 @@ const rev2026Codec = {
 			const meta = metaParse?.success ? metaParse.data : void 0;
 			if (Object.keys(inputRequests).length === 0 && typeof requestState !== "string") return {
 				kind: "invalid",
-				error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${method}: input_required carries neither inputRequests nor requestState (every input_required result must include at least one of the two)`, {
+				error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${method}: input_required carries neither inputRequests nor requestState (every input_required result must include at least one of the two)`, {
 					method,
 					violation: "input-required-missing-both"
 				})
@@ -15534,7 +15540,7 @@ const rev2026Codec = {
 		}
 		if (rawResultType !== "complete") return {
 			kind: "invalid",
-			error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.UnsupportedResultType, `Unsupported result type '${rawResultType}' for ${method}`, {
+			error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.UnsupportedResultType, `Unsupported result type '${rawResultType}' for ${method}`, {
 				resultType: rawResultType,
 				method
 			})
@@ -15545,7 +15551,7 @@ const rev2026Codec = {
 			const parsed = wireSchema.safeParse(raw);
 			if (!parsed.success) return {
 				kind: "invalid",
-				error: new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${method}: ${parsed.error}`, { method })
+				error: new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${method}: ${parsed.error}`, { method })
 			};
 		}
 		const lifted = { ...raw };
@@ -15599,7 +15605,7 @@ function warmWireResultSchemas2026() {
 * constant (G-D2-4: no public modern-version constant ships before era-aware
 * list semantics exist).
 */
-const src_Cqbh3MYc_MODERN_WIRE_REVISION = "2026-07-28";
+const src_DdvbAHrR_MODERN_WIRE_REVISION = "2026-07-28";
 /**
 * Era resolution, many-to-one (Q1-SD1): every modern-era revision
 * (`>= 2026-07-28`) → the 2026-era codec; every legacy revision (the five
@@ -15609,7 +15615,7 @@ const src_Cqbh3MYc_MODERN_WIRE_REVISION = "2026-07-28";
 * rest of the SDK uses ({@link isModernProtocolVersion}); a pinned modern
 * revision other than the literal '2026-07-28' must still resolve modern.
 */
-function src_Cqbh3MYc_codecForVersion(version) {
+function src_DdvbAHrR_codecForVersion(version) {
 	return version !== void 0 && isModernProtocolVersion(version) ? rev2026Codec : rev2025Codec;
 }
 /**
@@ -15621,7 +15627,7 @@ function src_Cqbh3MYc_codecForVersion(version) {
 * exact `revision` wins over the coarse era flag when both are present.
 */
 function classifiedWireEra(classification) {
-	if (classification.revision !== void 0) return src_Cqbh3MYc_codecForVersion(classification.revision).era;
+	if (classification.revision !== void 0) return src_DdvbAHrR_codecForVersion(classification.revision).era;
 	return classification.era === "modern" ? rev2026Codec.era : rev2025Codec.era;
 }
 /**
@@ -15670,7 +15676,7 @@ function isPlainObject$3(value) {
 	return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 /** The `_meta` object of a message's params, when present. */
-function src_Cqbh3MYc_requestMetaOf(params) {
+function src_DdvbAHrR_requestMetaOf(params) {
 	if (!isPlainObject$3(params)) return void 0;
 	const meta = params["_meta"];
 	return isPlainObject$3(meta) ? meta : void 0;
@@ -15680,8 +15686,8 @@ function src_Cqbh3MYc_requestMetaOf(params) {
 * reserved protocol-version `_meta` key is present (regardless of whether the
 * rest of the envelope is valid — validation is a separate, later step).
 */
-function src_Cqbh3MYc_hasEnvelopeClaim(params) {
-	const meta = src_Cqbh3MYc_requestMetaOf(params);
+function src_DdvbAHrR_hasEnvelopeClaim(params) {
+	const meta = src_DdvbAHrR_requestMetaOf(params);
 	return meta !== void 0 && PROTOCOL_VERSION_META_KEY in meta;
 }
 /**
@@ -15690,8 +15696,8 @@ function src_Cqbh3MYc_hasEnvelopeClaim(params) {
 * still counts as a claim ({@linkcode hasEnvelopeClaim}); it surfaces as a
 * validation issue instead of a version.
 */
-function src_Cqbh3MYc_envelopeClaimVersion(params) {
-	const value = src_Cqbh3MYc_requestMetaOf(params)?.[PROTOCOL_VERSION_META_KEY];
+function src_DdvbAHrR_envelopeClaimVersion(params) {
+	const value = src_DdvbAHrR_requestMetaOf(params)?.[PROTOCOL_VERSION_META_KEY];
 	return typeof value === "string" ? value : void 0;
 }
 /**
@@ -15702,8 +15708,8 @@ function src_Cqbh3MYc_envelopeClaimVersion(params) {
 * reported first (as `problem: 'missing'`), then schema violations inside
 * present keys, in a stable order.
 */
-function src_Cqbh3MYc_validateEnvelopeMeta(meta) {
-	return src_Cqbh3MYc_codecForVersion(src_Cqbh3MYc_MODERN_WIRE_REVISION).validateEnvelopeMeta(meta);
+function src_DdvbAHrR_validateEnvelopeMeta(meta) {
+	return src_DdvbAHrR_codecForVersion(src_DdvbAHrR_MODERN_WIRE_REVISION).validateEnvelopeMeta(meta);
 }
 
 //#endregion
@@ -15717,7 +15723,7 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 	BooleanSchemaSchema: () => BooleanSchemaSchema,
 	CallToolRequestParamsSchema: () => CallToolRequestParamsSchema,
 	CallToolRequestSchema: () => CallToolRequestSchema,
-	CallToolResultSchema: () => auth_BNDyLTqp_CallToolResultSchema,
+	CallToolResultSchema: () => schemas_DscsoNZN_CallToolResultSchema,
 	CancelTaskRequestSchema: () => CancelTaskRequestSchema,
 	CancelTaskResultSchema: () => CancelTaskResultSchema,
 	CancelledNotificationParamsSchema: () => CancelledNotificationParamsSchema,
@@ -15762,16 +15768,16 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 	ImageContentSchema: () => ImageContentSchema,
 	ImplementationSchema: () => ImplementationSchema,
 	InitializeRequestParamsSchema: () => InitializeRequestParamsSchema,
-	InitializeRequestSchema: () => auth_BNDyLTqp_InitializeRequestSchema,
+	InitializeRequestSchema: () => schemas_DscsoNZN_InitializeRequestSchema,
 	InitializeResultSchema: () => InitializeResultSchema,
-	InitializedNotificationSchema: () => auth_BNDyLTqp_InitializedNotificationSchema,
+	InitializedNotificationSchema: () => schemas_DscsoNZN_InitializedNotificationSchema,
 	JSONArraySchema: () => JSONArraySchema,
 	JSONObjectSchema: () => JSONObjectSchema,
 	JSONRPCErrorResponseSchema: () => JSONRPCErrorResponseSchema,
-	JSONRPCMessageSchema: () => auth_BNDyLTqp_JSONRPCMessageSchema,
+	JSONRPCMessageSchema: () => schemas_DscsoNZN_JSONRPCMessageSchema,
 	JSONRPCNotificationSchema: () => JSONRPCNotificationSchema,
 	JSONRPCRequestSchema: () => JSONRPCRequestSchema,
-	JSONRPCResponseSchema: () => auth_BNDyLTqp_JSONRPCResponseSchema,
+	JSONRPCResponseSchema: () => schemas_DscsoNZN_JSONRPCResponseSchema,
 	JSONRPCResultResponseSchema: () => JSONRPCResultResponseSchema,
 	JSONValueSchema: () => JSONValueSchema,
 	LegacyTitledEnumSchemaSchema: () => LegacyTitledEnumSchemaSchema,
@@ -15853,7 +15859,7 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 	SubscriptionsListenRequestSchema: () => SubscriptionsListenRequestSchema,
 	SubscriptionsListenResultMetaSchema: () => SubscriptionsListenResultMetaSchema,
 	SubscriptionsListenResultSchema: () => SubscriptionsListenResultSchema,
-	TaskAugmentedRequestParamsSchema: () => auth_BNDyLTqp_TaskAugmentedRequestParamsSchema,
+	TaskAugmentedRequestParamsSchema: () => schemas_DscsoNZN_TaskAugmentedRequestParamsSchema,
 	TaskCreationParamsSchema: () => TaskCreationParamsSchema,
 	TaskMetadataSchema: () => TaskMetadataSchema,
 	TaskSchema: () => TaskSchema,
@@ -15892,22 +15898,22 @@ var schemas_exports = /* @__PURE__ */ __exportAll({
 function parseJSONRPCMessage(value) {
 	return JSONRPCMessageSchema.parse(value);
 }
-const src_Cqbh3MYc_isJSONRPCRequest = (value) => JSONRPCRequestSchema.safeParse(value).success;
-const src_Cqbh3MYc_isJSONRPCNotification = (value) => JSONRPCNotificationSchema.safeParse(value).success;
+const src_DdvbAHrR_isJSONRPCRequest = (value) => JSONRPCRequestSchema.safeParse(value).success;
+const src_DdvbAHrR_isJSONRPCNotification = (value) => JSONRPCNotificationSchema.safeParse(value).success;
 /**
 * Checks if a value is a valid {@linkcode JSONRPCResultResponse}.
 * @param value - The value to check.
 *
 * @returns True if the value is a valid {@linkcode JSONRPCResultResponse}, false otherwise.
 */
-const src_Cqbh3MYc_isJSONRPCResultResponse = (value) => JSONRPCResultResponseSchema.safeParse(value).success;
+const src_DdvbAHrR_isJSONRPCResultResponse = (value) => JSONRPCResultResponseSchema.safeParse(value).success;
 /**
 * Checks if a value is a valid {@linkcode JSONRPCErrorResponse}.
 * @param value - The value to check.
 *
 * @returns True if the value is a valid {@linkcode JSONRPCErrorResponse}, false otherwise.
 */
-const src_Cqbh3MYc_isJSONRPCErrorResponse = (value) => JSONRPCErrorResponseSchema.safeParse(value).success;
+const src_DdvbAHrR_isJSONRPCErrorResponse = (value) => JSONRPCErrorResponseSchema.safeParse(value).success;
 /**
 * Checks if a value is a valid {@linkcode JSONRPCResponse} (either a result or error response).
 * @param value - The value to check.
@@ -15954,7 +15960,7 @@ const isInputRequiredResult = (value) => typeof value === "object" && value !== 
 * runtime; kept importable for interoperability only.
 */
 const isTaskAugmentedRequestParams = (value) => TaskAugmentedRequestParamsSchema.safeParse(value).success;
-const src_Cqbh3MYc_isInitializeRequest = (value) => InitializeRequestSchema.safeParse(value).success;
+const src_DdvbAHrR_isInitializeRequest = (value) => InitializeRequestSchema.safeParse(value).success;
 const isInitializedNotification = (value) => InitializedNotificationSchema.safeParse(value).success;
 function assertCompleteRequestPrompt(request) {
 	if (request.params.ref.type !== "ref/prompt") throw new TypeError(`Expected CompleteRequestPrompt, but got ${request.params.ref.type}`);
@@ -15975,25 +15981,22 @@ const X_MCP_HEADER_KEY = "x-mcp-header";
 */
 const RFC9110_TOKEN = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
 /**
-* JSON Schema `type` values the spec admits on an `x-mcp-header` property.
-*
-* The spec text names `integer`, `string`, `boolean` and explicitly excludes
-* `number`. The published conformance referee at the pinned release ships its
-* `http-custom-headers` scenario with two `type: "number"` `x-mcp-header`
-* parameters and expects the client to mirror them, so `number` is accepted
-* here so that the conformance gate passes; the discrepancy is tracked
-* upstream. Everything else (`object`, `array`, `null`, absent) is rejected.
+* JSON Schema `type` values the spec admits on an `x-mcp-header` property:
+* `integer`, `string` and `boolean`. `number` is explicitly not permitted
+* (2026-07-28 Streamable HTTP, "Schema Extension"), so a tool that annotates a
+* `number`-typed property is invalid (the server still checks its headers).
+* Everything else (`object`, `array`, `null`, absent) is rejected too.
 */
 const PERMITTED_X_MCP_HEADER_TYPES = new Set([
 	"string",
 	"integer",
-	"boolean",
-	"number"
+	"boolean"
 ]);
 /**
 * Scan a tool's JSON-serialized `inputSchema` for `x-mcp-header` declarations
 * and validate every constraint the spec places on them. Returns either the
-* collected declarations (possibly empty) or the first violated constraint.
+* collected declarations (possibly empty) or the first violated constraint
+* (with the declarations too, when `number`-typed declarations are the only fault).
 *
 * The walk descends through `properties` at any depth (the spec's "any nesting
 * depth" clause). The static-reachability MUST is enforced as a structural
@@ -16003,9 +16006,10 @@ const PERMITTED_X_MCP_HEADER_TYPES = new Set([
 * `x-mcp-header` found anywhere on that path invalidates the schema — "an
 * annotation anywhere else makes the tool definition invalid".
 */
-function src_Cqbh3MYc_scanXMcpHeaderDeclarations(inputSchema) {
+function src_DdvbAHrR_scanXMcpHeaderDeclarations(inputSchema) {
 	const declarations = [];
 	const seenLower = /* @__PURE__ */ new Map();
+	let numberFault;
 	const visit = (node, path, reachable) => {
 		if (node === null || typeof node !== "object") return void 0;
 		const schema = node;
@@ -16015,7 +16019,11 @@ function src_Cqbh3MYc_scanXMcpHeaderDeclarations(inputSchema) {
 			if (typeof raw !== "string" || raw.length === 0) return `${pathName(path)}: x-mcp-header MUST be a non-empty string`;
 			if (!RFC9110_TOKEN.test(raw)) return `${pathName(path)}: x-mcp-header '${raw}' is not a valid RFC 9110 token (no spaces, control characters or HTTP delimiters)`;
 			const type = typeof schema.type === "string" ? schema.type : void 0;
-			if (type === void 0 || !PERMITTED_X_MCP_HEADER_TYPES.has(type)) return `${pathName(path)}: x-mcp-header is only permitted on primitive-typed properties (string, integer, boolean); got ${type ?? "<none>"}`;
+			if (type === void 0 || !PERMITTED_X_MCP_HEADER_TYPES.has(type)) {
+				const fault$1 = `${pathName(path)}: x-mcp-header is only permitted on primitive-typed properties (string, integer, boolean); got ${type ?? "<none>"}`;
+				if (type !== "number") return fault$1;
+				numberFault ??= fault$1;
+			}
 			const lower = raw.toLowerCase();
 			const prior = seenLower.get(lower);
 			if (prior !== void 0) return `x-mcp-header '${raw}' is not case-insensitively unique (also declared as '${prior}')`;
@@ -16042,12 +16050,17 @@ function src_Cqbh3MYc_scanXMcpHeaderDeclarations(inputSchema) {
 		}
 	};
 	const fault = visit(inputSchema, [], true);
-	return fault === void 0 ? {
+	if (fault !== void 0) return {
+		valid: false,
+		reason: numberFault ?? fault
+	};
+	return numberFault === void 0 ? {
 		valid: true,
 		declarations
 	} : {
 		valid: false,
-		reason: fault
+		reason: numberFault,
+		declarations
 	};
 }
 /**
@@ -16150,7 +16163,7 @@ function valueAtPath(root, path) {
 * A sentinel-carrying header whose payload is not canonical Base64 / valid
 * UTF-8 is rejected as invalid characters.
 *
-* Integer-typed declarations are compared numerically (the spec's SHOULD —
+* Integer- and number-typed declarations are compared numerically (the spec's SHOULD —
 * `42.0` and `42` are equal); everything else is compared as decoded strings.
 *
 * Returns `undefined` when every check passes, or an
@@ -16159,7 +16172,7 @@ function valueAtPath(root, path) {
 * standard-header cross-checks — `400 Bad Request` with the disagreeing pair
 * in `data.mismatch`.
 */
-function src_Cqbh3MYc_validateMcpParamHeaders(declarations, args, headers) {
+function src_DdvbAHrR_validateMcpParamHeaders(declarations, args, headers) {
 	for (const decl of declarations) {
 		const headerKey = `${MCP_PARAM_HEADER_PREFIX}${decl.headerName}`;
 		const headerValue = headers.get(headerKey);
@@ -16307,7 +16320,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "jsonrpc-shape",
 		order: 2,
 		evaluatedAt: "edge",
-		codes: [src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest],
+		codes: [src_DdvbAHrR_ProtocolErrorCode.InvalidRequest],
 		conformance: ["server-stateless"],
 		rationale: "The body must be a JSON-RPC request or notification: posted responses and batch arrays containing a modern or invalid element are rejected before classification (element-wise batch rule); all-legacy arrays stay legacy traffic."
 	},
@@ -16315,7 +16328,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "era-classification",
 		order: 3,
 		evaluatedAt: "edge",
-		codes: [HEADER_MISMATCH_ERROR_CODE, src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion],
+		codes: [HEADER_MISMATCH_ERROR_CODE, src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion],
 		conformance: [
 			"server-stateless",
 			"http-header-validation",
@@ -16327,7 +16340,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "envelope",
 		order: 4,
 		evaluatedAt: "edge",
-		codes: [src_Cqbh3MYc_ProtocolErrorCode.InvalidParams],
+		codes: [src_DdvbAHrR_ProtocolErrorCode.InvalidParams],
 		conformance: ["server-stateless"],
 		rationale: "A present envelope claim with a malformed envelope — and a missing envelope on a request whose protocol-version header names a modern revision — is an invalid-params rejection naming the offending or missing key(s); never a silent fall back to legacy handling. This is the only place an invalid-params rejection maps to HTTP 400."
 	},
@@ -16335,7 +16348,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "method-registry",
 		order: 5,
 		evaluatedAt: "dispatch",
-		codes: [src_Cqbh3MYc_ProtocolErrorCode.MethodNotFound],
+		codes: [src_DdvbAHrR_ProtocolErrorCode.MethodNotFound],
 		conformance: ["server-stateless"],
 		rationale: "Method existence outranks parameter validity: a method absent from the negotiated revision’s registry (or with no handler installed) answers method-not-found before params or capabilities are looked at."
 	},
@@ -16343,7 +16356,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "request-params",
 		order: 6,
 		evaluatedAt: "dispatch",
-		codes: [src_Cqbh3MYc_ProtocolErrorCode.InvalidParams],
+		codes: [src_DdvbAHrR_ProtocolErrorCode.InvalidParams],
 		conformance: [],
 		rationale: "Per-method params validation; emitted in-band by the dispatch layer (HTTP 200), never via the ladder status table."
 	},
@@ -16359,7 +16372,7 @@ const INBOUND_VALIDATION_LADDER = [
 		rung: "client-capabilities",
 		order: 8,
 		evaluatedAt: "pre-dispatch",
-		codes: [src_Cqbh3MYc_ProtocolErrorCode.MissingRequiredClientCapability],
+		codes: [src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability],
 		conformance: ["server-stateless"],
 		rationale: "The capability requirement is checked by the HTTP entry, pre-dispatch, against the validated envelope the classifier produced — pinning the spec-mandated HTTP 400 independently of how dispatch- and handler-produced errors are mapped. The documented order (after method resolution and params validation) is preserved observably only while the requirement table is empty: once a served method gains a requirement entry, a request that is missing the capability and would also fail a dispatch rung is answered by this gate first, so the entry must consult the method registry before the gate if the documented precedence is to stay observable."
 	},
@@ -16388,12 +16401,12 @@ const INBOUND_VALIDATION_LADDER = [
 * short-circuit, which carries its HTTP status directly. A dispatch- or
 * handler-produced invalid-params error is always in-band.
 */
-const src_Cqbh3MYc_LADDER_ERROR_HTTP_STATUS = {
-	[src_Cqbh3MYc_ProtocolErrorCode.ParseError]: 400,
-	[src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest]: 400,
-	[src_Cqbh3MYc_ProtocolErrorCode.MethodNotFound]: 404,
-	[src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion]: 400,
-	[src_Cqbh3MYc_ProtocolErrorCode.MissingRequiredClientCapability]: 400,
+const LADDER_ERROR_HTTP_STATUS = {
+	[src_DdvbAHrR_ProtocolErrorCode.ParseError]: 400,
+	[src_DdvbAHrR_ProtocolErrorCode.InvalidRequest]: 400,
+	[src_DdvbAHrR_ProtocolErrorCode.MethodNotFound]: 404,
+	[src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion]: 400,
+	[src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability]: 400,
 	[HEADER_MISMATCH_ERROR_CODE]: 400
 };
 /**
@@ -16413,9 +16426,9 @@ const src_Cqbh3MYc_LADDER_ERROR_HTTP_STATUS = {
 * window `-32602` must stay in-band on 200). The transport indexes the table
 * directly; keep the two in agreement when editing either.
 */
-function src_Cqbh3MYc_httpStatusForErrorCode(code, origin) {
-	if (origin === "in-band") return code === src_Cqbh3MYc_ProtocolErrorCode.MissingRequiredClientCapability ? 400 : 200;
-	return src_Cqbh3MYc_LADDER_ERROR_HTTP_STATUS[code] ?? 400;
+function src_DdvbAHrR_httpStatusForErrorCode(code, origin) {
+	if (origin === "in-band") return code === src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability ? 400 : 200;
+	return LADDER_ERROR_HTTP_STATUS[code] ?? 400;
 }
 function rejection(rung, cell, httpStatus, error, settled) {
 	return {
@@ -16536,7 +16549,7 @@ function stripHttpOws(value) {
 * rule — classification still resolves from the body (a proxy stripping the
 * header must not change the era), and only this rung refuses to serve it.
 */
-function src_Cqbh3MYc_validateStandardRequestHeaders(request, route) {
+function src_DdvbAHrR_validateStandardRequestHeaders(request, route) {
 	if (route.messageKind !== "request") return;
 	const method = route.message.method;
 	if (request.protocolVersionHeader === void 0) {
@@ -16581,18 +16594,18 @@ function classificationForClaim(claimedVersion) {
 * applies the same precedence rule to a connection's opening message; not
 * public API.
 */
-function src_Cqbh3MYc_carriesValidModernEnvelopeClaim(params) {
-	if (!src_Cqbh3MYc_hasEnvelopeClaim(params)) return false;
-	const claimedVersion = src_Cqbh3MYc_envelopeClaimVersion(params);
+function src_DdvbAHrR_carriesValidModernEnvelopeClaim(params) {
+	if (!src_DdvbAHrR_hasEnvelopeClaim(params)) return false;
+	const claimedVersion = src_DdvbAHrR_envelopeClaimVersion(params);
 	if (claimedVersion === void 0 || !isModernProtocolVersion(claimedVersion)) return false;
-	const meta = src_Cqbh3MYc_requestMetaOf(params);
-	return meta !== void 0 && src_Cqbh3MYc_validateEnvelopeMeta(meta).length === 0;
+	const meta = src_DdvbAHrR_requestMetaOf(params);
+	return meta !== void 0 && src_DdvbAHrR_validateEnvelopeMeta(meta).length === 0;
 }
 function classifyBatch(body) {
-	if (body.length === 0) return rejection("jsonrpc-shape", "empty-batch", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: empty JSON-RPC batch"), true);
+	if (body.length === 0) return rejection("jsonrpc-shape", "empty-batch", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: empty JSON-RPC batch"), true);
 	for (const element of body) {
-		if (src_Cqbh3MYc_hasEnvelopeClaim(isPlainObject$2(element) ? element["params"] : void 0)) return rejection("jsonrpc-shape", "batch-with-modern-element", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batches may not contain requests for protocol revision 2026-07-28 or later"), true);
-		if (!(src_Cqbh3MYc_isJSONRPCRequest(element) || src_Cqbh3MYc_isJSONRPCNotification(element) || src_Cqbh3MYc_isJSONRPCResultResponse(element) || src_Cqbh3MYc_isJSONRPCErrorResponse(element))) return rejection("jsonrpc-shape", "batch-with-invalid-element", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batch contains an invalid message"), true);
+		if (src_DdvbAHrR_hasEnvelopeClaim(isPlainObject$2(element) ? element["params"] : void 0)) return rejection("jsonrpc-shape", "batch-with-modern-element", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batches may not contain requests for protocol revision 2026-07-28 or later"), true);
+		if (!(src_DdvbAHrR_isJSONRPCRequest(element) || src_DdvbAHrR_isJSONRPCNotification(element) || src_DdvbAHrR_isJSONRPCResultResponse(element) || src_DdvbAHrR_isJSONRPCErrorResponse(element))) return rejection("jsonrpc-shape", "batch-with-invalid-element", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batch contains an invalid message"), true);
 	}
 	return {
 		kind: "legacy",
@@ -16604,7 +16617,7 @@ function classifyRequestBody(request, body) {
 	const method = body.method;
 	const headerVersion = request.protocolVersionHeader;
 	const headerNamesModern = headerVersion !== void 0 && isModernProtocolVersion(headerVersion);
-	if (method === "initialize" && !src_Cqbh3MYc_carriesValidModernEnvelopeClaim(params)) {
+	if (method === "initialize" && !src_DdvbAHrR_carriesValidModernEnvelopeClaim(params)) {
 		if (headerNamesModern) return crossCheckMismatch("initialize-with-modern-header", headerVersion, "an initialize request (legacy handshake) was sent with a modern MCP-Protocol-Version header");
 		const requestedVersion = isPlainObject$2(params) && typeof params["protocolVersion"] === "string" ? params["protocolVersion"] : void 0;
 		return {
@@ -16613,11 +16626,11 @@ function classifyRequestBody(request, body) {
 			...requestedVersion !== void 0 && { requestedVersion }
 		};
 	}
-	if (src_Cqbh3MYc_hasEnvelopeClaim(params)) {
-		const meta = src_Cqbh3MYc_requestMetaOf(params);
-		const firstIssue = (meta === void 0 ? [] : src_Cqbh3MYc_validateEnvelopeMeta(meta))[0];
-		if (firstIssue !== void 0) return rejection("envelope", "envelope-invalid", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid _meta envelope for protocol revision 2026-07-28: ${firstIssue.key}: ${firstIssue.problem}`, { envelope: firstIssue }), true);
-		const claimedVersion = src_Cqbh3MYc_envelopeClaimVersion(params);
+	if (src_DdvbAHrR_hasEnvelopeClaim(params)) {
+		const meta = src_DdvbAHrR_requestMetaOf(params);
+		const firstIssue = (meta === void 0 ? [] : src_DdvbAHrR_validateEnvelopeMeta(meta))[0];
+		if (firstIssue !== void 0) return rejection("envelope", "envelope-invalid", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid _meta envelope for protocol revision 2026-07-28: ${firstIssue.key}: ${firstIssue.problem}`, { envelope: firstIssue }), true);
+		const claimedVersion = src_DdvbAHrR_envelopeClaimVersion(params);
 		if (headerVersion !== void 0 && claimedVersion !== void 0 && headerVersion !== claimedVersion) return crossCheckMismatch("header-body-version-mismatch", headerVersion, `the body envelope names protocol version ${claimedVersion} but the MCP-Protocol-Version header names ${headerVersion}`);
 		if (request.mcpMethodHeader !== void 0 && request.mcpMethodHeader !== method) return crossCheckMismatch("method-header-mismatch", request.mcpMethodHeader, `the body names method ${method} but the Mcp-Method header names ${request.mcpMethodHeader}`);
 		return {
@@ -16628,10 +16641,10 @@ function classifyRequestBody(request, body) {
 		};
 	}
 	if (headerNamesModern) {
-		const meta = src_Cqbh3MYc_requestMetaOf(params);
-		const missingFromEnvelope = src_Cqbh3MYc_validateEnvelopeMeta(meta ?? {}).filter((issue) => issue.problem === "missing").map((issue) => issue.key);
+		const meta = src_DdvbAHrR_requestMetaOf(params);
+		const missingFromEnvelope = src_DdvbAHrR_validateEnvelopeMeta(meta ?? {}).filter((issue) => issue.problem === "missing").map((issue) => issue.key);
 		const missing = meta === void 0 ? ["_meta"] : missingFromEnvelope.length > 0 ? missingFromEnvelope : [PROTOCOL_VERSION_META_KEY];
-		return rejection("envelope", "modern-header-without-claim", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid params: the MCP-Protocol-Version header names protocol revision ${headerVersion}, but the request is missing the required per-request envelope key(s): ${missing.join(", ")}`, { envelope: { missing } }), true);
+		return rejection("envelope", "modern-header-without-claim", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid params: the MCP-Protocol-Version header names protocol revision ${headerVersion}, but the request is missing the required per-request envelope key(s): ${missing.join(", ")}`, { envelope: { missing } }), true);
 	}
 	return {
 		kind: "legacy",
@@ -16644,15 +16657,15 @@ function classifyNotificationBody(request, body) {
 	const method = body.method;
 	const headerVersion = request.protocolVersionHeader;
 	const headerNamesModern = headerVersion !== void 0 && isModernProtocolVersion(headerVersion);
-	if (src_Cqbh3MYc_hasEnvelopeClaim(params)) {
-		const claimedVersion = src_Cqbh3MYc_envelopeClaimVersion(params);
+	if (src_DdvbAHrR_hasEnvelopeClaim(params)) {
+		const claimedVersion = src_DdvbAHrR_envelopeClaimVersion(params);
 		if (claimedVersion === void 0) {
-			const meta = src_Cqbh3MYc_requestMetaOf(params);
-			const claimIssue = (meta === void 0 ? [] : src_Cqbh3MYc_validateEnvelopeMeta(meta)).find((issue) => issue.key === PROTOCOL_VERSION_META_KEY) ?? {
+			const meta = src_DdvbAHrR_requestMetaOf(params);
+			const claimIssue = (meta === void 0 ? [] : src_DdvbAHrR_validateEnvelopeMeta(meta)).find((issue) => issue.key === PROTOCOL_VERSION_META_KEY) ?? {
 				key: PROTOCOL_VERSION_META_KEY,
 				problem: "expected a protocol version string"
 			};
-			return rejection("envelope", "notification-envelope-invalid", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid _meta envelope for protocol revision 2026-07-28: ${claimIssue.key}: ${claimIssue.problem}`, { envelope: claimIssue }), true);
+			return rejection("envelope", "notification-envelope-invalid", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid _meta envelope for protocol revision 2026-07-28: ${claimIssue.key}: ${claimIssue.problem}`, { envelope: claimIssue }), true);
 		}
 		if (headerVersion !== void 0 && headerVersion !== claimedVersion) return crossCheckMismatch("notification-header-body-version-mismatch", headerVersion, `the notification envelope names protocol version ${claimedVersion} but the MCP-Protocol-Version header names ${headerVersion}`);
 		const classification = classificationForClaim(claimedVersion);
@@ -16689,7 +16702,7 @@ function classifyNotificationBody(request, body) {
 * module documentation for the rules. Returns a routing outcome (`legacy` or
 * `modern`) or a ladder rejection; it never throws.
 */
-function src_Cqbh3MYc_classifyInboundRequest(request) {
+function src_DdvbAHrR_classifyInboundRequest(request) {
 	request = {
 		...request,
 		...request.protocolVersionHeader !== void 0 && { protocolVersionHeader: stripHttpOws(request.protocolVersionHeader) },
@@ -16702,13 +16715,13 @@ function src_Cqbh3MYc_classifyInboundRequest(request) {
 	};
 	const body = request.body;
 	if (Array.isArray(body)) return classifyBatch(body);
-	if (src_Cqbh3MYc_isJSONRPCResultResponse(body) || src_Cqbh3MYc_isJSONRPCErrorResponse(body)) return {
+	if (src_DdvbAHrR_isJSONRPCResultResponse(body) || src_DdvbAHrR_isJSONRPCErrorResponse(body)) return {
 		kind: "legacy",
 		reason: "response"
 	};
-	if (isPlainObject$2(body) && src_Cqbh3MYc_isJSONRPCRequest(body)) return classifyRequestBody(request, body);
-	if (isPlainObject$2(body) && src_Cqbh3MYc_isJSONRPCNotification(body)) return classifyNotificationBody(request, body);
-	return rejection("jsonrpc-shape", "invalid-json-rpc-body", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: the request body is not a valid JSON-RPC message"), true);
+	if (isPlainObject$2(body) && src_DdvbAHrR_isJSONRPCRequest(body)) return classifyRequestBody(request, body);
+	if (isPlainObject$2(body) && src_DdvbAHrR_isJSONRPCNotification(body)) return classifyNotificationBody(request, body);
+	return rejection("jsonrpc-shape", "invalid-json-rpc-body", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: the request body is not a valid JSON-RPC message"), true);
 }
 /**
 * The rejection a modern-only endpoint (no legacy serving configured)
@@ -16725,16 +16738,16 @@ function src_Cqbh3MYc_classifyInboundRequest(request) {
 * - Legacy-classified notifications return `undefined`: the caller answers
 *   202 with no body and does not dispatch the notification (accept-and-drop).
 */
-function src_Cqbh3MYc_modernOnlyStrictRejection(route, supportedVersions) {
+function src_DdvbAHrR_modernOnlyStrictRejection(route, supportedVersions) {
 	switch (route.reason) {
 		case "http-method": return rejection("http-method", "modern-only-method-not-allowed", 405, new ProtocolError(-32e3, "Method not allowed."), true);
-		case "batch": return rejection("jsonrpc-shape", "modern-only-batch-not-supported", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batches are not supported by this endpoint"), true);
-		case "response": return rejection("jsonrpc-shape", "modern-only-response-post", 400, new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC responses cannot be posted to this endpoint"), true);
+		case "batch": return rejection("jsonrpc-shape", "modern-only-batch-not-supported", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC batches are not supported by this endpoint"), true);
+		case "response": return rejection("jsonrpc-shape", "modern-only-response-post", 400, new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidRequest, "Bad Request: JSON-RPC responses cannot be posted to this endpoint"), true);
 		case "notification": return;
 		case "initialize":
 		case "no-claim": {
 			const requested = route.requestedVersion;
-			return rejection("era-classification", "modern-only-missing-envelope", 400, requested === void 0 ? new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion, "Unsupported protocol version: the request did not name a protocol version", { supported: [...supportedVersions] }) : new src_Cqbh3MYc_UnsupportedProtocolVersionError({
+			return rejection("era-classification", "modern-only-missing-envelope", 400, requested === void 0 ? new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion, "Unsupported protocol version: the request did not name a protocol version", { supported: [...supportedVersions] }) : new src_DdvbAHrR_UnsupportedProtocolVersionError({
 				supported: [...supportedVersions],
 				requested
 			}), true);
@@ -16818,22 +16831,26 @@ function standardSchemaToJsonSchema(schema, io = "input") {
 		...result
 	};
 }
+const LOCAL_DEFINITION_REF = /^#\/(\$defs|definitions)\/([^/~%]+)$/;
 /**
 * A typeless JSON Schema root is "provably object-shaped" when either it carries object keywords
 * directly (`properties`/`patternProperties`/`additionalProperties`/`required`), or it is a
 * composition (`oneOf`/`anyOf`/`allOf`) whose every member is itself `type:'object'` or recursively
-* provably object-shaped (e.g. a nested `discriminatedUnion`). `$ref` is not followed. Used to
+* provably object-shaped (e.g. a nested `discriminatedUnion`). A `$ref` is followed one hop, to an
+* entry of the root's `$defs`/`definitions` that is itself `type:'object'`. Used to
 * decide whether stamping `type:'object'` is safe (redundant-but-valid) versus self-contradictory.
 */
-function isProvablyObjectShapedRoot(schema) {
+function isProvablyObjectShapedRoot(schema, root = schema) {
 	if ("properties" in schema || "patternProperties" in schema || "additionalProperties" in schema || "required" in schema) return true;
+	const ref = typeof schema.$ref === "string" && LOCAL_DEFINITION_REF.exec(schema.$ref);
+	if (ref && root[ref[1]]?.[ref[2]]?.type === "object") return true;
 	for (const key of [
 		"oneOf",
 		"anyOf",
 		"allOf"
 	]) {
 		const members = schema[key];
-		if (Array.isArray(members) && members.length > 0) return members.every((m) => m !== null && typeof m === "object" && (m.type === "object" || isProvablyObjectShapedRoot(m)));
+		if (Array.isArray(members) && members.length > 0) return members.every((m) => m !== null && typeof m === "object" && (m.type === "object" || isProvablyObjectShapedRoot(m, "$id" in m ? {} : root)));
 	}
 	return false;
 }
@@ -16918,7 +16935,7 @@ function convertStandardElicitationSchema(schema) {
 		return standardSchemaToJsonSchema(schema, "input");
 	} catch (error) {
 		const detail = error instanceof Error ? error.message : String(error);
-		throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema must describe an object with flat primitive properties: ${detail}`);
+		throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema must describe an object with flat primitive properties: ${detail}`);
 	}
 }
 const ANNOTATION_ONLY_JSON_SCHEMA_KEYWORDS = new Set([
@@ -16967,7 +16984,7 @@ function walkRequestedSchema(converted, vendor) {
 	for (const [key, value] of Object.entries(converted)) if (key === "properties" && isJsonObject(value)) pruned[key] = Object.fromEntries(Object.entries(value).map(([name, node]) => [name, walkProperty(node, `properties.${name}`, vendor, unsupported)]));
 	else if (ROOT_KEYS.has(key)) pruned[key] = value;
 	else if (!isAnnotationOnlyJsonSchemaKeyword(key)) unsupported.push(key);
-	if (unsupported.length > 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema contains unsupported JSON Schema constraint(s) after Standard Schema conversion: ${unsupported.join(", ")}`);
+	if (unsupported.length > 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema contains unsupported JSON Schema constraint(s) after Standard Schema conversion: ${unsupported.join(", ")}`);
 	return pruned;
 }
 /** Names the properties that fail value validation, instead of surfacing a raw union dump. */
@@ -16995,11 +17012,11 @@ function normalizeElicitInputParams(input) {
 	const vendor = input.requestedSchema["~standard"].vendor;
 	const pruned = walkRequestedSchema(convertStandardElicitationSchema(input.requestedSchema), vendor);
 	const parsed = parseSchema(ElicitRequestFormParamsSchema.shape.requestedSchema, pruned);
-	if (!parsed.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema only supports flat primitive properties (string, number, integer, boolean, and string enums): ${describeUnsupportedProperties(pruned, parsed.error.message)}`);
+	if (!parsed.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema only supports flat primitive properties (string, number, integer, boolean, and string enums): ${describeUnsupportedProperties(pruned, parsed.error.message)}`);
 	const droppedConstraints = findDroppedConstraintPaths(pruned, parsed.data);
-	if (droppedConstraints.length > 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema contains unsupported JSON Schema constraint(s) after Standard Schema conversion: ${droppedConstraints.join(", ")}`);
+	if (droppedConstraints.length > 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema contains unsupported JSON Schema constraint(s) after Standard Schema conversion: ${droppedConstraints.join(", ")}`);
 	const danglingRequired = (parsed.data.required ?? []).filter((key) => !Object.prototype.hasOwnProperty.call(parsed.data.properties, key));
-	if (danglingRequired.length > 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema lists required properties that are not defined in properties: ${danglingRequired.join(", ")}`);
+	if (danglingRequired.length > 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation requestedSchema lists required properties that are not defined in properties: ${danglingRequired.join(", ")}`);
 	return {
 		...input,
 		mode: "form",
@@ -17181,7 +17198,7 @@ function inputRequiredRoundsExceededMessage(method, maxRounds) {
 function sleep(ms, signal) {
 	return new Promise((resolve, reject) => {
 		if (signal?.aborted) {
-			reject(signal.reason instanceof src_Cqbh3MYc_SdkError ? signal.reason : new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, String(signal.reason)));
+			reject(signal.reason instanceof src_DdvbAHrR_SdkError ? signal.reason : new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, String(signal.reason)));
 			return;
 		}
 		const timer = setTimeout(() => {
@@ -17190,7 +17207,7 @@ function sleep(ms, signal) {
 		}, ms);
 		const onAbort = () => {
 			clearTimeout(timer);
-			reject(signal?.reason instanceof src_Cqbh3MYc_SdkError ? signal.reason : new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, String(signal?.reason)));
+			reject(signal?.reason instanceof src_DdvbAHrR_SdkError ? signal.reason : new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, String(signal?.reason)));
 		};
 		signal?.addEventListener("abort", onAbort, { once: true });
 	});
@@ -17461,8 +17478,8 @@ const isSpecType = Object.freeze(_isSpecType);
 function bootstrapOutboundCodec(method) {
 	switch (method) {
 		case "initialize":
-		case "notifications/initialized": return src_Cqbh3MYc_codecForVersion(void 0);
-		case "server/discover": return src_Cqbh3MYc_codecForVersion(src_Cqbh3MYc_MODERN_WIRE_REVISION);
+		case "notifications/initialized": return src_DdvbAHrR_codecForVersion(void 0);
+		case "server/discover": return src_DdvbAHrR_codecForVersion(src_DdvbAHrR_MODERN_WIRE_REVISION);
 		default: return;
 	}
 }
@@ -17480,9 +17497,9 @@ const DEFAULT_REQUEST_TIMEOUT_MSEC = 6e4;
 * wire-level bookkeeping, not handler material.
 */
 const RESERVED_ENVELOPE_META_KEYS = [
-	auth_BNDyLTqp_PROTOCOL_VERSION_META_KEY,
-	auth_BNDyLTqp_CLIENT_INFO_META_KEY,
-	auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY,
+	schemas_DscsoNZN_PROTOCOL_VERSION_META_KEY,
+	schemas_DscsoNZN_CLIENT_INFO_META_KEY,
+	schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY,
 	LOG_LEVEL_META_KEY
 ];
 /**
@@ -17601,7 +17618,7 @@ let writeNegotiatedProtocolVersion;
 * instance modern at binding time. Exported on the core internal barrel
 * only — never public API.
 */
-function src_Cqbh3MYc_setNegotiatedProtocolVersion(instance, version) {
+function src_DdvbAHrR_setNegotiatedProtocolVersion(instance, version) {
 	writeNegotiatedProtocolVersion(instance, version);
 }
 /**
@@ -17658,7 +17675,7 @@ var Protocol = class {
 	fallbackNotificationHandler;
 	constructor(_options) {
 		this._options = _options;
-		this._supportedProtocolVersions = _options?.supportedProtocolVersions ?? auth_BNDyLTqp_SUPPORTED_PROTOCOL_VERSIONS;
+		this._supportedProtocolVersions = _options?.supportedProtocolVersions ?? schemas_DscsoNZN_SUPPORTED_PROTOCOL_VERSIONS;
 		this.setNotificationHandler("notifications/cancelled", (notification) => {
 			this._oncancel(notification);
 		});
@@ -17736,7 +17753,7 @@ var Protocol = class {
 	* outbound legs and leave the base behavior in place.
 	*/
 	_resolveNonCompleteResult(decoded, flow) {
-		return Promise.reject(new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.UnsupportedResultType, `Unsupported result type '${decoded.kind}' for ${flow.request.method}`, {
+		return Promise.reject(new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.UnsupportedResultType, `Unsupported result type '${decoded.kind}' for ${flow.request.method}`, {
 			resultType: decoded.kind,
 			method: flow.request.method
 		}));
@@ -17770,7 +17787,7 @@ var Protocol = class {
 		const totalElapsed = Date.now() - info.startTime;
 		if (info.maxTotalTimeout && totalElapsed >= info.maxTotalTimeout) {
 			this._timeoutInfo.delete(messageId);
-			throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, "Maximum total timeout exceeded", {
+			throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, "Maximum total timeout exceeded", {
 				maxTotalTimeout: info.maxTotalTimeout,
 				totalElapsed
 			});
@@ -17809,9 +17826,9 @@ var Protocol = class {
 		const _onmessage = this._transport?.onmessage;
 		this._transport.onmessage = (message, extra) => {
 			_onmessage?.(message, extra);
-			if (src_Cqbh3MYc_isJSONRPCResultResponse(message) || src_Cqbh3MYc_isJSONRPCErrorResponse(message)) this._onresponse(message);
-			else if (src_Cqbh3MYc_isJSONRPCRequest(message)) this._onrequest(message, extra);
-			else if (src_Cqbh3MYc_isJSONRPCNotification(message)) this._onnotification(message, extra);
+			if (src_DdvbAHrR_isJSONRPCResultResponse(message) || src_DdvbAHrR_isJSONRPCErrorResponse(message)) this._onresponse(message);
+			else if (src_DdvbAHrR_isJSONRPCRequest(message)) this._onrequest(message, extra);
+			else if (src_DdvbAHrR_isJSONRPCNotification(message)) this._onnotification(message, extra);
 			else this._onerror(/* @__PURE__ */ new Error(`Unknown message type: ${JSON.stringify(message)}`));
 		};
 		transport.setSupportedProtocolVersions?.(this._supportedProtocolVersions);
@@ -17831,7 +17848,7 @@ var Protocol = class {
 		this._timeoutInfo.clear();
 		const requestHandlerAbortControllers = this._requestHandlerAbortControllers;
 		this._requestHandlerAbortControllers = /* @__PURE__ */ new Map();
-		const error = new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.ConnectionClosed, "Connection closed");
+		const error = new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.ConnectionClosed, "Connection closed");
 		this._transport = void 0;
 		try {
 			this.onclose?.();
@@ -17891,7 +17908,7 @@ var Protocol = class {
 			if (classified !== codec.era) {
 				this._onerror(/* @__PURE__ */ new Error(`Era mismatch on inbound request '${request.method}': classified as ${classified} but this instance serves ${codec.era}`));
 				const requested = extra.classification.revision ?? classified;
-				sendErrorResponse(src_Cqbh3MYc_ProtocolErrorCode.UnsupportedProtocolVersion, `Unsupported protocol version: ${requested}`, {
+				sendErrorResponse(src_DdvbAHrR_ProtocolErrorCode.UnsupportedProtocolVersion, `Unsupported protocol version: ${requested}`, {
 					supported: this._supportedProtocolVersions,
 					requested
 				});
@@ -17899,17 +17916,17 @@ var Protocol = class {
 			}
 		}
 		if (isSpecRequestMethod(request.method) && !codec.hasRequestMethod(request.method) && !(isExtensionReusedRequestMethod(request.method) && this._customSchemaRequestMethods.has(request.method))) {
-			sendErrorResponse(src_Cqbh3MYc_ProtocolErrorCode.MethodNotFound, "Method not found");
+			sendErrorResponse(src_DdvbAHrR_ProtocolErrorCode.MethodNotFound, "Method not found");
 			return;
 		}
 		const handler = this._requestHandlers.get(request.method) ?? this.fallbackRequestHandler;
 		if (handler === void 0) {
-			sendErrorResponse(src_Cqbh3MYc_ProtocolErrorCode.MethodNotFound, "Method not found");
+			sendErrorResponse(src_DdvbAHrR_ProtocolErrorCode.MethodNotFound, "Method not found");
 			return;
 		}
 		const envelopeError = codec.checkInboundEnvelope(lifted);
 		if (envelopeError !== void 0) {
-			sendErrorResponse(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, envelopeError);
+			sendErrorResponse(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, envelopeError);
 			return;
 		}
 		const sendNotification = (notification, options) => this._notificationViaCodec(this._resolveOutboundCodec(notification.method), notification, {
@@ -17954,7 +17971,7 @@ var Protocol = class {
 				encoded = codec.encodeResult(request.method, result, this._outboundServerInfo());
 			} catch (error) {
 				this._onerror(/* @__PURE__ */ new Error(`Failed to encode result for ${request.method}: ${error}`));
-				sendErrorResponse(src_Cqbh3MYc_ProtocolErrorCode.InternalError, "Internal error");
+				sendErrorResponse(src_DdvbAHrR_ProtocolErrorCode.InternalError, "Internal error");
 				return;
 			}
 			const response = {
@@ -17965,7 +17982,7 @@ var Protocol = class {
 			await capturedTransport?.send(response);
 		}, async (error) => {
 			if (abortController.signal.aborted) return;
-			const thrownCode = Number.isSafeInteger(error["code"]) ? error["code"] : src_Cqbh3MYc_ProtocolErrorCode.InternalError;
+			const thrownCode = Number.isSafeInteger(error["code"]) ? error["code"] : src_DdvbAHrR_ProtocolErrorCode.InternalError;
 			const errorResponse = {
 				jsonrpc: "2.0",
 				id: request.id,
@@ -18017,7 +18034,7 @@ var Protocol = class {
 		this._responseHandlers.delete(messageId);
 		this._cleanupTimeout(messageId);
 		this._progressHandlers.delete(messageId);
-		if (src_Cqbh3MYc_isJSONRPCResultResponse(response)) handler(response);
+		if (src_DdvbAHrR_isJSONRPCResultResponse(response)) handler(response);
 		else handler(ProtocolError.fromError(response.error.code, response.error.message, response.error.data));
 	}
 	get transport() {
@@ -18046,7 +18063,7 @@ var Protocol = class {
 	* through it. Legacy until a version has been negotiated.
 	*/
 	_negotiatedWireCodec() {
-		return src_Cqbh3MYc_codecForVersion(this._negotiatedProtocolVersion);
+		return src_DdvbAHrR_codecForVersion(this._negotiatedProtocolVersion);
 	}
 	/**
 	* Protected accessor for the instance's negotiated wire codec, for role
@@ -18081,7 +18098,7 @@ var Protocol = class {
 	* and stay era-blind.
 	*/
 	_assertOutboundRequestInEra(codec, method) {
-		if (isSpecRequestMethod(method) && !codec.hasRequestMethod(method)) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Method '${method}' is not supported by the negotiated protocol version (wire era ${codec.era})`, {
+		if (isSpecRequestMethod(method) && !codec.hasRequestMethod(method)) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Method '${method}' is not supported by the negotiated protocol version (wire era ${codec.era})`, {
 			method,
 			era: codec.era
 		});
@@ -18128,9 +18145,9 @@ var Protocol = class {
 			}
 			if (options?.signal?.aborted) {
 				const reason = options.signal.reason;
-				throw reason instanceof src_Cqbh3MYc_SdkError ? reason : new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, String(reason));
+				throw reason instanceof src_DdvbAHrR_SdkError ? reason : new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, String(reason));
 			}
-			const requestAbort = codec.era === src_Cqbh3MYc_MODERN_WIRE_REVISION && this._transport.hasPerRequestStream === true ? new AbortController() : void 0;
+			const requestAbort = codec.era === src_DdvbAHrR_MODERN_WIRE_REVISION && this._transport.hasPerRequestStream === true ? new AbortController() : void 0;
 			const messageId = this._requestMessageId++;
 			cleanupMessageId = messageId;
 			const jsonrpcRequest = {
@@ -18167,7 +18184,7 @@ var Protocol = class {
 						onresumptiontoken
 					}).catch((error) => this._onerror(/* @__PURE__ */ new Error(`Failed to send cancellation: ${error}`)));
 				} else requestAbort.abort();
-				reject(reason instanceof src_Cqbh3MYc_SdkError ? reason : new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, String(reason)));
+				reject(reason instanceof src_DdvbAHrR_SdkError ? reason : new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, String(reason)));
 			};
 			this._responseHandlers.set(messageId, (response) => {
 				if (options?.signal?.aborted) return;
@@ -18198,13 +18215,13 @@ var Protocol = class {
 				const result = decoded.result;
 				validateStandardSchema(resultSchema, result).then((parseResult) => {
 					if (parseResult.success) resolve(parseResult.data);
-					else reject(new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid result for ${request.method}: ${parseResult.error}`));
+					else reject(new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid result for ${request.method}: ${parseResult.error}`));
 				}, reject);
 			});
 			onAbort = () => cancel(options?.signal?.reason);
 			options?.signal?.addEventListener("abort", onAbort, { once: true });
 			const timeout = options?.timeout ?? DEFAULT_REQUEST_TIMEOUT_MSEC;
-			const timeoutHandler = () => cancel(new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.RequestTimeout, "Request timed out", { timeout }));
+			const timeoutHandler = () => cancel(new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.RequestTimeout, "Request timed out", { timeout }));
 			this._setupTimeout(messageId, timeout, options?.maxTotalTimeout, timeoutHandler, options?.resetTimeoutOnProgress ?? false);
 			this._transport.send(outbound, {
 				relatedRequestId,
@@ -18236,8 +18253,8 @@ var Protocol = class {
 	* resolve through the instance's negotiated era at send time.
 	*/
 	async _notificationViaCodec(codec, notification, options) {
-		if (!this._transport) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.NotConnected, "Not connected");
-		if (isSpecNotificationMethod(notification.method) && !codec.hasNotificationMethod(notification.method)) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Notification '${notification.method}' is not supported by the negotiated protocol version (wire era ${codec.era})`, {
+		if (!this._transport) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.NotConnected, "Not connected");
+		if (isSpecNotificationMethod(notification.method) && !codec.hasNotificationMethod(notification.method)) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Notification '${notification.method}' is not supported by the negotiated protocol version (wire era ${codec.era})`, {
 			method: notification.method,
 			era: codec.era
 		});
@@ -18268,14 +18285,14 @@ var Protocol = class {
 				let outcome = dispatchCodec.validateRequest(method, request);
 				if (!outcome.ok && outcome.reason === "not-in-era") outcome = dispatchCodec.validateInputRequest(method, request);
 				if (!outcome.ok) {
-					if (outcome.reason === "not-in-era") throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `No wire schema for ${method} in the resolved era`);
+					if (outcome.reason === "not-in-era") throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `No wire schema for ${method} in the resolved era`);
 					throw new Error(outcome.message);
 				}
 				return Promise.resolve(schemasOrHandler(outcome.value, ctx));
 			};
 		} else if (maybeHandler) stored = async (request, ctx) => {
 			const parsed = await validateStandardSchema(schemasOrHandler.params, { ...request.params });
-			if (!parsed.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid params for ${method}: ${parsed.error}`);
+			if (!parsed.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid params for ${method}: ${parsed.error}`);
 			return maybeHandler(parsed.data, ctx);
 		};
 		else throw new TypeError("setRequestHandler: handler is required");
@@ -18323,7 +18340,7 @@ var Protocol = class {
 			this._notificationHandlers.set(method, (notification, codec) => {
 				const outcome = codec.validateNotification(method, notification);
 				if (!outcome.ok) {
-					if (outcome.reason === "not-in-era") throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `No wire schema for ${method} in the resolved era`);
+					if (outcome.reason === "not-in-era") throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `No wire schema for ${method} in the resolved era`);
 					throw new Error(outcome.message);
 				}
 				return Promise.resolve(schemasOrHandler(outcome.value));
@@ -18333,7 +18350,7 @@ var Protocol = class {
 		if (!maybeHandler) throw new TypeError("setNotificationHandler: handler is required");
 		this._notificationHandlers.set(method, async (notification) => {
 			const parsed = await validateStandardSchema(schemasOrHandler.params, { ...notification.params });
-			if (!parsed.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid params for notification ${method}: ${parsed.error}`);
+			if (!parsed.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid params for notification ${method}: ${parsed.error}`);
 			await maybeHandler(parsed.data, notification);
 		});
 	}
@@ -18364,7 +18381,7 @@ function mergeCapabilities(base, additional) {
 
 //#endregion
 //#region ../core-internal/src/shared/inputRequiredEngine.ts
-function src_Cqbh3MYc_isPlainObject(value) {
+function src_DdvbAHrR_isPlainObject(value) {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 /**
@@ -18378,12 +18395,12 @@ function src_Cqbh3MYc_isPlainObject(value) {
 function partitionInputResponses(inputResponses) {
 	const accepted = {};
 	const droppedKeys = [];
-	if (!src_Cqbh3MYc_isPlainObject(inputResponses)) return {
+	if (!src_DdvbAHrR_isPlainObject(inputResponses)) return {
 		accepted,
 		droppedKeys
 	};
 	for (const [key, entry] of Object.entries(inputResponses)) {
-		if (!src_Cqbh3MYc_isPlainObject(entry) || "method" in entry || "result" in entry) {
+		if (!src_DdvbAHrR_isPlainObject(entry) || "method" in entry || "result" in entry) {
 			droppedKeys.push(key);
 			continue;
 		}
@@ -18532,7 +18549,7 @@ var import_content_type = /* @__PURE__ */ __toESM(require_content_type(), 1);
 * behavior, so a header whose media type is unambiguous is not rejected for
 * a sloppy parameter section.
 */
-function src_Cqbh3MYc_mediaTypeEssence(header) {
+function src_DdvbAHrR_mediaTypeEssence(header) {
 	if (!header) return;
 	try {
 		return import_content_type.parse(header).type;
@@ -18548,9 +18565,9 @@ function src_Cqbh3MYc_mediaTypeEssence(header) {
 * parameter sections do not reject a header whose media type is unambiguously
 * `application/json` (see `mediaTypeEssence` for the exact grammar).
 */
-function src_Cqbh3MYc_isJsonContentType(header) {
+function src_DdvbAHrR_isJsonContentType(header) {
 	if (header === "application/json") return true;
-	return src_Cqbh3MYc_mediaTypeEssence(header) === "application/json";
+	return src_DdvbAHrR_mediaTypeEssence(header) === "application/json";
 }
 
 //#endregion
@@ -18609,7 +18626,7 @@ var ReadBuffer = class {
 	}
 };
 function deserializeMessage(line) {
-	return auth_BNDyLTqp_JSONRPCMessageSchema.parse(JSON.parse(line));
+	return schemas_DscsoNZN_JSONRPCMessageSchema.parse(JSON.parse(line));
 }
 function serializeMessage(message) {
 	return JSON.stringify(message) + "\n";
@@ -18729,7 +18746,7 @@ const MAX_TEMPLATE_LENGTH = 1e6;
 const MAX_VARIABLE_LENGTH = 1e6;
 const MAX_TEMPLATE_EXPRESSIONS = 1e4;
 const MAX_REGEX_LENGTH = 1e6;
-var src_Cqbh3MYc_UriTemplate = class UriTemplate {
+var src_DdvbAHrR_UriTemplate = class UriTemplate {
 	/**
 	* Returns true if the given string contains any URI template expressions.
 	* A template expression is a sequence of characters enclosed in curly braces,
@@ -18969,7 +18986,7 @@ var InMemoryTransport = class InMemoryTransport {
 	* This is useful for testing authentication scenarios.
 	*/
 	async send(message, options) {
-		if (!this._otherTransport) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.NotConnected, "Not connected");
+		if (!this._otherTransport) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.NotConnected, "Not connected");
 		if (this._otherTransport.onmessage) this._otherTransport.onmessage(message, { authInfo: options?.authInfo });
 		else this._otherTransport._messageQueue.push({
 			message,
@@ -19115,8 +19132,8 @@ function fromJsonSchema(schema, validator) {
 
 //#endregion
 
-//# sourceMappingURL=src-Cqbh3MYc.mjs.map
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/ajvProvider-CEoC__sr.mjs
+//# sourceMappingURL=src-DdvbAHrR.mjs.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/ajvProvider-DyjnscPj.mjs
 
 
 
@@ -21859,12 +21876,34 @@ var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 }));
 
 //#endregion
-//#region ../../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/lib/utils.js
+//#region ../../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/lib/utils.js
 var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	/** @type {(value: string) => boolean} */
 	const isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
 	/** @type {(value: string) => boolean} */
 	const isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
+	/** @type {(value: string) => boolean} */
+	const isPort = RegExp.prototype.test.bind(/^\d*$/u);
+	/** @type {(value: string) => boolean} */
+	const isHexPair = RegExp.prototype.test.bind(/^[\da-f]{2}$/iu);
+	/** @type {(value: string) => boolean} */
+	const isUnreserved = RegExp.prototype.test.bind(/^[\da-z\-._~]$/iu);
+	/** @type {(value: string) => boolean} */
+	const isPathCharacter = RegExp.prototype.test.bind(/^[A-Za-z0-9\-._~!$&'()*+,;=:@/]$/u);
+	/** @type {(value: string) => boolean} */
+	const isQueryFragmentCharacter = RegExp.prototype.test.bind(/^[A-Za-z0-9\-._~!$&'()*+,;=:@/?]$/u);
+	/** @type {(value: string) => boolean} */
+	const isUserinfoCharacter = RegExp.prototype.test.bind(/^[A-Za-z0-9\-._~!$&'()*+,;=:]$/u);
+	const BYTE_HEX = new Array(256);
+	{
+		const HEX_DIGITS = "0123456789ABCDEF";
+		for (let i = 0; i < 256; i++) BYTE_HEX[i] = "%" + HEX_DIGITS[i >> 4] + HEX_DIGITS[i & 15];
+	}
+	function percentEncodeNonAscii(cp) {
+		if (cp < 2048) return BYTE_HEX[192 | cp >> 6] + BYTE_HEX[128 | cp & 63];
+		if (cp < 65536) return BYTE_HEX[224 | cp >> 12] + BYTE_HEX[128 | cp >> 6 & 63] + BYTE_HEX[128 | cp & 63];
+		return BYTE_HEX[240 | cp >> 18] + BYTE_HEX[128 | cp >> 12 & 63] + BYTE_HEX[128 | cp >> 6 & 63] + BYTE_HEX[128 | cp & 63];
+	}
 	/**
 	* @param {Array<string>} input
 	* @returns {string}
@@ -21887,119 +21926,162 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return acc;
 	}
-	/**
-	* @typedef {Object} GetIPV6Result
-	* @property {boolean} error - Indicates if there was an error parsing the IPv6 address.
-	* @property {string} address - The parsed IPv6 address.
-	* @property {string} [zone] - The zone identifier, if present.
-	*/
+	/** @type {(value: string) => boolean} */
+	const isHextet = RegExp.prototype.test.bind(/^[\dA-Fa-f]{1,4}$/);
+	/** @type {(value: string) => boolean} */
+	const isIPvFuture = RegExp.prototype.test.bind(/^[vV][\dA-Fa-f]+\.[A-Za-z\d\-._~!$&'()*+,;=:]+$/);
+	/** @type {(value: string) => boolean} */
+	const isZoneCharacter = RegExp.prototype.test.bind(/^[A-Za-z\d\-._~]$/);
 	/**
 	* @param {string} value
 	* @returns {boolean}
 	*/
 	const nonSimpleDomain = RegExp.prototype.test.bind(/[^!"$&'()*+,\-.;=_`a-z{}~]/u);
 	/**
-	* @param {Array<string>} buffer
+	* @param {string} zone
 	* @returns {boolean}
 	*/
-	function consumeIsZone(buffer) {
-		buffer.length = 0;
-		return true;
-	}
-	/**
-	* @param {Array<string>} buffer
-	* @param {Array<string>} address
-	* @param {GetIPV6Result} output
-	* @returns {boolean}
-	*/
-	function consumeHextets(buffer, address, output) {
-		if (buffer.length) {
-			const hex = stringArrayToHexStripped(buffer);
-			if (hex !== "") address.push(hex);
-			else {
-				output.error = true;
-				return false;
+	function isZoneIdentifier(zone) {
+		if (zone.length === 0) return false;
+		for (let i = 0; i < zone.length; i++) {
+			if (isZoneCharacter(zone[i])) continue;
+			if (zone[i] === "%" && i + 2 < zone.length && isHexPair(zone.slice(i + 1, i + 3))) {
+				i += 2;
+				continue;
 			}
-			buffer.length = 0;
+			return false;
 		}
 		return true;
 	}
 	/**
+	* Compresses the longest run of zero hextets to "::" per RFC 5952. A run of a
+	* single zero hextet is left uncompressed. On ties the leftmost run wins.
+	*
+	* @param {string[]} hextets
+	* @returns {string}
+	*/
+	function compressIPv6ZeroRun(hextets) {
+		let bestStart = -1;
+		let bestLength = 0;
+		let runStart = -1;
+		let runLength = 0;
+		for (let i = 0; i < hextets.length; i++) if (hextets[i] === "0") {
+			if (runStart === -1) runStart = i;
+			runLength++;
+			if (runLength > bestLength) {
+				bestLength = runLength;
+				bestStart = runStart;
+			}
+		} else {
+			runStart = -1;
+			runLength = 0;
+		}
+		if (bestLength < 2) return hextets.join(":");
+		const head = hextets.slice(0, bestStart).join(":");
+		const tail = hextets.slice(bestStart + bestLength).join(":");
+		return head + "::" + tail;
+	}
+	/**
+	* Validates an IPv6 address against the alternatives in RFC 3986 section
+	* 3.2.2 and returns the same address with leading hextet zeroes removed.
+	* An embedded IPv4 address counts as two hextets and is only valid at the end.
+	*
 	* @param {string} input
-	* @returns {GetIPV6Result}
+	* @returns {string|undefined}
 	*/
-	function getIPV6(input) {
-		let tokenCount = 0;
-		const output = {
-			error: false,
-			address: "",
-			zone: ""
-		};
-		/** @type {Array<string>} */
-		const address = [];
-		/** @type {Array<string>} */
-		const buffer = [];
-		let endipv6Encountered = false;
-		let endIpv6 = false;
-		let consume = consumeHextets;
-		for (let i = 0; i < input.length; i++) {
-			const cursor = input[i];
-			if (cursor === "[" || cursor === "]") continue;
-			if (cursor === ":") {
-				if (endipv6Encountered === true) endIpv6 = true;
-				if (!consume(buffer, address, output)) break;
-				if (++tokenCount > 7) {
-					output.error = true;
-					break;
-				}
-				if (i > 0 && input[i - 1] === ":") endipv6Encountered = true;
-				address.push(":");
-				continue;
-			} else if (cursor === "%") {
-				if (!consume(buffer, address, output)) break;
-				consume = consumeIsZone;
-			} else {
-				buffer.push(cursor);
+	function normalizeIPv6Address(input) {
+		const compression = input.indexOf("::");
+		if (compression !== -1 && input.indexOf("::", compression + 1) !== -1) return void 0;
+		const left = compression === -1 ? input.split(":") : input.slice(0, compression).split(":");
+		const right = compression === -1 ? [] : input.slice(compression + 2).split(":");
+		if (compression !== -1) {
+			if (left.length === 1 && left[0] === "") left.length = 0;
+			if (right.length === 1 && right[0] === "") right.length = 0;
+		}
+		const parts = left.concat(right);
+		let hextetCount = 0;
+		for (let i = 0; i < parts.length; i++) {
+			const part = parts[i];
+			if (part === "") return void 0;
+			if (part.indexOf(".") !== -1) {
+				if (i !== parts.length - 1 || compression !== -1 && right.length === 0 || !isIPv4(part)) return void 0;
+				hextetCount += 2;
 				continue;
 			}
+			if (!isHextet(part)) return void 0;
+			parts[i] = parseInt(part, 16).toString(16);
+			hextetCount++;
 		}
-		if (buffer.length) if (consume === consumeIsZone) output.zone = buffer.join("");
-		else if (endIpv6) address.push(buffer.join(""));
-		else address.push(stringArrayToHexStripped(buffer));
-		output.address = address.join("");
-		return output;
+		if (compression === -1) {
+			if (hextetCount !== 8) return void 0;
+			return compressIPv6ZeroRun(parts);
+		}
+		if (hextetCount >= 8) return void 0;
+		const expanded = parts.slice(0, left.length);
+		for (let i = hextetCount; i < 8; i++) expanded.push("0");
+		for (let i = left.length; i < parts.length; i++) expanded.push(parts[i]);
+		return compressIPv6ZeroRun(expanded);
 	}
 	/**
 	* @typedef {Object} NormalizeIPv6Result
 	* @property {string} host - The normalized host.
 	* @property {string} [escapedHost] - The escaped host.
 	* @property {boolean} isIPV6 - Indicates if the host is an IPv6 address.
+	* @property {boolean} [isIPVFuture] - Indicates if the host is an IPvFuture literal.
+	* @property {boolean} [error] - Indicates if a bracketed IP literal is malformed.
 	*/
 	/**
+	* Validates and normalizes a bracketed IP literal. Raw zone separators remain
+	* accepted for backwards compatibility, while encoded separators and zone
+	* contents follow RFC 6874.
+	*
 	* @param {string} host
 	* @returns {NormalizeIPv6Result}
 	*/
 	function normalizeIPv6(host) {
-		if (findToken(host, ":") < 2) return {
+		const bracketed = host[0] === "[" && host[host.length - 1] === "]";
+		if ((host[0] === "[" || host[host.length - 1] === "]") && !bracketed) return {
 			host,
-			isIPV6: false
+			isIPV6: false,
+			error: true
 		};
-		const ipv6 = getIPV6(host);
-		if (!ipv6.error) {
-			let newHost = ipv6.address;
-			let escapedHost = ipv6.address;
-			if (ipv6.zone) {
-				newHost += "%" + ipv6.zone;
-				escapedHost += "%25" + ipv6.zone;
-			}
+		let input = bracketed ? host.slice(1, -1) : host;
+		if (bracketed && isIPvFuture(input)) {
+			input = input.toLowerCase();
 			return {
-				host: newHost,
-				isIPV6: true,
-				escapedHost
+				host: `[${input}]`,
+				escapedHost: input,
+				isIPV6: false,
+				isIPVFuture: true
 			};
-		} else return {
+		}
+		if (findToken(input, ":") < 2) return {
 			host,
-			isIPV6: false
+			isIPV6: false,
+			error: bracketed
+		};
+		let zoneIdentifier = "";
+		const zoneSeparator = input.indexOf("%");
+		if (zoneSeparator !== -1) {
+			const separatorLength = input.slice(zoneSeparator, zoneSeparator + 3).toLowerCase() === "%25" ? 3 : 1;
+			zoneIdentifier = input.slice(zoneSeparator + separatorLength);
+			if (!isZoneIdentifier(zoneIdentifier)) return {
+				host,
+				isIPV6: false,
+				error: true
+			};
+			input = input.slice(0, zoneSeparator);
+		}
+		const address = normalizeIPv6Address(input);
+		if (address === void 0) return {
+			host,
+			isIPV6: false,
+			error: true
+		};
+		return {
+			host: address + (zoneIdentifier ? "%" + zoneIdentifier : ""),
+			escapedHost: address + (zoneIdentifier ? "%25" + zoneIdentifier : ""),
+			isIPV6: true
 		};
 	}
 	/**
@@ -22087,19 +22169,264 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return output.join("");
 	}
 	/**
-	* @param {import('../types/index').URIComponent} component
-	* @param {boolean} esc
-	* @returns {import('../types/index').URIComponent}
+	* Re-escape RFC 3986 gen-delims that must not appear literally in the host.
+	* After the URI regex parses, these characters cannot be literal in the host
+	* field, so any that appear after decoding came from percent-encoding and
+	* must be restored to prevent authority structure changes.
+	*
+	* @param {string} host
+	* @param {boolean} isIP - true for IPv4/IPv6 hosts (skip colon re-escaping)
+	* @returns {string}
 	*/
-	function normalizeComponentEncoding(component, esc) {
-		const func = esc !== true ? escape : unescape;
-		if (component.scheme !== void 0) component.scheme = func(component.scheme);
-		if (component.userinfo !== void 0) component.userinfo = func(component.userinfo);
-		if (component.host !== void 0) component.host = func(component.host);
-		if (component.path !== void 0) component.path = func(component.path);
-		if (component.query !== void 0) component.query = func(component.query);
-		if (component.fragment !== void 0) component.fragment = func(component.fragment);
-		return component;
+	const HOST_DELIMS = {
+		"@": "%40",
+		"/": "%2F",
+		"?": "%3F",
+		"#": "%23",
+		":": "%3A"
+	};
+	const HOST_DELIM_RE = /[@/?#:]/g;
+	const HOST_DELIM_NO_COLON_RE = /[@/?#]/g;
+	function reescapeHostDelimiters(host, isIP) {
+		const re = isIP ? HOST_DELIM_NO_COLON_RE : HOST_DELIM_RE;
+		re.lastIndex = 0;
+		return host.replace(re, (ch) => HOST_DELIMS[ch]);
+	}
+	/**
+	* Normalizes percent escapes and optionally decodes only unreserved ASCII bytes.
+	* Reserved delimiters such as `%2F` stay escaped; `%2E` is unreserved.
+	*
+	* @param {string} input
+	* @param {boolean} [decodeUnreserved=false]
+	* @returns {string}
+	*/
+	function normalizePercentEncoding(input, decodeUnreserved = false) {
+		if (input.indexOf("%") === -1) return input;
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			if (input[i] === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					const normalizedHex = hex.toUpperCase();
+					const decoded = String.fromCharCode(parseInt(normalizedHex, 16));
+					if (decodeUnreserved && isUnreserved(decoded)) output += decoded;
+					else output += "%" + normalizedHex;
+					i += 2;
+					continue;
+				}
+			}
+			output += input[i];
+		}
+		return output;
+	}
+	/**
+	* Normalizes path data without turning reserved escapes into live path syntax.
+	* Valid escapes are uppercased, raw unsafe characters are escaped, and only
+	* unreserved bytes that are not `.` are decoded.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function normalizePathEncoding(input) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			const ch = input[i];
+			if (ch === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					const normalizedHex = hex.toUpperCase();
+					const decoded = String.fromCharCode(parseInt(normalizedHex, 16));
+					if (decoded !== "." && isUnreserved(decoded)) output += decoded;
+					else output += "%" + normalizedHex;
+					i += 2;
+					continue;
+				}
+			}
+			if (isPathCharacter(ch)) output += ch;
+			else {
+				const code = input.charCodeAt(i);
+				if (code < 128) output += isEscapeSafe(code) ? ch : BYTE_HEX[code];
+				else if (code < 55296 || code > 57343) output += percentEncodeNonAscii(code);
+				else if (code <= 56319 && i + 1 < input.length) {
+					const low = input.charCodeAt(i + 1);
+					if (low >= 56320 && low <= 57343) {
+						output += percentEncodeNonAscii(65536 + (code - 55296 << 10) + (low - 56320));
+						i++;
+					} else output += percentEncodeNonAscii(65533);
+				} else output += percentEncodeNonAscii(65533);
+			}
+		}
+		return output;
+	}
+	/**
+	* Serializes a path without rewriting reserved data. Raw RFC 3986 path
+	* characters remain literal, valid escapes are preserved and uppercased, and
+	* everything else is UTF-8 percent-encoded. In a path-noscheme, a colon in the
+	* first segment must be escaped so the result cannot be parsed as a scheme.
+	*
+	* @param {string} input
+	* @param {boolean} [pathNoScheme=false]
+	* @returns {string}
+	*/
+	function serializePathEncoding(input, pathNoScheme = false) {
+		let output = "";
+		let firstSegment = pathNoScheme && input[0] !== "/";
+		for (let i = 0; i < input.length; i++) {
+			const ch = input[i];
+			if (ch === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					output += "%" + hex.toUpperCase();
+					i += 2;
+					continue;
+				}
+			}
+			if (ch === "/") firstSegment = false;
+			if (isPathCharacter(ch) && (ch !== ":" || !firstSegment)) output += ch;
+			else {
+				const code = input.charCodeAt(i);
+				if (code < 128) output += BYTE_HEX[code];
+				else if (code < 55296 || code > 57343) output += percentEncodeNonAscii(code);
+				else if (code <= 56319 && i + 1 < input.length) {
+					const low = input.charCodeAt(i + 1);
+					if (low >= 56320 && low <= 57343) {
+						output += percentEncodeNonAscii(65536 + (code - 55296 << 10) + (low - 56320));
+						i++;
+					} else output += percentEncodeNonAscii(65533);
+				} else output += percentEncodeNonAscii(65533);
+			}
+		}
+		return output;
+	}
+	/**
+	* Percent-encodes a URI component using its RFC 3986 literal character set.
+	* Existing valid escapes are preserved and normalized to uppercase hex.
+	*
+	* @param {string} input
+	* @param {(value: string) => boolean} isAllowed
+	* @returns {string}
+	*/
+	function encodeComponent(input, isAllowed) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			const ch = input[i];
+			if (ch === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					output += "%" + hex.toUpperCase();
+					i += 2;
+					continue;
+				}
+			}
+			if (isAllowed(ch)) output += ch;
+			else {
+				const code = input.charCodeAt(i);
+				if (code < 128) output += BYTE_HEX[code];
+				else if (code < 55296 || code > 57343) output += percentEncodeNonAscii(code);
+				else if (code <= 56319 && i + 1 < input.length) {
+					const low = input.charCodeAt(i + 1);
+					if (low >= 56320 && low <= 57343) {
+						output += percentEncodeNonAscii(65536 + (code - 55296 << 10) + (low - 56320));
+						i++;
+					} else output += percentEncodeNonAscii(65533);
+				} else output += percentEncodeNonAscii(65533);
+			}
+		}
+		return output;
+	}
+	/**
+	* Encodes userinfo while preserving its RFC 3986 §3.2.1 literal characters.
+	* In particular, authority delimiters such as `@`, `/`, `?`, and `#` are data.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function encodeUserinfo(input) {
+		return encodeComponent(input, isUserinfoCharacter);
+	}
+	/**
+	* Encodes query data using the RFC 3986 §3.4 grammar. A literal `#` must be
+	* escaped because it would otherwise begin the fragment component.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function encodeQuery(input) {
+		return encodeComponent(input, isQueryFragmentCharacter);
+	}
+	/**
+	* Encodes fragment data using the RFC 3986 §3.5 grammar.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function encodeFragment(input) {
+		return encodeComponent(input, isQueryFragmentCharacter);
+	}
+	function isEscapeSafe(cp) {
+		return cp >= 48 && cp <= 57 || cp >= 65 && cp <= 90 || cp >= 97 && cp <= 122 || cp === 42 || cp === 43 || cp === 45 || cp === 46 || cp === 47 || cp === 64 || cp === 95;
+	}
+	/**
+	* Normalizes the percent-encoding of a query or fragment component.
+	*
+	* Like `normalizePathEncoding`, but uses the query/fragment character set
+	* (which additionally allows `?`) and decodes `.` since it has no dot-segment
+	* meaning outside of a path.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function normalizeQueryFragmentEncoding(input) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			const ch = input[i];
+			if (ch === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					const normalizedHex = hex.toUpperCase();
+					const decoded = String.fromCharCode(parseInt(normalizedHex, 16));
+					if (isUnreserved(decoded)) output += decoded;
+					else output += "%" + normalizedHex;
+					i += 2;
+					continue;
+				}
+			}
+			if (isQueryFragmentCharacter(ch)) output += ch;
+			else {
+				const code = input.charCodeAt(i);
+				if (code < 128) output += isEscapeSafe(code) ? ch : BYTE_HEX[code];
+				else if (code < 55296 || code > 57343) output += percentEncodeNonAscii(code);
+				else if (code <= 56319 && i + 1 < input.length) {
+					const low = input.charCodeAt(i + 1);
+					if (low >= 56320 && low <= 57343) {
+						output += percentEncodeNonAscii(65536 + (code - 55296 << 10) + (low - 56320));
+						i++;
+					} else output += percentEncodeNonAscii(65533);
+				} else output += percentEncodeNonAscii(65533);
+			}
+		}
+		return output;
+	}
+	/**
+	* Escapes a component while preserving existing valid percent escapes.
+	*
+	* @param {string} input
+	* @returns {string}
+	*/
+	function escapePreservingEscapes(input) {
+		let output = "";
+		for (let i = 0; i < input.length; i++) {
+			if (input[i] === "%" && i + 2 < input.length) {
+				const hex = input.slice(i + 1, i + 3);
+				if (isHexPair(hex)) {
+					output += "%" + hex.toUpperCase();
+					i += 2;
+					continue;
+				}
+			}
+			output += escape(input[i]);
+		}
+		return output;
 	}
 	/**
 	* @param {import('../types/index').URIComponent} component
@@ -22108,28 +22435,42 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function recomposeAuthority(component) {
 		const uriTokens = [];
 		if (component.userinfo !== void 0) {
-			uriTokens.push(component.userinfo);
+			uriTokens.push(encodeUserinfo(component.userinfo));
 			uriTokens.push("@");
 		}
 		if (component.host !== void 0) {
-			let host = unescape(component.host);
+			let host = component.host;
 			if (!isIPv4(host)) {
-				const ipV6res = normalizeIPv6(host);
-				if (ipV6res.isIPV6 === true) host = `[${ipV6res.escapedHost}]`;
-				else host = component.host;
+				let ipV6res = normalizeIPv6(host);
+				if (ipV6res.isIPV6 !== true && ipV6res.isIPVFuture !== true) {
+					host = normalizePercentEncoding(host, true);
+					ipV6res = normalizeIPv6(host);
+				}
+				if (ipV6res.isIPV6 === true || ipV6res.isIPVFuture === true) host = `[${ipV6res.escapedHost}]`;
+				else host = reescapeHostDelimiters(host, false);
 			}
 			uriTokens.push(host);
 		}
 		if (typeof component.port === "number" || typeof component.port === "string") {
+			const port = String(component.port);
+			if (!isPort(port)) throw new TypeError("URI port is malformed.");
 			uriTokens.push(":");
-			uriTokens.push(String(component.port));
+			uriTokens.push(port);
 		}
 		return uriTokens.length ? uriTokens.join("") : void 0;
 	}
 	module.exports = {
 		nonSimpleDomain,
 		recomposeAuthority,
-		normalizeComponentEncoding,
+		reescapeHostDelimiters,
+		normalizePercentEncoding,
+		normalizePathEncoding,
+		serializePathEncoding,
+		normalizeQueryFragmentEncoding,
+		encodeUserinfo,
+		encodeQuery,
+		encodeFragment,
+		escapePreservingEscapes,
 		removeDotSegments,
 		isIPv4,
 		isUUID,
@@ -22139,10 +22480,10 @@ var require_utils = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 }));
 
 //#endregion
-//#region ../../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/lib/schemes.js
+//#region ../../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/lib/schemes.js
 var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { isUUID } = require_utils();
-	const URN_REG = /([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-.:;=@]|%[\da-f]{2})+)/iu;
+	const URN_REG = /^([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-./:;=@]|%[\da-f]{2})+)$/iu;
 	const supportedSchemeNames = [
 		"http",
 		"https",
@@ -22213,9 +22554,10 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			wsComponent.secure = void 0;
 		}
 		if (wsComponent.resourceName) {
-			const [path, query] = wsComponent.resourceName.split("?");
+			const queryIndex = wsComponent.resourceName.indexOf("?");
+			const path = queryIndex === -1 ? wsComponent.resourceName : wsComponent.resourceName.slice(0, queryIndex);
 			wsComponent.path = path && path !== "/" ? path : void 0;
-			wsComponent.query = query;
+			wsComponent.query = queryIndex === -1 ? void 0 : wsComponent.resourceName.slice(queryIndex + 1);
 			wsComponent.resourceName = void 0;
 		}
 		wsComponent.fragment = void 0;
@@ -22228,7 +22570,7 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return urnComponent;
 		}
 		const matches = urnComponent.path.match(URN_REG);
-		if (matches) {
+		if (matches && matches[0] === urnComponent.path) {
 			const scheme = options.scheme || urnComponent.scheme || "urn";
 			urnComponent.nid = matches[1].toLowerCase();
 			urnComponent.nss = matches[2];
@@ -22326,10 +22668,21 @@ var require_schemes = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 }));
 
 //#endregion
-//#region ../../node_modules/.pnpm/fast-uri@3.1.0/node_modules/fast-uri/index.js
+//#region ../../node_modules/.pnpm/fast-uri@3.1.8/node_modules/fast-uri/index.js
 var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizeComponentEncoding, isIPv4, nonSimpleDomain } = require_utils();
+	const { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
 	const { SCHEMES, getSchemeHandler } = require_schemes();
+	const VALID_SCHEME = /^[A-Za-z][A-Za-z0-9+.-]*$/u;
+	const MALFORMED_SCHEME_ERROR = "URI scheme is malformed.";
+	/**
+	* @param {string} scheme
+	* @returns {string}
+	*/
+	function decodeValidScheme(scheme) {
+		const decodedScheme = unescape(String(scheme));
+		if (!VALID_SCHEME.test(decodedScheme)) throw new TypeError(MALFORMED_SCHEME_ERROR);
+		return decodedScheme;
+	}
 	/**
 	* @template {import('./types/index').URIComponent|string} T
 	* @param {T} uri
@@ -22337,7 +22690,7 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @returns {T}
 	*/
 	function normalize(uri, options) {
-		if (typeof uri === "string") uri = serialize(parse(uri, options), options);
+		if (typeof uri === "string") uri = normalizeString(uri, options);
 		else if (typeof uri === "object") uri = parse(serialize(uri, options), options);
 		return uri;
 	}
@@ -22349,7 +22702,16 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	*/
 	function resolve(baseURI, relativeURI, options) {
 		const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
-		const resolved = resolveComponent(parse(baseURI, schemelessOptions), parse(relativeURI, schemelessOptions), schemelessOptions, true);
+		const { parsed: baseParsed, malformedAuthorityOrPort: baseMalformed, malformedPercentEncoding: baseMalformedPercentEncoding, malformedSchemeSpecific: baseMalformedSchemeSpecific, malformedHost: baseMalformedHost, malformedScheme: baseMalformedScheme } = parseWithStatus(baseURI, schemelessOptions);
+		const { parsed: relativeParsed, malformedAuthorityOrPort: relativeMalformed, malformedPercentEncoding: relativeMalformedPercentEncoding, malformedSchemeSpecific: relativeMalformedSchemeSpecific, malformedHost: relativeMalformedHost, malformedScheme: relativeMalformedScheme } = parseWithStatus(relativeURI, schemelessOptions);
+		if (baseMalformed || relativeMalformed || baseMalformedPercentEncoding || relativeMalformedPercentEncoding || baseMalformedSchemeSpecific || relativeMalformedSchemeSpecific || baseMalformedHost || relativeMalformedHost || baseMalformedScheme || relativeMalformedScheme) throw new Error(baseParsed.error || relativeParsed.error || "URI is malformed.");
+		const resolved = resolveComponent(baseParsed, relativeParsed, schemelessOptions, true);
+		const resolvedSchemeHandler = getSchemeHandler(options && options.scheme || resolved.scheme);
+		const resolvedHost = resolved.host;
+		const resolvedHostIsIP = resolvedHost !== void 0 && resolvedHost !== "" && (isIPv4(resolvedHost) || normalizeIPv6(resolvedHost).isIPV6);
+		canonicalizeHost(resolved, options || {}, resolvedSchemeHandler, resolvedHostIsIP);
+		const encodedASCIIHost = resolvedHost && resolvedHost.indexOf("%") !== -1 && !/\P{ASCII}/u.test(resolvedHost);
+		if (resolved.error && !encodedASCIIHost) throw new Error(resolved.error);
 		schemelessOptions.skipEscape = true;
 		return serialize(resolved, schemelessOptions);
 	}
@@ -22413,27 +22775,9 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @returns {boolean}
 	*/
 	function equal(uriA, uriB, options) {
-		if (typeof uriA === "string") {
-			uriA = unescape(uriA);
-			uriA = serialize(normalizeComponentEncoding(parse(uriA, options), true), {
-				...options,
-				skipEscape: true
-			});
-		} else if (typeof uriA === "object") uriA = serialize(normalizeComponentEncoding(uriA, true), {
-			...options,
-			skipEscape: true
-		});
-		if (typeof uriB === "string") {
-			uriB = unescape(uriB);
-			uriB = serialize(normalizeComponentEncoding(parse(uriB, options), true), {
-				...options,
-				skipEscape: true
-			});
-		} else if (typeof uriB === "object") uriB = serialize(normalizeComponentEncoding(uriB, true), {
-			...options,
-			skipEscape: true
-		});
-		return uriA.toLowerCase() === uriB.toLowerCase();
+		const normalizedA = normalizeComparableURI(uriA, options);
+		const normalizedB = normalizeComparableURI(uriB, options);
+		return normalizedA !== void 0 && normalizedB !== void 0 && normalizedA === normalizedB;
 	}
 	/**
 	* @param {Readonly<import('./types/index').URIComponent>} cmpts
@@ -22459,13 +22803,17 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 		const options = Object.assign({}, opts);
 		const uriTokens = [];
+		if (component.scheme) component.scheme = decodeValidScheme(component.scheme);
 		const schemeHandler = getSchemeHandler(options.scheme || component.scheme);
 		if (schemeHandler && schemeHandler.serialize) schemeHandler.serialize(component, options);
-		if (component.path !== void 0) if (!options.skipEscape) {
-			component.path = escape(component.path);
-			if (component.scheme !== void 0) component.path = component.path.split("%3A").join(":");
-		} else component.path = unescape(component.path);
-		if (options.reference !== "suffix" && component.scheme) uriTokens.push(component.scheme, ":");
+		const hasAuthority = component.userinfo !== void 0 || component.host !== void 0 || component.port !== void 0;
+		const pathNoScheme = !options.skipEscape && component.scheme === void 0 && !hasAuthority;
+		if (component.path !== void 0) if (!options.skipEscape) component.path = serializePathEncoding(component.path, pathNoScheme);
+		else component.path = normalizePercentEncoding(component.path);
+		if (options.reference !== "suffix" && component.scheme) {
+			component.scheme = decodeValidScheme(component.scheme);
+			uriTokens.push(component.scheme, ":");
+		}
 		const authority = recomposeAuthority(component);
 		if (authority !== void 0) {
 			if (options.reference !== "suffix") uriTokens.push("//");
@@ -22475,20 +22823,84 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		if (component.path !== void 0) {
 			let s = component.path;
 			if (!options.absolutePath && (!schemeHandler || !schemeHandler.absolutePath)) s = removeDotSegments(s);
+			if (pathNoScheme) s = serializePathEncoding(s, true);
 			if (authority === void 0 && s[0] === "/" && s[1] === "/") s = "/%2F" + s.slice(2);
 			uriTokens.push(s);
 		}
-		if (component.query !== void 0) uriTokens.push("?", component.query);
-		if (component.fragment !== void 0) uriTokens.push("#", component.fragment);
+		if (component.query !== void 0) uriTokens.push("?", encodeQuery(component.query));
+		if (component.fragment !== void 0) uriTokens.push("#", encodeFragment(component.fragment));
 		return uriTokens.join("");
 	}
 	const URI_PARSE = /^(?:([^#/:?]+):)?(?:\/\/((?:([^#/?@]*)@)?(\[[^#/?\]]+\]|[^#/:?]*)(?::(\d*))?))?([^#?]*)(?:\?([^#]*))?(?:#((?:.|[\n\r])*))?/u;
+	const AUTHORITY_PREFIX = /^(?:[^#/:?]+:)?\/\/([^/?#]*)/;
+	const AUTHORITY_INTRODUCER_REGION = /^(?:[^#/:?]+:)?([/\\\t\n\r]*)/;
+	/**
+	* @param {import('./types/index').URIComponent} parsed
+	* @param {RegExpMatchArray} matches
+	* @returns {string|undefined}
+	*/
+	function getParseError(parsed, matches) {
+		if (matches[2] !== void 0 && parsed.path && parsed.path[0] !== "/") return "URI path must start with \"/\" when authority is present.";
+		if (typeof parsed.port === "number" && (parsed.port < 0 || parsed.port > 65535)) return "URI port is malformed.";
+	}
+	/**
+	* Checks percent syntax without decoding the represented octets. RFC 3986
+	* percent-encoding is byte-oriented, so sequences such as `%FF` are valid even
+	* though they are not independently valid UTF-8.
+	*
+	* @param {string|undefined} component
+	* @returns {boolean}
+	*/
+	function hasMalformedPercentEncoding(component) {
+		if (component === void 0) return false;
+		let percent = component.indexOf("%");
+		while (percent !== -1) {
+			if (percent + 2 >= component.length || !/^[\da-f]{2}$/iu.test(component.slice(percent + 1, percent + 3))) return true;
+			percent = component.indexOf("%", percent + 3);
+		}
+		return false;
+	}
+	/**
+	* Whether the host is a bracketed IP literal (RFC 3986 `IP-literal`).
+	* An unterminated `[` is not a literal, so it must still be validated as a
+	* reg-name instead of being waved through as an IP.
+	*
+	* @param {string} host
+	* @returns {boolean}
+	*/
+	function isIPLiteral(host) {
+		return host[0] === "[" && host[host.length - 1] === "]";
+	}
+	/**
+	* @param {RegExpMatchArray} matches
+	* @returns {boolean}
+	*/
+	function hasMalformedComponentPercentEncoding(matches) {
+		const host = matches[4];
+		return hasMalformedPercentEncoding(matches[3]) || host !== void 0 && !isIPLiteral(host) && hasMalformedPercentEncoding(host) || hasMalformedPercentEncoding(matches[6]) || hasMalformedPercentEncoding(matches[7]) || hasMalformedPercentEncoding(matches[8]);
+	}
+	/**
+	* @param {import('./types/index').URIComponent} parsed
+	* @param {import('./types/index').Options} options
+	* @param {{ domainHost?: boolean, unicodeSupport?: boolean }|undefined} schemeHandler
+	* @param {boolean} isIP
+	* @returns {boolean} whether host conversion failed
+	*/
+	function canonicalizeHost(parsed, options, schemeHandler, isIP) {
+		if (!options.unicodeSupport && (!schemeHandler || !schemeHandler.unicodeSupport) && parsed.host && !isIPLiteral(parsed.host) && (options.domainHost || schemeHandler && schemeHandler.domainHost) && isIP === false && nonSimpleDomain(parsed.host)) try {
+			parsed.host = new URL("http://" + parsed.host).hostname;
+		} catch (e) {
+			parsed.error = parsed.error || "Host's domain name can not be converted to ASCII: " + e;
+			return true;
+		}
+		return false;
+	}
 	/**
 	* @param {string} uri
 	* @param {import('./types/index').Options} [opts]
-	* @returns
+	* @returns {{ parsed: import('./types/index').URIComponent, malformedAuthorityOrPort: boolean, malformedPercentEncoding: boolean, malformedSchemeSpecific: boolean, malformedHost: boolean, malformedScheme: boolean }}
 	*/
-	function parse(uri, opts) {
+	function parseWithStatus(uri, opts) {
 		const options = Object.assign({}, opts);
 		/** @type {import('./types/index').URIComponent} */
 		const parsed = {
@@ -22500,9 +22912,34 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			query: void 0,
 			fragment: void 0
 		};
+		let malformedAuthorityOrPort = false;
+		let malformedPercentEncoding = false;
+		let malformedSchemeSpecific = false;
+		let malformedHost = false;
+		let malformedIPLiteral = false;
+		let malformedScheme = false;
 		let isIP = false;
 		if (options.reference === "suffix") if (options.scheme) uri = options.scheme + ":" + uri;
 		else uri = "//" + uri;
+		const authorityMatch = uri.match(AUTHORITY_PREFIX);
+		if (authorityMatch !== null && authorityMatch[1].indexOf("\\") !== -1) {
+			parsed.error = "URI authority must not contain a literal backslash.";
+			malformedAuthorityOrPort = true;
+		}
+		const introducerMatch = uri.match(AUTHORITY_INTRODUCER_REGION);
+		if (introducerMatch !== null) {
+			const region = introducerMatch[1];
+			const normalizedRegion = region.replace(/[\t\n\r]/g, "");
+			if (normalizedRegion.length >= 2) {
+				if (normalizedRegion.slice(0, 2) !== "//") {
+					parsed.error = parsed.error || "URI authority must not contain a literal backslash.";
+					malformedAuthorityOrPort = true;
+				} else if (region.length !== normalizedRegion.length) {
+					parsed.error = parsed.error || "URI authority introducer must not contain whitespace.";
+					malformedAuthorityOrPort = true;
+				}
+			}
+		}
 		const matches = uri.match(URI_PARSE);
 		if (matches) {
 			parsed.scheme = matches[1];
@@ -22512,11 +22949,33 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			parsed.path = matches[6] || "";
 			parsed.query = matches[7];
 			parsed.fragment = matches[8];
+			if (parsed.scheme !== void 0) {
+				const decodedScheme = unescape(parsed.scheme);
+				if (VALID_SCHEME.test(decodedScheme)) parsed.scheme = decodedScheme.toLowerCase();
+				else {
+					parsed.error = parsed.error || MALFORMED_SCHEME_ERROR;
+					malformedScheme = true;
+				}
+			}
+			malformedPercentEncoding = hasMalformedComponentPercentEncoding(matches);
+			if (malformedPercentEncoding) parsed.error = parsed.error || "URI contains malformed percent-encoding.";
 			if (isNaN(parsed.port)) parsed.port = matches[5];
+			const parseError = getParseError(parsed, matches);
+			if (parseError !== void 0) {
+				parsed.error = parsed.error || parseError;
+				malformedAuthorityOrPort = true;
+			}
 			if (parsed.host) if (isIPv4(parsed.host) === false) {
+				const bracketedIPLiteral = isIPLiteral(parsed.host);
+				const hasIPLiteralBracket = parsed.host.indexOf("[") !== -1 || parsed.host.indexOf("]") !== -1;
 				const ipv6result = normalizeIPv6(parsed.host);
-				parsed.host = ipv6result.host.toLowerCase();
-				isIP = ipv6result.isIPV6;
+				isIP = ipv6result.isIPV6 || ipv6result.isIPVFuture === true;
+				malformedIPLiteral = hasIPLiteralBracket && (!bracketedIPLiteral || ipv6result.error === true);
+				parsed.host = isIP ? ipv6result.host : ipv6result.host.toLowerCase();
+				if (malformedIPLiteral) {
+					parsed.error = parsed.error || "URI host is malformed.";
+					malformedAuthorityOrPort = true;
+				}
 			} else isIP = true;
 			if (parsed.scheme === void 0 && parsed.userinfo === void 0 && parsed.host === void 0 && parsed.port === void 0 && parsed.query === void 0 && !parsed.path) parsed.reference = "same-document";
 			else if (parsed.scheme === void 0) parsed.reference = "relative";
@@ -22524,24 +22983,78 @@ var require_fast_uri = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			else parsed.reference = "uri";
 			if (options.reference && options.reference !== "suffix" && options.reference !== parsed.reference) parsed.error = parsed.error || "URI is not a " + options.reference + " reference.";
 			const schemeHandler = getSchemeHandler(options.scheme || parsed.scheme);
-			if (!options.unicodeSupport && (!schemeHandler || !schemeHandler.unicodeSupport)) {
-				if (parsed.host && (options.domainHost || schemeHandler && schemeHandler.domainHost) && isIP === false && nonSimpleDomain(parsed.host)) try {
-					parsed.host = URL.domainToASCII(parsed.host.toLowerCase());
-				} catch (e) {
-					parsed.error = parsed.error || "Host's domain name can not be converted to ASCII: " + e;
-				}
+			if (!malformedIPLiteral) malformedHost = canonicalizeHost(parsed, options, schemeHandler, isIP);
+			if (uri.indexOf("%") !== -1 && parsed.host !== void 0 && !malformedIPLiteral) {
+				let host = isIP ? parsed.host : normalizePercentEncoding(parsed.host, true);
+				if (!isIP) host = normalizePercentEncoding(host.toLowerCase());
+				parsed.host = reescapeHostDelimiters(host, isIP);
 			}
 			if (!schemeHandler || schemeHandler && !schemeHandler.skipNormalize) {
-				if (uri.indexOf("%") !== -1) {
-					if (parsed.scheme !== void 0) parsed.scheme = unescape(parsed.scheme);
-					if (parsed.host !== void 0) parsed.host = unescape(parsed.host);
-				}
-				if (parsed.path) parsed.path = escape(unescape(parsed.path));
-				if (parsed.fragment) parsed.fragment = encodeURI(decodeURIComponent(parsed.fragment));
+				if (parsed.path) parsed.path = normalizePathEncoding(parsed.path);
+				if (parsed.query) parsed.query = normalizeQueryFragmentEncoding(parsed.query);
+				if (parsed.fragment) parsed.fragment = normalizeQueryFragmentEncoding(parsed.fragment);
 			}
-			if (schemeHandler && schemeHandler.parse) schemeHandler.parse(parsed, options);
+			if (schemeHandler && schemeHandler.parse) {
+				schemeHandler.parse(parsed, options);
+				if (schemeHandler === SCHEMES.urn && parsed.nid === void 0) malformedSchemeSpecific = true;
+			}
 		} else parsed.error = parsed.error || "URI can not be parsed.";
-		return parsed;
+		return {
+			parsed,
+			malformedAuthorityOrPort,
+			malformedPercentEncoding,
+			malformedSchemeSpecific,
+			malformedHost,
+			malformedScheme
+		};
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns
+	*/
+	function parse(uri, opts) {
+		return parseWithStatus(uri, opts).parsed;
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {string}
+	*/
+	function normalizeString(uri, opts) {
+		return normalizeStringWithStatus(uri, opts).normalized;
+	}
+	/**
+	* @param {string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {{ normalized: string, malformedAuthorityOrPort: boolean, malformedPercentEncoding: boolean, malformedSchemeSpecific: boolean, malformedHost: boolean, malformedScheme: boolean }}
+	*/
+	function normalizeStringWithStatus(uri, opts) {
+		const { parsed, malformedAuthorityOrPort, malformedPercentEncoding, malformedSchemeSpecific, malformedHost, malformedScheme } = parseWithStatus(uri, opts);
+		return {
+			normalized: malformedAuthorityOrPort || malformedPercentEncoding || malformedSchemeSpecific || malformedHost || malformedScheme ? uri : serialize(parsed, opts),
+			malformedAuthorityOrPort,
+			malformedPercentEncoding,
+			malformedSchemeSpecific,
+			malformedHost,
+			malformedScheme
+		};
+	}
+	/**
+	* @param {import ('./types/index').URIComponent|string} uri
+	* @param {import('./types/index').Options} [opts]
+	* @returns {string|undefined}
+	*/
+	function normalizeComparableURI(uri, opts) {
+		if (typeof uri !== "string" && typeof uri !== "object") return;
+		let value;
+		try {
+			value = typeof uri === "string" ? uri : serialize(uri, opts);
+		} catch {
+			return;
+		}
+		const { normalized, malformedAuthorityOrPort, malformedPercentEncoding, malformedSchemeSpecific, malformedHost, malformedScheme } = normalizeStringWithStatus(value, opts);
+		return malformedAuthorityOrPort || malformedPercentEncoding || malformedSchemeSpecific || malformedHost || malformedScheme ? void 0 : normalized;
 	}
 	const fastUri = {
 		SCHEMES,
@@ -26630,15 +27143,15 @@ const Ajv = import_ajv.Ajv;
 
 //#endregion
 
-//# sourceMappingURL=ajvProvider-CEoC__sr.mjs.map
+//# sourceMappingURL=ajvProvider-DyjnscPj.mjs.map
 ;// CONCATENATED MODULE: external "node:process"
 const external_node_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:process");
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/shimsNode.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/shimsNode.mjs
 
 
 
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/mcp-DIH4cS6P.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/mcp-oHn3ureC.mjs
 
 
 
@@ -26700,10 +27213,10 @@ function getCompleter(schema) {
 //#endregion
 //#region src/server/sseKeepAlive.ts
 /** Default interval between SSE keep-alive comment frames. */
-const mcp_DIH4cS6P_DEFAULT_SSE_KEEP_ALIVE_MS = 15e3;
-const MAX_TIMER_DELAY_MS = (/* unused pure expression or super */ null && (2 ** 31 - 1));
+const mcp_oHn3ureC_DEFAULT_SSE_KEEP_ALIVE_MS = 15e3;
+const MAX_TIMER_DELAY_MS = 2 ** 31 - 1;
 /** Arms an unref'd timer, or disables keep-alive for invalid delays. */
-function mcp_DIH4cS6P_armSseKeepAlive(intervalMs, onTick) {
+function mcp_oHn3ureC_armSseKeepAlive(intervalMs, onTick) {
 	if (!Number.isFinite(intervalMs) || intervalMs < 1) return;
 	const timer = setInterval(onTick, Math.min(intervalMs, MAX_TIMER_DELAY_MS));
 	timer.unref?.();
@@ -26711,244 +27224,196 @@ function mcp_DIH4cS6P_armSseKeepAlive(intervalMs, onTick) {
 }
 
 //#endregion
-//#region src/server/serverEventBus.ts
+//#region src/server/perRequestTransport.ts
+let readClassification;
 /**
-* A `ServerEventBus` backed by an in-process listener set.
+* The per-request micro-transport: a real, connected `Transport` whose whole
+* lifetime is one HTTP exchange. See the module documentation for the
+* response shapes it produces.
 *
-* `publish()` delivers synchronously to the live listener set (a listener
-* unsubscribing itself mid-dispatch is safe; the entry's listen-router
-* listeners never unsubscribe peers). A throwing listener does not stop
-* delivery to the others.
+* Connecting a `Server` binds the instance to the classified modern revision
+* when its `supportedProtocolVersions` lists it and the SDK implements it.
 */
-var mcp_DIH4cS6P_InMemoryServerEventBus = class {
-	_listeners = /* @__PURE__ */ new Set();
+var mcp_oHn3ureC_PerRequestHTTPServerTransport = class {
+	static {
+		readClassification = (transport) => transport._classification;
+	}
+	onclose;
+	onerror;
+	onmessage;
+	_classification;
+	_responseMode;
+	_started = false;
+	_used = false;
+	_closed = false;
+	_terminalDelivered = false;
 	/**
-	* @param onerror - Optional callback for errors thrown by listeners
-	*   during dispatch.
+	* `true` only while the inbound message is being delivered synchronously
+	* to the connected protocol layer. The pre-handler gates (the era
+	* registry gate, the edge→instance handoff check, the missing-handler
+	* rejection) answer inside this window; request handlers always run
+	* after it (the protocol layer defers them to a microtask). An error
+	* sent inside the window is therefore ladder-originated, and an error
+	* sent after it is handler-produced.
 	*/
-	constructor(onerror) {
-		this.onerror = onerror;
+	_dispatchWindowOpen = false;
+	_requestId;
+	_deferredResponse;
+	_sse;
+	_abortCleanup;
+	_keepAliveMs;
+	constructor(options) {
+		this._classification = options.classification;
+		this._responseMode = options.responseMode ?? "auto";
+		this._keepAliveMs = options.keepAliveMs ?? mcp_oHn3ureC_DEFAULT_SSE_KEEP_ALIVE_MS;
 	}
-	publish(event) {
-		for (const listener of this._listeners) try {
-			listener(event);
-		} catch (error) {
-			this.onerror?.(error instanceof Error ? error : new Error(String(error)));
+	async start() {
+		if (this._started) throw new Error("PerRequestHTTPServerTransport is already started");
+		this._started = true;
+	}
+	/**
+	* Serves the single exchange: delivers the classified message to the
+	* connected server instance and resolves with the HTTP response.
+	*
+	* Throws when called a second time (the transport is strictly
+	* single-use), or before a server has been connected to the transport.
+	* The returned promise rejects with a connection-closed error when the
+	* transport is closed before a response was produced (for example because
+	* the client disconnected).
+	*/
+	async handleMessage(message, extra) {
+		if (this._used) throw new Error("PerRequestHTTPServerTransport serves exactly one exchange; construct a new transport per request");
+		if (!this._started || this.onmessage === void 0) throw new Error("PerRequestHTTPServerTransport is not connected: connect a server to this transport before handling a message");
+		if (this._closed) throw new Error("PerRequestHTTPServerTransport is closed");
+		this._used = true;
+		const signal = extra?.request?.signal;
+		if (signal?.aborted) {
+			await this.close();
+			throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.ConnectionClosed, "The request was aborted before it could be handled");
 		}
-	}
-	subscribe(listener) {
-		this._listeners.add(listener);
-		let live = true;
-		return () => {
-			if (!live) return;
-			live = false;
-			this._listeners.delete(listener);
+		const messageExtra = {
+			classification: this._classification,
+			...extra?.request !== void 0 && { request: extra.request },
+			...extra?.authInfo !== void 0 && { authInfo: extra.authInfo }
 		};
-	}
-	/** The number of currently registered listeners (test/introspection only — the routers track capacity via their own open-subscription set). */
-	get listenerCount() {
-		return this._listeners.size;
-	}
-};
-/** Build a {@linkcode ServerNotifier} over a bus. */
-function mcp_DIH4cS6P_createServerNotifier(bus) {
-	return {
-		toolsChanged: () => bus.publish({ kind: "tools_list_changed" }),
-		promptsChanged: () => bus.publish({ kind: "prompts_list_changed" }),
-		resourcesChanged: () => bus.publish({ kind: "resources_list_changed" }),
-		resourceUpdated: (uri) => bus.publish({
-			kind: "resource_updated",
-			uri
-		})
-	};
-}
-/**
-* Whether a `subscriptions/listen` filter accepts a given change event.
-*
-* Pure: no I/O, no mutation. The filter governs ONLY the four
-* subscription-gated change types — non-gated notifications never reach the
-* bus and are not modeled here.
-*
-* `resource_updated` matches only when `resourceSubscriptions` is present and
-* contains the event's URI exactly (per the spec: "for these resource URIs").
-*/
-function listenFilterAccepts(filter, event) {
-	switch (event.kind) {
-		case "tools_list_changed": return filter.toolsListChanged === true;
-		case "prompts_list_changed": return filter.promptsListChanged === true;
-		case "resources_list_changed": return filter.resourcesListChanged === true;
-		case "resource_updated": return filter.resourceSubscriptions !== void 0 && filter.resourceSubscriptions.includes(event.uri);
-	}
-}
-/**
-* The honored subset of a requested filter: keeps only the fields the client
-* explicitly opted in to (drops `false` and absent fields), narrowed against
-* the server's declared capabilities when supplied. The serving entry sends
-* this back in `notifications/subscriptions/acknowledged` so the ack reflects
-* what the server can actually deliver.
-*
-* - `toolsListChanged` is honored only when `capabilities.tools.listChanged`
-*   is advertised; likewise `promptsListChanged` / `resourcesListChanged`.
-* - `resourceSubscriptions` is honored only when
-*   `capabilities.resources.subscribe` is advertised.
-*
-* `capabilities` is optional on this pure helper for test convenience only —
-* both wired routers REQUIRE capabilities at the call site (the HTTP router's
-* `serve()` takes a required parameter; `StdioListenRouter.serve()` throws
-* before `setServerCapabilities()` was called), so the fail-open
-* `undefined → honor everything` branch is never reachable on a wired entry.
-*/
-function honoredSubset(requested, capabilities) {
-	const honored = {};
-	const allow = (bit) => capabilities === void 0 || bit === true;
-	if (requested.toolsListChanged === true && allow(capabilities?.tools?.listChanged)) honored.toolsListChanged = true;
-	if (requested.promptsListChanged === true && allow(capabilities?.prompts?.listChanged)) honored.promptsListChanged = true;
-	if (requested.resourcesListChanged === true && allow(capabilities?.resources?.listChanged)) honored.resourcesListChanged = true;
-	if (requested.resourceSubscriptions !== void 0 && requested.resourceSubscriptions.length > 0 && allow(capabilities?.resources?.subscribe)) honored.resourceSubscriptions = [...requested.resourceSubscriptions];
-	return honored;
-}
-/** Map a {@linkcode ServerEvent} onto its wire notification `{method, params}`. */
-function serverEventToNotification(event) {
-	switch (event.kind) {
-		case "tools_list_changed": return { method: "notifications/tools/list_changed" };
-		case "prompts_list_changed": return { method: "notifications/prompts/list_changed" };
-		case "resources_list_changed": return { method: "notifications/resources/list_changed" };
-		case "resource_updated": return {
-			method: "notifications/resources/updated",
-			params: { uri: event.uri }
-		};
-	}
-}
-
-//#endregion
-//#region src/server/listenRouter.ts
-/** Default capacity guard: refuse a new subscription when this many are already open. */
-const mcp_DIH4cS6P_DEFAULT_MAX_SUBSCRIPTIONS = 1024;
-function jsonRpcError(id, code, message) {
-	return Response.json({
-		jsonrpc: "2.0",
-		error: {
-			code,
-			message
-		},
-		id
-	}, { status: 200 });
-}
-/** Stamp the subscription id onto a notification's `_meta`. Non-mutating. */
-function stampSubscriptionId(notification, subscriptionId) {
-	return {
-		method: notification.method,
-		params: {
-			...notification.params,
-			_meta: {
-				...notification.params?._meta,
-				[SUBSCRIPTION_ID_META_KEY]: subscriptionId
+		if (src_DdvbAHrR_isJSONRPCRequest(message)) {
+			this._requestId = message.id;
+			let resolve;
+			let reject;
+			const promise = new Promise((promiseResolve, promiseReject) => {
+				resolve = promiseResolve;
+				reject = promiseReject;
+			});
+			this._deferredResponse = {
+				promise,
+				resolve,
+				reject,
+				settled: false
+			};
+			if (signal !== void 0) {
+				const onAbort = () => void this.close();
+				signal.addEventListener("abort", onAbort, { once: true });
+				this._abortCleanup = () => signal.removeEventListener("abort", onAbort);
 			}
+			this._dispatchWindowOpen = true;
+			try {
+				this.onmessage(message, messageExtra);
+			} finally {
+				this._dispatchWindowOpen = false;
+			}
+			if (this._responseMode === "sse" && !this._closed && !this._deferredResponse.settled) this.upgradeToSse();
+			return promise;
 		}
-	};
-}
-/**
-* Read the requested filter off a `subscriptions/listen` request body.
-* Returns the validated filter, or `undefined` when `params.notifications`
-* is absent or fails the schema (the caller answers `-32602` — the spec
-* marks `notifications` REQUIRED on the listen request).
-*/
-function parseListenFilter(message) {
-	const outcome = codecForVersion(MODERN_WIRE_REVISION).validateRequest("subscriptions/listen", message);
-	return outcome.ok ? outcome.value.params?.notifications : void 0;
-}
-function mcp_DIH4cS6P_createListenRouter(options) {
-	const { bus, onerror } = options;
-	const maxSubscriptions = options.maxSubscriptions ?? mcp_DIH4cS6P_DEFAULT_MAX_SUBSCRIPTIONS;
-	const keepAliveMs = options.keepAliveMs ?? mcp_DIH4cS6P_DEFAULT_SSE_KEEP_ALIVE_MS;
-	const open = /* @__PURE__ */ new Set();
-	function serve(message, signal, capabilities, serverInfo) {
-		if (open.size >= maxSubscriptions) {
-			onerror?.(/* @__PURE__ */ new Error(`subscriptions/listen refused: subscription limit reached (${maxSubscriptions})`));
-			return jsonRpcError(message.id, -32603, "Subscription limit reached");
+		this.onmessage(message, messageExtra);
+		return new Response(null, { status: 202 });
+	}
+	async send(message, options) {
+		if (this._closed) return;
+		const isResponse = src_DdvbAHrR_isJSONRPCResultResponse(message) || src_DdvbAHrR_isJSONRPCErrorResponse(message);
+		const relatedId = isResponse ? message.id : options?.relatedRequestId;
+		if (this._requestId === void 0 || relatedId === void 0 || relatedId !== this._requestId) {
+			if (isResponse) this.onerror?.(/* @__PURE__ */ new Error(`Received a response for an unknown request id: ${String(message.id)}`));
+			return;
 		}
-		const filter = parseListenFilter(message);
-		if (filter === void 0) return jsonRpcError(message.id, -32602, "Invalid params: 'notifications' is required and must be a valid SubscriptionFilter");
-		const honored = honoredSubset(filter, capabilities);
-		const subscriptionId = message.id;
-		const encoder = new TextEncoder();
-		let controller;
-		let closed = false;
-		let unsubscribe;
-		let keepAliveTimer;
-		let abortCleanup;
-		const writeFrame = (frame) => {
-			if (closed) return;
-			try {
-				controller.enqueue(encoder.encode(frame));
-			} catch (error) {
-				onerror?.(error instanceof Error ? error : new Error(String(error)));
+		if (isResponse) {
+			if (this._terminalDelivered) return;
+			this._terminalDelivered = true;
+			const errorCode = src_DdvbAHrR_isJSONRPCErrorResponse(message) ? message.error.code : void 0;
+			const ladderStatus = errorCode !== void 0 && (this._dispatchWindowOpen || errorCode === src_DdvbAHrR_ProtocolErrorCode.MissingRequiredClientCapability) ? LADDER_ERROR_HTTP_STATUS[errorCode] : void 0;
+			if (ladderStatus !== void 0 && this._sse === void 0) {
+				this.settleResponse(Response.json(message, {
+					status: ladderStatus,
+					headers: { "Content-Type": "application/json" }
+				}));
+				queueMicrotask(() => void this.close());
+				return;
 			}
-		};
-		const writeNotification = (method, params) => {
-			writeFrame(`event: message\ndata: ${JSON.stringify({
-				jsonrpc: "2.0",
-				method,
-				params
-			})}\n\n`);
-		};
-		const teardown = (graceful) => {
-			if (closed) return;
-			if (graceful) writeFrame(`event: message\ndata: ${JSON.stringify({
-				jsonrpc: "2.0",
-				id: subscriptionId,
-				result: {
-					resultType: "complete",
-					_meta: {
-						[SUBSCRIPTION_ID_META_KEY]: subscriptionId,
-						[SERVER_INFO_META_KEY]: serverInfo
-					}
-				}
-			})}\n\n`);
-			closed = true;
-			try {
-				unsubscribe?.();
-			} catch (error) {
-				onerror?.(error instanceof Error ? error : new Error(String(error)));
+			if (this._sse !== void 0 || this._responseMode === "sse") {
+				if (this._sse === void 0) this.upgradeToSse();
+				this.writeMessageFrame(message);
+				this.finalizeStream();
+				return;
 			}
-			if (keepAliveTimer !== void 0) clearInterval(keepAliveTimer);
-			abortCleanup?.();
-			open.delete(teardown);
+			this.settleResponse(Response.json(message, {
+				status: 200,
+				headers: { "Content-Type": "application/json" }
+			}));
+			queueMicrotask(() => void this.close());
+			return;
+		}
+		if (this._responseMode === "json") return;
+		if (this._sse === void 0) this.upgradeToSse();
+		this.writeMessageFrame(message);
+	}
+	/**
+	* Writes an SSE comment frame (a keep-alive heartbeat). Dropped when the
+	* exchange is not currently streaming.
+	*/
+	writeCommentFrame(comment) {
+		if (this._closed || this._sse === void 0 || this._sse.closed) return;
+		const frame = comment.split("\n").map((line) => `: ${line}`).join("\n");
+		this.writeFrame(`${frame}\n\n`);
+	}
+	async close() {
+		if (this._closed) return;
+		this._closed = true;
+		this._abortCleanup?.();
+		this._abortCleanup = void 0;
+		if (this._sse?.keepAliveTimer !== void 0) clearInterval(this._sse.keepAliveTimer);
+		if (this._sse !== void 0 && !this._sse.closed) {
+			this._sse.closed = true;
 			try {
-				controller.close();
+				this._sse.controller.close();
 			} catch {}
-		};
+		}
+		if (this._deferredResponse !== void 0 && !this._deferredResponse.settled) {
+			this._deferredResponse.settled = true;
+			this._deferredResponse.reject(new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.ConnectionClosed, "Connection closed before a response was produced"));
+		}
+		this.onclose?.();
+	}
+	settleResponse(response) {
+		if (this._deferredResponse === void 0 || this._deferredResponse.settled) return;
+		this._deferredResponse.settled = true;
+		this._deferredResponse.resolve(response);
+	}
+	upgradeToSse() {
+		let controller;
 		const readable = new ReadableStream({
-			start(streamController) {
+			start: (streamController) => {
 				controller = streamController;
-				const ack = stampSubscriptionId({
-					method: "notifications/subscriptions/acknowledged",
-					params: { notifications: honored }
-				}, subscriptionId);
-				writeNotification(ack.method, ack.params);
-				if (Object.keys(honored).length === 0) {
-					teardown(true);
-					return;
-				}
-				unsubscribe = bus.subscribe((event) => {
-					if (closed || !listenFilterAccepts(honored, event)) return;
-					const note = stampSubscriptionId(serverEventToNotification(event), subscriptionId);
-					writeNotification(note.method, note.params);
-				});
-				keepAliveTimer = mcp_DIH4cS6P_armSseKeepAlive(keepAliveMs, () => writeFrame(": keepalive\n\n"));
-				open.add(teardown);
 			},
-			cancel() {
-				teardown(false);
+			cancel: () => {
+				this.close();
 			}
 		});
-		if (signal !== void 0) if (signal.aborted) teardown(false);
-		else {
-			const onAbort = () => teardown(false);
-			signal.addEventListener("abort", onAbort, { once: true });
-			abortCleanup = () => signal.removeEventListener("abort", onAbort);
-		}
-		return new Response(readable, {
+		this._sse = {
+			controller,
+			encoder: new TextEncoder(),
+			closed: false
+		};
+		this._sse.keepAliveTimer = mcp_oHn3ureC_armSseKeepAlive(this._keepAliveMs, () => this.writeCommentFrame("keepalive"));
+		this.settleResponse(new Response(readable, {
 			status: 200,
 			headers: {
 				"Content-Type": "text/event-stream",
@@ -26956,167 +27421,33 @@ function mcp_DIH4cS6P_createListenRouter(options) {
 				Connection: "keep-alive",
 				"X-Accel-Buffering": "no"
 			}
-		});
+		}));
 	}
-	return {
-		serve,
-		closeAll() {
-			for (const teardown of open) teardown(true);
-		},
-		get openCount() {
-			return open.size;
+	finalizeStream() {
+		if (this._sse?.keepAliveTimer !== void 0) clearInterval(this._sse.keepAliveTimer);
+		if (this._sse !== void 0 && !this._sse.closed) {
+			this._sse.closed = true;
+			try {
+				this._sse.controller.close();
+			} catch {}
 		}
-	};
-}
-const CHANGE_NOTIFICATION_METHODS = new Set([
-	"notifications/tools/list_changed",
-	"notifications/prompts/list_changed",
-	"notifications/resources/list_changed",
-	"notifications/resources/updated"
-]);
-/**
-* Per-connection listen state for the stdio entry. One instance is held by
-* `serveStdio` for the connection lifetime; it routes inbound
-* `subscriptions/listen` / `notifications/cancelled` and rewrites outbound
-* change notifications onto the active subscriptions. No bus — the long-lived
-* pinned instance's existing `send*ListChanged()` calls feed straight into
-* `routeOutbound()`.
-*/
-var mcp_DIH4cS6P_StdioListenRouter = class {
-	/** Active subscriptions, keyed by the listen request's JSON-RPC id verbatim. */
-	_subs = /* @__PURE__ */ new Map();
-	/**
-	* The serving instance's declared capabilities. Filled in by the entry
-	* once the modern instance is constructed (the router is created before
-	* the instance exists), so the acknowledged filter is narrowed against
-	* what the server can actually deliver.
-	*/
-	_serverCapabilities;
-	/**
-	* The serving instance's identity, stamped onto the graceful-close
-	* results' `_meta` (the spec's `SubscriptionsListenResultMetaObject` extends
-	* `ResultMetaObject`). Handed over together with the capabilities.
-	*/
-	_serverInfo;
-	constructor(_maxSubscriptions = mcp_DIH4cS6P_DEFAULT_MAX_SUBSCRIPTIONS, serverCapabilities, serverInfo) {
-		this._maxSubscriptions = _maxSubscriptions;
-		this._serverCapabilities = serverCapabilities;
-		this._serverInfo = serverInfo;
+		queueMicrotask(() => void this.close());
 	}
-	/**
-	* Record the serving instance's declared capabilities and identity once
-	* it has been constructed. Called by `serveStdio`'s connect path;
-	* subsequent `serve()` calls narrow the honored filter against the
-	* capabilities, and `teardownAll()` stamps the identity.
-	*/
-	setServerCapabilities(capabilities, serverInfo) {
-		this._serverCapabilities = capabilities;
-		if (serverInfo !== void 0) this._serverInfo = serverInfo;
+	writeMessageFrame(message) {
+		this.writeFrame(`event: message\ndata: ${JSON.stringify(message)}\n\n`);
 	}
-	/** Whether `id` is an active listen subscription on this connection. */
-	has(id) {
-		return this._subs.has(id);
-	}
-	/**
-	* Serve one inbound `subscriptions/listen` request: registers the
-	* subscription and returns the stamped acknowledged notification (or, on
-	* capacity / params rejection, the in-band JSON-RPC error response).
-	*
-	* @throws when called before {@linkcode setServerCapabilities} (or the
-	* constructor) has supplied the serving instance's capabilities. Honoring a
-	* filter without knowing the server's advertised capabilities would fail
-	* open (deliver unadvertised types); the entry guarantees capabilities are
-	* set before any listen request is routed here.
-	*/
-	serve(message) {
-		if (this._serverCapabilities === void 0) throw new Error("StdioListenRouter.serve() called before setServerCapabilities(); refusing to honor a filter without capabilities");
-		if (this._subs.size >= this._maxSubscriptions) return {
-			jsonrpc: "2.0",
-			id: message.id,
-			error: {
-				code: -32603,
-				message: "Subscription limit reached"
-			}
-		};
-		const filter = parseListenFilter(message);
-		if (filter === void 0) return {
-			jsonrpc: "2.0",
-			id: message.id,
-			error: {
-				code: -32602,
-				message: "Invalid params: 'notifications' is required and must be a valid SubscriptionFilter"
-			}
-		};
-		const honored = honoredSubset(filter, this._serverCapabilities);
-		this._subs.set(message.id, honored);
-		return stampSubscriptionId({
-			method: "notifications/subscriptions/acknowledged",
-			params: { notifications: honored }
-		}, message.id);
-	}
-	/**
-	* Tear down one subscription (inbound `notifications/cancelled`). Returns
-	* `true` when a subscription was removed. After this call NOTHING further
-	* is delivered for that subscription id (the post-cancel hardening).
-	*/
-	cancel(id) {
-		return this._subs.delete(id);
-	}
-	/**
-	* Route an outbound notification through the active subscriptions.
-	*
-	* - For a subscription-gated change notification, returns one stamped copy
-	*   per subscription that opted in to it (an empty array means it is
-	*   dropped — the modern era never delivers an un-requested change type).
-	* - For any other outbound message, returns `'passthrough'` (the entry
-	*   forwards it as-is).
-	*/
-	routeOutbound(message) {
-		if (!CHANGE_NOTIFICATION_METHODS.has(message.method)) return "passthrough";
-		const uriParam = message.params?.["uri"];
-		const uri = typeof uriParam === "string" ? uriParam : void 0;
-		const event = notificationToServerEvent(message.method, uri);
-		const out = [];
-		for (const [subscriptionId, filter] of this._subs) if (listenFilterAccepts(filter, event)) out.push(stampSubscriptionId({
-			method: message.method,
-			params: message.params ?? {}
-		}, subscriptionId));
-		return out;
-	}
-	/**
-	* Server-side graceful teardown of every active subscription: returns the
-	* empty `subscriptions/listen` JSON-RPC result for each subscription id —
-	* the spec's graceful-close signal, `_meta` carrying the subscription id
-	* and the serving instance's identity — for the entry to emit before
-	* closing the wire. Clears the set so nothing further is delivered.
-	*/
-	teardownAll() {
-		const out = [];
-		for (const id of this._subs.keys()) out.push({
-			jsonrpc: "2.0",
-			id,
-			result: {
-				resultType: "complete",
-				_meta: {
-					[SUBSCRIPTION_ID_META_KEY]: id,
-					...this._serverInfo !== void 0 && { [SERVER_INFO_META_KEY]: this._serverInfo }
-				}
-			}
-		});
-		this._subs.clear();
-		return out;
+	writeFrame(frame) {
+		if (this._sse === void 0 || this._sse.closed) return;
+		try {
+			this._sse.controller.enqueue(this._sse.encoder.encode(frame));
+		} catch (error) {
+			this.onerror?.(/* @__PURE__ */ new Error(`Failed to write to the response stream: ${error}`));
+		}
 	}
 };
-function notificationToServerEvent(method, uri) {
-	switch (method) {
-		case "notifications/tools/list_changed": return { kind: "tools_list_changed" };
-		case "notifications/prompts/list_changed": return { kind: "prompts_list_changed" };
-		case "notifications/resources/list_changed": return { kind: "resources_list_changed" };
-		default: return {
-			kind: "resource_updated",
-			uri: uri ?? ""
-		};
-	}
+/** Package-internal: the classification a per-request transport serves; `undefined` for any other transport. Not public API. */
+function perRequestClassificationOf(transport) {
+	return transport instanceof mcp_oHn3ureC_PerRequestHTTPServerTransport ? readClassification(transport) : void 0;
 }
 
 //#endregion
@@ -27403,7 +27734,7 @@ function requireScopes(...scopes) {
 	};
 }
 /** @internal */
-async function mcp_DIH4cS6P_findScopeChallenge(requests, authInfo, resolve) {
+async function mcp_oHn3ureC_findScopeChallenge(requests, authInfo, resolve) {
 	for (const request of requests) {
 		const challenge = await resolve({
 			request,
@@ -27423,12 +27754,12 @@ async function mcp_DIH4cS6P_findScopeChallenge(requests, authInfo, resolve) {
 *
 * @internal
 */
-function mcp_DIH4cS6P_scopeChallengeResourceMetadataUrl(authInfo) {
+function mcp_oHn3ureC_scopeChallengeResourceMetadataUrl(authInfo) {
 	if (authInfo?.resourceMetadataUrl !== void 0) return authInfo.resourceMetadataUrl;
 	if (authInfo?.resource?.protocol === "https:" || authInfo?.resource?.protocol === "http:") return getOAuthProtectedResourceMetadataUrl(authInfo.resource);
 }
 /** @internal */
-function mcp_DIH4cS6P_createScopeChallengeResponse(challenge, resourceMetadataUrl) {
+function mcp_oHn3ureC_createScopeChallengeResponse(challenge, resourceMetadataUrl) {
 	return bearerAuthChallengeResponse(new OAuthError(OAuthErrorCode.InsufficientScope, challenge.errorDescription ?? "Insufficient scope"), {
 		requiredScopes: [...challenge.scopes],
 		resourceMetadataUrl
@@ -27460,10 +27791,10 @@ function resolveLegacyShimOptions(options) {
 * check and the shim's gate.
 */
 function coerceEmbeddedInputRequest(method, key, entry) {
-	if (entry === null || typeof entry !== "object" || typeof entry.method !== "string") throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an invalid input request '${key}': each inputRequests entry must be an embedded elicitation/create, sampling/createMessage, or roots/list request`);
+	if (entry === null || typeof entry !== "object" || typeof entry.method !== "string") throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an invalid input request '${key}': each inputRequests entry must be an embedded elicitation/create, sampling/createMessage, or roots/list request`);
 	const embedded = entry;
 	const required = requiredClientCapabilitiesForInputRequest(embedded);
-	if (required === void 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input request '${key}' of kind '${embedded.method}', which is not an embedded request the 2026-07-28 revision defines`);
+	if (required === void 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input request '${key}' of kind '${embedded.method}', which is not an embedded request the 2026-07-28 revision defines`);
 	return {
 		embedded,
 		required
@@ -27493,7 +27824,7 @@ function legacyShimFailure(method, message) {
 		}],
 		isError: true
 	};
-	throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, message);
+	throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, message);
 }
 /** The fulfilment loop — see the module doc for the contract. */
 var LegacyInputRequiredShim = class {
@@ -27511,15 +27842,15 @@ var LegacyInputRequiredShim = class {
 			const inputRequests = current.inputRequests;
 			const hasInputRequests = inputRequests != null && Object.keys(inputRequests).length > 0;
 			const requestState = typeof current.requestState === "string" ? current.requestState : void 0;
-			if (!hasInputRequests && requestState === void 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result with neither inputRequests nor requestState (every InputRequiredResult must include at least one of the two)`);
+			if (!hasInputRequests && requestState === void 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result with neither inputRequests nor requestState (every InputRequiredResult must include at least one of the two)`);
 			let responses;
 			if (hasInputRequests) {
 				const declared = this._host.resolvedClientCapabilities(ctx);
 				const coerced = [];
 				for (const [key, entry] of Object.entries(inputRequests)) {
 					const { embedded, required } = coerceEmbeddedInputRequest(method, key, entry);
-					if (embedded.method !== "roots/list" && embedded.params === void 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input request '${key}' of kind '${embedded.method}' without params`);
-					if (src_Cqbh3MYc_missingClientCapabilities(required, declared) !== void 0) return legacyShimFailure(method, `Cannot request input '${key}' (${embedded.method}): the client on this 2025-era connection did not declare the required capability${declared === void 0 ? " (no client capabilities are available on this connection — per-request legacy serving cannot receive server-to-client requests)" : ""}`);
+					if (embedded.method !== "roots/list" && embedded.params === void 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input request '${key}' of kind '${embedded.method}' without params`);
+					if (src_DdvbAHrR_missingClientCapabilities(required, declared) !== void 0) return legacyShimFailure(method, `Cannot request input '${key}' (${embedded.method}): the client on this 2025-era connection did not declare the required capability${declared === void 0 ? " (no client capabilities are available on this connection — per-request legacy serving cannot receive server-to-client requests)" : ""}`);
 					coerced.push([key, embedded]);
 				}
 				const roundAbort = linkedRoundAbort(outerSignal);
@@ -27604,7 +27935,7 @@ let readServerIdentity;
 * accessors keep answering on instances that never see an `initialize` handshake.
 * Not public API.
 */
-function mcp_DIH4cS6P_seedClientIdentityFromEnvelope(server, identity) {
+function mcp_oHn3ureC_seedClientIdentityFromEnvelope(server, identity) {
 	writeClientIdentity(server, identity);
 }
 /**
@@ -27616,7 +27947,7 @@ function mcp_DIH4cS6P_seedClientIdentityFromEnvelope(server, identity) {
 * answering `-32601` unless their own supported-versions list opts into a modern
 * revision. Not public API.
 */
-function mcp_DIH4cS6P_installModernOnlyHandlers(server, servedModernVersions) {
+function mcp_oHn3ureC_installModernOnlyHandlers(server, servedModernVersions) {
 	installDiscoverHandler(server, servedModernVersions);
 }
 /**
@@ -27626,7 +27957,7 @@ function mcp_DIH4cS6P_installModernOnlyHandlers(server, servedModernVersions) {
 * `SubscriptionsListenResultMetaObject` extends `ResultMetaObject`, so it carries
 * the serverInfo SHOULD like every other result). Not public API.
 */
-function mcp_DIH4cS6P_serverIdentityOf(server) {
+function mcp_oHn3ureC_serverIdentityOf(server) {
 	return readServerIdentity(server);
 }
 /**
@@ -27658,6 +27989,7 @@ var Server = class extends Protocol {
 	_requestStateVerify;
 	_inputRequiredServing;
 	_legacyShim;
+	_boundFromTransport = false;
 	/** Lazily-built legacy shim; the loop lives in legacyInputRequiredShim.ts behind a narrow host contract. */
 	_legacyInputRequiredShim() {
 		return this._legacyShim ??= new LegacyInputRequiredShim({
@@ -27696,7 +28028,16 @@ var Server = class extends Protocol {
 	}
 	/** Attaches to the given transport; rejects while this instance is connected to another one. */
 	async connect(transport) {
-		if (this.transport !== void 0) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.AlreadyConnected, "Use a separate Server instance per connection: this instance is already connected to a transport. To connect it to a new transport, call close() first.");
+		if (this.transport !== void 0) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.AlreadyConnected, "Use a separate Server instance per connection: this instance is already connected to a transport. To connect it to a new transport, call close() first.");
+		if (this._boundFromTransport) {
+			this._boundFromTransport = false;
+			this._negotiatedProtocolVersion = void 0;
+		}
+		const revision = perRequestClassificationOf(transport)?.revision;
+		if (revision !== void 0 && !this._servedModernEra() && src_DdvbAHrR_SUPPORTED_MODERN_PROTOCOL_VERSIONS.includes(revision) && modernProtocolVersions(this._supportedProtocolVersions).includes(revision)) {
+			this._negotiatedProtocolVersion = revision;
+			this._boundFromTransport = true;
+		}
 		await super.connect(transport);
 	}
 	/**
@@ -27761,7 +28102,7 @@ var Server = class extends Protocol {
 	* The new capabilities will be merged with any existing capabilities previously given (e.g., at initialization).
 	*/
 	registerCapabilities(capabilities) {
-		if (this.transport) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.AlreadyConnected, "Cannot register capabilities after connecting to transport");
+		if (this.transport) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.AlreadyConnected, "Cannot register capabilities after connecting to transport");
 		const hadLogging = !!this._capabilities.logging;
 		this._capabilities = mergeCapabilities(this._capabilities, capabilities);
 		if (!hadLogging && this._capabilities.logging) this._registerLoggingHandler();
@@ -27785,27 +28126,27 @@ var Server = class extends Protocol {
 			const isInputRequiredCapable = INPUT_REQUIRED_CAPABLE_METHODS.has(method);
 			if (cacheHint === void 0 && !isInputRequiredCapable) return async (request, ctx) => {
 				const result = await handler(request, ctx);
-				if (isInputRequiredResult(result)) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but only tools/call, prompts/get and resources/read support input_required (protocol revision 2026-07-28)`);
+				if (isInputRequiredResult(result)) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but only tools/call, prompts/get and resources/read support input_required (protocol revision 2026-07-28)`);
 				return result;
 			};
 			return async (request, ctx) => {
 				const result = isInputRequiredCapable ? await this._invokeInputRequiredCapableHandler(method, handler, request, ctx) : await handler(request, ctx);
 				if (isInputRequiredResult(result)) {
-					if (!isInputRequiredCapable) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but only tools/call, prompts/get and resources/read support input_required (protocol revision 2026-07-28)`);
+					if (!isInputRequiredCapable) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but only tools/call, prompts/get and resources/read support input_required (protocol revision 2026-07-28)`);
 					return result;
 				}
 				return cacheHint === void 0 ? result : attachCacheHintFallback(result, cacheHint);
 			};
 		}
 		return async (request, ctx) => {
-			const codec = src_Cqbh3MYc_codecForVersion(this._negotiatedProtocolVersion);
+			const codec = src_DdvbAHrR_codecForVersion(this._negotiatedProtocolVersion);
 			const validatedRequest = codec.validateRequest("tools/call", request);
-			if (!validatedRequest.ok) throw new ProtocolError(validatedRequest.reason === "not-in-era" ? src_Cqbh3MYc_ProtocolErrorCode.InternalError : src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, validatedRequest.reason === "not-in-era" ? "No wire schema for tools/call in the resolved era" : `Invalid tools/call request: ${validatedRequest.message}`);
+			if (!validatedRequest.ok) throw new ProtocolError(validatedRequest.reason === "not-in-era" ? src_DdvbAHrR_ProtocolErrorCode.InternalError : src_DdvbAHrR_ProtocolErrorCode.InvalidParams, validatedRequest.reason === "not-in-era" ? "No wire schema for tools/call in the resolved era" : `Invalid tools/call request: ${validatedRequest.message}`);
 			const result = await this._invokeInputRequiredCapableHandler("tools/call", handler, request, ctx);
 			if (isInputRequiredResult(result)) return result;
 			const normalizedResult = normalizeContentlessToolResult(result);
 			const validationResult = codec.validateResult("tools/call", normalizedResult);
-			if (!validationResult.ok) throw new ProtocolError(validationResult.reason === "not-in-era" ? src_Cqbh3MYc_ProtocolErrorCode.InternalError : src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, validationResult.reason === "not-in-era" ? "No wire schema for tools/call in the resolved era" : `Invalid tools/call result: ${validationResult.message}`);
+			if (!validationResult.ok) throw new ProtocolError(validationResult.reason === "not-in-era" ? src_DdvbAHrR_ProtocolErrorCode.InternalError : src_DdvbAHrR_ProtocolErrorCode.InvalidParams, validationResult.reason === "not-in-era" ? "No wire schema for tools/call in the resolved era" : `Invalid tools/call result: ${validationResult.message}`);
 			return validationResult.value;
 		};
 	}
@@ -27842,7 +28183,7 @@ var Server = class extends Protocol {
 	async _invokeInputRequiredCapableHandler(method, handler, request, ctx) {
 		const servedModern = this._servedModernEra();
 		const rawRequestState = ctx.mcpReq.requestState();
-		if (rawRequestState !== void 0 && typeof rawRequestState !== "string") throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, "Invalid or expired requestState", { reason: "invalid_request_state" });
+		if (rawRequestState !== void 0 && typeof rawRequestState !== "string") throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, "Invalid or expired requestState", { reason: "invalid_request_state" });
 		let ctxForHandler = ctx;
 		if (typeof rawRequestState === "string") {
 			const decoded = await this._verifyRequestState(rawRequestState, ctx, method);
@@ -27852,27 +28193,27 @@ var Server = class extends Protocol {
 		try {
 			result = await handler(request, ctxForHandler);
 		} catch (error) {
-			if (error instanceof ProtocolError && error.code === src_Cqbh3MYc_ProtocolErrorCode.UrlElicitationRequired) {
+			if (error instanceof ProtocolError && error.code === src_DdvbAHrR_ProtocolErrorCode.UrlElicitationRequired) {
 				if (!servedModern) throw error;
-				throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `URL elicitation cannot be signalled by throwing UrlElicitationRequiredError on protocol revision ${this._negotiatedProtocolVersion}: return inputRequired({ inputRequests: { …: inputRequired.elicitUrl(...) } }) from the handler instead. The urlElicitationRequired error (-32042) of earlier revisions is not available on this revision.`);
+				throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `URL elicitation cannot be signalled by throwing UrlElicitationRequiredError on protocol revision ${this._negotiatedProtocolVersion}: return inputRequired({ inputRequests: { …: inputRequired.elicitUrl(...) } }) from the handler instead. The urlElicitationRequired error (-32042) of earlier revisions is not available on this revision.`);
 			}
 			throw error;
 		}
 		if (!isInputRequiredResult(result)) return result;
 		if (!servedModern) {
-			if (!this._inputRequiredServing.legacyShim) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but this request is served on protocol revision ${this._negotiatedProtocolVersion ?? LATEST_PROTOCOL_VERSION}, which has no input_required vocabulary`);
+			if (!this._inputRequiredServing.legacyShim) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result, but this request is served on protocol revision ${this._negotiatedProtocolVersion ?? LATEST_PROTOCOL_VERSION}, which has no input_required vocabulary`);
 			return await this._legacyInputRequiredShim().fulfill(method, handler, request, ctxForHandler, result);
 		}
 		const inputRequests = result.inputRequests;
 		const hasInputRequests = inputRequests != null && Object.keys(inputRequests).length > 0;
 		const hasRequestState = typeof result.requestState === "string";
-		if (!hasInputRequests && !hasRequestState) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result with neither inputRequests nor requestState (every InputRequiredResult must include at least one of the two)`);
+		if (!hasInputRequests && !hasRequestState) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Handler for ${method} returned an input-required result with neither inputRequests nor requestState (every InputRequiredResult must include at least one of the two)`);
 		if (hasInputRequests) {
 			const declared = this._inputRequestCapabilityView(ctx);
 			for (const [key, entry] of Object.entries(inputRequests)) {
 				const { embedded, required } = coerceEmbeddedInputRequest(method, key, entry);
-				const missing = src_Cqbh3MYc_missingClientCapabilities(required, declared);
-				if (missing !== void 0) throw new src_Cqbh3MYc_MissingRequiredClientCapabilityError({ requiredCapabilities: missing }, `Cannot request input '${key}' (${embedded.method}): the request's client capabilities do not declare the required capability`);
+				const missing = src_DdvbAHrR_missingClientCapabilities(required, declared);
+				if (missing !== void 0) throw new src_DdvbAHrR_MissingRequiredClientCapabilityError({ requiredCapabilities: missing }, `Cannot request input '${key}' (${embedded.method}): the request's client capabilities do not declare the required capability`);
 			}
 		}
 		return result;
@@ -27889,7 +28230,7 @@ var Server = class extends Protocol {
 			return await this._requestStateVerify(state, ctx);
 		} catch (error) {
 			this.onerror?.(/* @__PURE__ */ new Error(`requestState verification rejected ${method}: ${error instanceof Error ? error.message : String(error)}`));
-			throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, "Invalid or expired requestState", { reason: "invalid_request_state" });
+			throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, "Invalid or expired requestState", { reason: "invalid_request_state" });
 		}
 	}
 	/**
@@ -27899,7 +28240,7 @@ var Server = class extends Protocol {
 	* initialize (stateless legacy) hold nothing, so gates refuse there.
 	*/
 	_inputRequestCapabilityView(ctx) {
-		return this._servedModernEra() ? ctx.mcpReq.envelope?.[auth_BNDyLTqp_CLIENT_CAPABILITIES_META_KEY] : this._clientCapabilities;
+		return this._servedModernEra() ? ctx.mcpReq.envelope?.[schemas_DscsoNZN_CLIENT_CAPABILITIES_META_KEY] : this._clientCapabilities;
 	}
 	/**
 	* Guard for the push-style server→client request APIs ({@linkcode createMessage},
@@ -27910,7 +28251,7 @@ var Server = class extends Protocol {
 	* also reject it; this guard runs first to carry the steer.
 	*/
 	_assertPushApiInServedEra(method) {
-		if (this._servedModernEra()) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Server-to-client requests are not available on protocol revision ${this._negotiatedProtocolVersion}: '${method}' cannot be sent while serving a request on that revision. Return inputRequired({ ... }) from the handler instead — the client fulfils the embedded requests and retries the original request (multi round-trip requests).`, {
+		if (this._servedModernEra()) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.MethodNotSupportedByProtocolVersion, `Server-to-client requests are not available on protocol revision ${this._negotiatedProtocolVersion}: '${method}' cannot be sent while serving a request on that revision. Return inputRequired({ ... }) from the handler instead — the client fulfils the embedded requests and retries the original request (multi round-trip requests).`, {
 			method,
 			era: "2026-07-28"
 		});
@@ -27918,13 +28259,13 @@ var Server = class extends Protocol {
 	assertCapabilityForMethod(method) {
 		switch (method) {
 			case "sampling/createMessage":
-				if (!this._clientCapabilities?.sampling) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Client does not support sampling (required for ${method})`);
+				if (!this._clientCapabilities?.sampling) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Client does not support sampling (required for ${method})`);
 				break;
 			case "elicitation/create":
-				if (!this._clientCapabilities?.elicitation) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Client does not support elicitation (required for ${method})`);
+				if (!this._clientCapabilities?.elicitation) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Client does not support elicitation (required for ${method})`);
 				break;
 			case "roots/list":
-				if (!this._clientCapabilities?.roots) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Client does not support listing roots (required for ${method})`);
+				if (!this._clientCapabilities?.roots) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Client does not support listing roots (required for ${method})`);
 				break;
 			case "ping": break;
 		}
@@ -27932,20 +28273,20 @@ var Server = class extends Protocol {
 	assertNotificationCapability(method) {
 		switch (method) {
 			case "notifications/message":
-				if (!this._capabilities.logging) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support logging (required for ${method})`);
+				if (!this._capabilities.logging) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support logging (required for ${method})`);
 				break;
 			case "notifications/resources/updated":
 			case "notifications/resources/list_changed":
-				if (!this._capabilities.resources) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying about resources (required for ${method})`);
+				if (!this._capabilities.resources) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying about resources (required for ${method})`);
 				break;
 			case "notifications/tools/list_changed":
-				if (!this._capabilities.tools) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying of tool list changes (required for ${method})`);
+				if (!this._capabilities.tools) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying of tool list changes (required for ${method})`);
 				break;
 			case "notifications/prompts/list_changed":
-				if (!this._capabilities.prompts) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying of prompt list changes (required for ${method})`);
+				if (!this._capabilities.prompts) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support notifying of prompt list changes (required for ${method})`);
 				break;
 			case "notifications/elicitation/complete":
-				if (!this._clientCapabilities?.elicitation?.url) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Client does not support URL elicitation (required for ${method})`);
+				if (!this._clientCapabilities?.elicitation?.url) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Client does not support URL elicitation (required for ${method})`);
 				break;
 			case "notifications/cancelled": break;
 			case "notifications/progress": break;
@@ -27954,23 +28295,23 @@ var Server = class extends Protocol {
 	assertRequestHandlerCapability(method) {
 		switch (method) {
 			case "completion/complete":
-				if (!this._capabilities.completions) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support completions (required for ${method})`);
+				if (!this._capabilities.completions) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support completions (required for ${method})`);
 				break;
 			case "logging/setLevel":
-				if (!this._capabilities.logging) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support logging (required for ${method})`);
+				if (!this._capabilities.logging) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support logging (required for ${method})`);
 				break;
 			case "prompts/get":
 			case "prompts/list":
-				if (!this._capabilities.prompts) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support prompts (required for ${method})`);
+				if (!this._capabilities.prompts) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support prompts (required for ${method})`);
 				break;
 			case "resources/list":
 			case "resources/templates/list":
 			case "resources/read":
-				if (!this._capabilities.resources) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support resources (required for ${method})`);
+				if (!this._capabilities.resources) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support resources (required for ${method})`);
 				break;
 			case "tools/call":
 			case "tools/list":
-				if (!this._capabilities.tools) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, `Server does not support tools (required for ${method})`);
+				if (!this._capabilities.tools) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, `Server does not support tools (required for ${method})`);
 				break;
 			case "ping":
 			case "initialize": break;
@@ -28018,8 +28359,8 @@ var Server = class extends Protocol {
 	* @deprecated Read client identity from the per-request handler context instead: on
 	* 2026-07-28 (per-request envelope) requests `ctx.mcpReq.envelope` carries the client's
 	* declared capabilities, while on 2025-era connections this accessor keeps returning the
-	* `initialize`-scoped value. The accessor remains functional — instances serving the
-	* 2026-07-28 era are backfilled per request from the validated envelope.
+	* `initialize`-scoped value. The accessor remains functional where `createMcpHandler`
+	* serves the 2026-07-28 era: it backfills it per request from the validated envelope.
 	*/
 	getClientCapabilities() {
 		return this._clientCapabilities;
@@ -28030,8 +28371,8 @@ var Server = class extends Protocol {
 	* @deprecated Read client identity from the per-request handler context instead: on
 	* 2026-07-28 (per-request envelope) requests `ctx.mcpReq.envelope` carries the client's
 	* name and version, while on 2025-era connections this accessor keeps returning the
-	* `initialize`-scoped value. The accessor remains functional — instances serving the
-	* 2026-07-28 era are backfilled per request from the validated envelope.
+	* `initialize`-scoped value. The accessor remains functional where `createMcpHandler`
+	* serves the 2026-07-28 era: it backfills it per request from the validated envelope.
 	*/
 	getClientVersion() {
 		return this._clientVersion;
@@ -28086,7 +28427,7 @@ var Server = class extends Protocol {
 	}
 	async createMessage(params, options) {
 		this._assertPushApiInServedEra("sampling/createMessage");
-		if ((params.tools || params.toolChoice) && !this._clientCapabilities?.sampling?.tools) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, "Client does not support sampling tools capability.");
+		if ((params.tools || params.toolChoice) && !this._clientCapabilities?.sampling?.tools) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, "Client does not support sampling tools capability.");
 		if (params.messages.length > 0) {
 			const lastMessage = params.messages.at(-1);
 			const lastContent = Array.isArray(lastMessage.content) ? lastMessage.content : [lastMessage.content];
@@ -28095,13 +28436,13 @@ var Server = class extends Protocol {
 			const previousContent = previousMessage ? Array.isArray(previousMessage.content) ? previousMessage.content : [previousMessage.content] : [];
 			const hasPreviousToolUse = previousContent.some((c) => c.type === "tool_use");
 			if (hasToolResults) {
-				if (lastContent.some((c) => c.type !== "tool_result")) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, "The last message must contain only tool_result content if any is present");
-				if (!hasPreviousToolUse) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, "tool_result blocks are not matching any tool_use from the previous message");
+				if (lastContent.some((c) => c.type !== "tool_result")) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, "The last message must contain only tool_result content if any is present");
+				if (!hasPreviousToolUse) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, "tool_result blocks are not matching any tool_use from the previous message");
 			}
 			if (hasPreviousToolUse) {
 				const toolUseIds = new Set(previousContent.filter((c) => c.type === "tool_use").map((c) => c.id));
 				const toolResultIds = new Set(lastContent.filter((c) => c.type === "tool_result").map((c) => c.toolUseId));
-				if (toolUseIds.size !== toolResultIds.size || ![...toolUseIds].every((id) => toolResultIds.has(id))) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, "ids of tool_result blocks and tool_use blocks from previous message do not match");
+				if (toolUseIds.size !== toolResultIds.size || ![...toolUseIds].every((id) => toolResultIds.has(id))) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, "ids of tool_result blocks and tool_use blocks from previous message do not match");
 			}
 		}
 		const hasTools = Boolean(params.tools || params.toolChoice);
@@ -28110,7 +28451,7 @@ var Server = class extends Protocol {
 			params
 		}, options);
 		const outcome = this._wireCodec().samplingResultVariant(hasTools, wide);
-		if (!outcome.ok) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.InvalidResult, `Invalid sampling/createMessage result: ${outcome.reason === "invalid" ? outcome.message : outcome.reason}`);
+		if (!outcome.ok) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.InvalidResult, `Invalid sampling/createMessage result: ${outcome.reason === "invalid" ? outcome.message : outcome.reason}`);
 		return outcome.value;
 	}
 	/**
@@ -28129,10 +28470,10 @@ var Server = class extends Protocol {
 		this._assertPushApiInServedEra("elicitation/create");
 		switch (params.mode ?? "form") {
 			case "url":
-				if (!this._clientCapabilities?.elicitation?.url) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, "Client does not support url elicitation.");
+				if (!this._clientCapabilities?.elicitation?.url) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, "Client does not support url elicitation.");
 				break;
 			case "form":
-				if (!this._clientCapabilities?.elicitation?.form) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, "Client does not support form elicitation.");
+				if (!this._clientCapabilities?.elicitation?.form) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, "Client does not support form elicitation.");
 				break;
 		}
 		return this._sendElicitationLeg(params, options);
@@ -28167,10 +28508,10 @@ var Server = class extends Protocol {
 				}, options);
 				if (validateAcceptedContent && result.action === "accept" && result.content && formParams.requestedSchema) try {
 					const validationResult = this._jsonSchemaValidator.getValidator(formParams.requestedSchema)(result.content);
-					if (!validationResult.valid) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Elicitation response content does not match requested schema: ${validationResult.errorMessage}`);
+					if (!validationResult.valid) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Elicitation response content does not match requested schema: ${validationResult.errorMessage}`);
 				} catch (error) {
 					if (error instanceof ProtocolError) throw error;
-					throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InternalError, `Error validating elicitation response: ${error instanceof Error ? error.message : String(error)}`);
+					throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InternalError, `Error validating elicitation response: ${error instanceof Error ? error.message : String(error)}`);
 				}
 				return result;
 			}
@@ -28190,7 +28531,7 @@ var Server = class extends Protocol {
 	* @returns A function that emits the completion notification when awaited.
 	*/
 	createElicitationCompletionNotifier(elicitationId, options) {
-		if (!this._clientCapabilities?.elicitation?.url) throw new src_Cqbh3MYc_SdkError(src_Cqbh3MYc_SdkErrorCode.CapabilityNotSupported, "Client does not support URL elicitation (required for notifications/elicitation/complete)");
+		if (!this._clientCapabilities?.elicitation?.url) throw new src_DdvbAHrR_SdkError(src_DdvbAHrR_SdkErrorCode.CapabilityNotSupported, "Client does not support URL elicitation (required for notifications/elicitation/complete)");
 		return () => this.notification({
 			method: "notifications/elicitation/complete",
 			params: { elicitationId }
@@ -28297,7 +28638,7 @@ function resolveMaxToolInputElements(value) {
 * });
 * ```
 */
-var mcp_DIH4cS6P_McpServer = class {
+var mcp_oHn3ureC_McpServer = class {
 	/**
 	* The underlying {@linkcode Server} instance, useful for advanced operations like sending notifications.
 	*/
@@ -28415,8 +28756,8 @@ var mcp_DIH4cS6P_McpServer = class {
 		}) }));
 		this.server.setRequestHandler("tools/call", async (request, ctx) => {
 			const tool = this._registeredTools[request.params.name];
-			if (!tool) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} not found`);
-			if (!tool.enabled) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} disabled`);
+			if (!tool) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} not found`);
+			if (!tool.enabled) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} disabled`);
 			try {
 				const args = await this.validateToolInput(tool, request.params.arguments, request.params.name);
 				const result = await this.executeToolHandler(tool, args, ctx);
@@ -28424,7 +28765,7 @@ var mcp_DIH4cS6P_McpServer = class {
 				if (isInputRequiredResult(result)) return result;
 				return this.server.projectCallToolResult(result, tool.outputSchemaJson);
 			} catch (error) {
-				if (error instanceof ProtocolError && error.code === src_Cqbh3MYc_ProtocolErrorCode.UrlElicitationRequired) throw error;
+				if (error instanceof ProtocolError && error.code === src_DdvbAHrR_ProtocolErrorCode.UrlElicitationRequired) throw error;
 				return this.createToolError(error instanceof Error ? error.message : String(error));
 			}
 		});
@@ -28449,10 +28790,10 @@ var mcp_DIH4cS6P_McpServer = class {
 	* Validates tool input arguments against the tool's input schema.
 	*/
 	async validateToolInput(tool, args, toolName) {
-		if (this._maxToolInputElements !== void 0 && toolInputElementCount(args, this._maxToolInputElements) > this._maxToolInputElements) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid arguments for tool ${toolName}: arguments contain more than the maximum of ${this._maxToolInputElements} elements`);
+		if (this._maxToolInputElements !== void 0 && toolInputElementCount(args, this._maxToolInputElements) > this._maxToolInputElements) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid arguments for tool ${toolName}: arguments contain more than the maximum of ${this._maxToolInputElements} elements`);
 		if (!tool.inputSchema) return;
 		const parseResult = await validateStandardSchema(tool.inputSchema, args ?? {});
-		if (!parseResult.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Input validation error: Invalid arguments for tool ${toolName}: ${parseResult.error}`);
+		if (!parseResult.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Input validation error: Invalid arguments for tool ${toolName}: ${parseResult.error}`);
 		return parseResult.data;
 	}
 	/**
@@ -28462,9 +28803,9 @@ var mcp_DIH4cS6P_McpServer = class {
 		if (!tool.outputSchema) return;
 		if (isInputRequiredResult(result)) return;
 		if (result.isError) return;
-		if (result.structuredContent === void 0) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Output validation error: Tool ${toolName} has an output schema but no structured content was provided`);
+		if (result.structuredContent === void 0) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Output validation error: Tool ${toolName} has an output schema but no structured content was provided`);
 		const parseResult = await validateStandardSchema(tool.outputSchema, result.structuredContent);
-		if (!parseResult.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Output validation error: Invalid structured content for tool ${toolName}: ${parseResult.error}`);
+		if (!parseResult.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Output validation error: Invalid structured content for tool ${toolName}: ${parseResult.error}`);
 	}
 	/**
 	* Executes a tool handler.
@@ -28485,15 +28826,15 @@ var mcp_DIH4cS6P_McpServer = class {
 				case "ref/resource":
 					assertCompleteRequestResourceTemplate(request);
 					return this.handleResourceCompletion(request, request.params.ref);
-				default: throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid completion reference: ${request.params.ref}`);
+				default: throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid completion reference: ${request.params.ref}`);
 			}
 		});
 		this._completionHandlerInitialized = true;
 	}
 	async handlePromptCompletion(request, ref) {
 		const prompt = this._registeredPrompts[ref.name];
-		if (!prompt) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Prompt ${ref.name} not found`);
-		if (!prompt.enabled) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Prompt ${ref.name} disabled`);
+		if (!prompt) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Prompt ${ref.name} not found`);
+		if (!prompt.enabled) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Prompt ${ref.name} disabled`);
 		if (!prompt.argsSchema) return EMPTY_COMPLETION_RESULT;
 		const field = unwrapOptionalSchema(getSchemaShape(prompt.argsSchema)?.[request.params.argument.name]);
 		if (!isCompletable(field)) return EMPTY_COMPLETION_RESULT;
@@ -28505,7 +28846,7 @@ var mcp_DIH4cS6P_McpServer = class {
 		const template = Object.values(this._registeredResourceTemplates).find((t) => t.resourceTemplate.uriTemplate.toString() === ref.uri);
 		if (!template) {
 			if (this._registeredResources[ref.uri]) return EMPTY_COMPLETION_RESULT;
-			throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Resource template ${request.params.ref.uri} not found`);
+			throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Resource template ${request.params.ref.uri} not found`);
 		}
 		const completer = template.resourceTemplate.completeCallback(request.params.argument.name);
 		if (!completer) return EMPTY_COMPLETION_RESULT;
@@ -28547,20 +28888,20 @@ var mcp_DIH4cS6P_McpServer = class {
 			try {
 				uri = new URL(request.params.uri);
 			} catch {
-				throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Resource URI ${request.params.uri} is invalid`, {
+				throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Resource URI ${request.params.uri} is invalid`, {
 					uri: request.params.uri,
 					reason: "invalid_uri"
 				});
 			}
 			const resource = this._registeredResources[uri.toString()];
 			if (resource) {
-				if (!resource.enabled) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Resource ${uri} disabled`);
+				if (!resource.enabled) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Resource ${uri} disabled`);
 				return attachCacheHintFallback(await resource.readCallback(uri, ctx), resource.cacheHint);
 			}
 			for (const template of Object.values(this._registeredResourceTemplates)) {
 				const variables = template.resourceTemplate.uriTemplate.match(uri.toString());
 				if (variables) {
-					if (!template.enabled) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Resource template ${template.resourceTemplate.uriTemplate} disabled`);
+					if (!template.enabled) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Resource template ${template.resourceTemplate.uriTemplate} disabled`);
 					return attachCacheHintFallback(await template.readCallback(uri, variables, ctx), template.cacheHint);
 				}
 			}
@@ -28586,8 +28927,8 @@ var mcp_DIH4cS6P_McpServer = class {
 		}) }));
 		this.server.setRequestHandler("prompts/get", async (request, ctx) => {
 			const prompt = this._registeredPrompts[request.params.name];
-			if (!prompt) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Prompt ${request.params.name} not found`);
-			if (!prompt.enabled) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Prompt ${request.params.name} disabled`);
+			if (!prompt) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Prompt ${request.params.name} not found`);
+			if (!prompt.enabled) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Prompt ${request.params.name} disabled`);
 			return prompt.handler(request.params.arguments, ctx);
 		});
 		this._promptHandlersInitialized = true;
@@ -28629,8 +28970,14 @@ var mcp_DIH4cS6P_McpServer = class {
 					if (updates.uri) this._registeredResources[updates.uri] = registeredResource;
 				}
 				if (updates.name !== void 0) registeredResource.name = updates.name;
-				if (updates.title !== void 0) registeredResource.title = updates.title;
 				if (updates.metadata !== void 0) registeredResource.metadata = updates.metadata;
+				if (updates.title !== void 0) {
+					registeredResource.title = updates.title;
+					registeredResource.metadata = {
+						...registeredResource.metadata,
+						title: updates.title
+					};
+				}
 				if (updates.callback !== void 0) registeredResource.readCallback = updates.callback;
 				if (updates.scopeChallenge !== void 0) registeredResource.scopeChallenge = updates.scopeChallenge === null ? void 0 : updates.scopeChallenge;
 				if (updates.enabled !== void 0) registeredResource.enabled = updates.enabled;
@@ -28656,9 +29003,15 @@ var mcp_DIH4cS6P_McpServer = class {
 					delete this._registeredResourceTemplates[name];
 					if (updates.name) this._registeredResourceTemplates[updates.name] = registeredResourceTemplate;
 				}
-				if (updates.title !== void 0) registeredResourceTemplate.title = updates.title;
 				if (updates.template !== void 0) registeredResourceTemplate.resourceTemplate = updates.template;
 				if (updates.metadata !== void 0) registeredResourceTemplate.metadata = updates.metadata;
+				if (updates.title !== void 0) {
+					registeredResourceTemplate.title = updates.title;
+					registeredResourceTemplate.metadata = {
+						...registeredResourceTemplate.metadata,
+						title: updates.title
+					};
+				}
 				if (updates.callback !== void 0) registeredResourceTemplate.readCallback = updates.callback;
 				if (updates.scopeChallenge !== void 0) registeredResourceTemplate.scopeChallenge = updates.scopeChallenge === null ? void 0 : updates.scopeChallenge;
 				if (updates.enabled !== void 0) registeredResourceTemplate.enabled = updates.enabled;
@@ -28899,7 +29252,7 @@ const EMPTY_OBJECT_JSON_SCHEMA = {
 /** Converts a tool's `inputSchema` for `tools/list` and warns on an invalid SEP-2243 `x-mcp-header` declaration. */
 function convertListedInputSchema(name, inputSchema) {
 	const json = standardSchemaToJsonSchema(inputSchema, "input");
-	const scan = src_Cqbh3MYc_scanXMcpHeaderDeclarations(json);
+	const scan = src_DdvbAHrR_scanXMcpHeaderDeclarations(json);
 	if (!scan.valid) console.warn(`[mcp-sdk] tool '${name}' carries an invalid x-mcp-header declaration and will be excluded by conforming Streamable HTTP clients: ${scan.reason}`);
 	return json;
 }
@@ -28926,7 +29279,7 @@ function createPromptHandler(name, argsSchema, callback) {
 		const typedCallback = callback;
 		return async (args, ctx) => {
 			const parseResult = await validateStandardSchema(argsSchema, args ?? {});
-			if (!parseResult.success) throw new ProtocolError(src_Cqbh3MYc_ProtocolErrorCode.InvalidParams, `Invalid arguments for prompt ${name}: ${parseResult.error}`);
+			if (!parseResult.success) throw new ProtocolError(src_DdvbAHrR_ProtocolErrorCode.InvalidParams, `Invalid arguments for prompt ${name}: ${parseResult.error}`);
 			return typedCallback(parseResult.data, ctx);
 		};
 	} else {
@@ -28964,8 +29317,436 @@ function unwrapOptionalSchema(schema) {
 
 //#endregion
 
-//# sourceMappingURL=mcp-DIH4cS6P.mjs.map
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/stdio.mjs
+//# sourceMappingURL=mcp-oHn3ureC.mjs.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/listenRouter-Bartj63y.mjs
+
+
+
+//#region src/server/serverEventBus.ts
+/**
+* A `ServerEventBus` backed by an in-process listener set.
+*
+* `publish()` delivers synchronously to the live listener set (a listener
+* unsubscribing itself mid-dispatch is safe; the entry's listen-router
+* listeners never unsubscribe peers). A throwing listener does not stop
+* delivery to the others.
+*/
+var listenRouter_Bartj63y_InMemoryServerEventBus = class {
+	_listeners = /* @__PURE__ */ new Set();
+	/**
+	* @param onerror - Optional callback for errors thrown by listeners
+	*   during dispatch.
+	*/
+	constructor(onerror) {
+		this.onerror = onerror;
+	}
+	publish(event) {
+		for (const listener of this._listeners) try {
+			listener(event);
+		} catch (error) {
+			this.onerror?.(error instanceof Error ? error : new Error(String(error)));
+		}
+	}
+	subscribe(listener) {
+		this._listeners.add(listener);
+		let live = true;
+		return () => {
+			if (!live) return;
+			live = false;
+			this._listeners.delete(listener);
+		};
+	}
+	/** The number of currently registered listeners (test/introspection only — the routers track capacity via their own open-subscription set). */
+	get listenerCount() {
+		return this._listeners.size;
+	}
+};
+/** Build a {@linkcode ServerNotifier} over a bus. */
+function listenRouter_Bartj63y_createServerNotifier(bus) {
+	return {
+		toolsChanged: () => bus.publish({ kind: "tools_list_changed" }),
+		promptsChanged: () => bus.publish({ kind: "prompts_list_changed" }),
+		resourcesChanged: () => bus.publish({ kind: "resources_list_changed" }),
+		resourceUpdated: (uri) => bus.publish({
+			kind: "resource_updated",
+			uri
+		})
+	};
+}
+/**
+* Whether a `subscriptions/listen` filter accepts a given change event.
+*
+* Pure: no I/O, no mutation. The filter governs ONLY the four
+* subscription-gated change types — non-gated notifications never reach the
+* bus and are not modeled here.
+*
+* `resource_updated` matches only when `resourceSubscriptions` is present and
+* contains the event's URI exactly (per the spec: "for these resource URIs").
+*/
+function listenFilterAccepts(filter, event) {
+	switch (event.kind) {
+		case "tools_list_changed": return filter.toolsListChanged === true;
+		case "prompts_list_changed": return filter.promptsListChanged === true;
+		case "resources_list_changed": return filter.resourcesListChanged === true;
+		case "resource_updated": return filter.resourceSubscriptions !== void 0 && filter.resourceSubscriptions.includes(event.uri);
+	}
+}
+/**
+* The honored subset of a requested filter: keeps only the fields the client
+* explicitly opted in to (drops `false` and absent fields), narrowed against
+* the server's declared capabilities when supplied. The serving entry sends
+* this back in `notifications/subscriptions/acknowledged` so the ack reflects
+* what the server can actually deliver.
+*
+* - `toolsListChanged` is honored only when `capabilities.tools.listChanged`
+*   is advertised; likewise `promptsListChanged` / `resourcesListChanged`.
+* - `resourceSubscriptions` is honored only when
+*   `capabilities.resources.subscribe` is advertised.
+*
+* `capabilities` is optional on this pure helper for test convenience only —
+* both wired routers REQUIRE capabilities at the call site (the HTTP router's
+* `serve()` takes a required parameter; `StdioListenRouter.serve()` throws
+* before `setServerCapabilities()` was called), so the fail-open
+* `undefined → honor everything` branch is never reachable on a wired entry.
+*/
+function honoredSubset(requested, capabilities) {
+	const honored = {};
+	const allow = (bit) => capabilities === void 0 || bit === true;
+	if (requested.toolsListChanged === true && allow(capabilities?.tools?.listChanged)) honored.toolsListChanged = true;
+	if (requested.promptsListChanged === true && allow(capabilities?.prompts?.listChanged)) honored.promptsListChanged = true;
+	if (requested.resourcesListChanged === true && allow(capabilities?.resources?.listChanged)) honored.resourcesListChanged = true;
+	if (requested.resourceSubscriptions !== void 0 && requested.resourceSubscriptions.length > 0 && allow(capabilities?.resources?.subscribe)) honored.resourceSubscriptions = [...requested.resourceSubscriptions];
+	return honored;
+}
+/** Map a {@linkcode ServerEvent} onto its wire notification `{method, params}`. */
+function serverEventToNotification(event) {
+	switch (event.kind) {
+		case "tools_list_changed": return {
+			method: "notifications/tools/list_changed",
+			...event.params !== void 0 && { params: event.params }
+		};
+		case "prompts_list_changed": return {
+			method: "notifications/prompts/list_changed",
+			...event.params !== void 0 && { params: event.params }
+		};
+		case "resources_list_changed": return {
+			method: "notifications/resources/list_changed",
+			...event.params !== void 0 && { params: event.params }
+		};
+		case "resource_updated": return {
+			method: "notifications/resources/updated",
+			params: {
+				...event.params,
+				uri: event.uri
+			}
+		};
+	}
+}
+
+//#endregion
+//#region src/server/listenRouter.ts
+/** Default capacity guard: refuse a new subscription when this many are already open. */
+const listenRouter_Bartj63y_DEFAULT_MAX_SUBSCRIPTIONS = 1024;
+function jsonRpcError(id, code, message) {
+	return Response.json({
+		jsonrpc: "2.0",
+		error: {
+			code,
+			message
+		},
+		id
+	}, { status: 200 });
+}
+/** Stamp the subscription id onto a notification's `_meta`. Non-mutating. */
+function stampSubscriptionId(notification, subscriptionId) {
+	return {
+		method: notification.method,
+		params: {
+			...notification.params,
+			_meta: {
+				...notification.params?._meta,
+				[SUBSCRIPTION_ID_META_KEY]: subscriptionId
+			}
+		}
+	};
+}
+/**
+* Read the requested filter off a `subscriptions/listen` request body.
+* Returns the validated filter, or `undefined` when `params.notifications`
+* is absent or fails the schema (the caller answers `-32602` — the spec
+* marks `notifications` REQUIRED on the listen request).
+*/
+function parseListenFilter(message) {
+	const outcome = codecForVersion(MODERN_WIRE_REVISION).validateRequest("subscriptions/listen", message);
+	return outcome.ok ? outcome.value.params?.notifications : void 0;
+}
+function listenRouter_Bartj63y_createListenRouter(options) {
+	const { bus, onerror } = options;
+	const maxSubscriptions = options.maxSubscriptions ?? listenRouter_Bartj63y_DEFAULT_MAX_SUBSCRIPTIONS;
+	const keepAliveMs = options.keepAliveMs ?? DEFAULT_SSE_KEEP_ALIVE_MS;
+	const open = /* @__PURE__ */ new Set();
+	function serve(message, signal, capabilities, serverInfo) {
+		if (open.size >= maxSubscriptions) {
+			onerror?.(/* @__PURE__ */ new Error(`subscriptions/listen refused: subscription limit reached (${maxSubscriptions})`));
+			return jsonRpcError(message.id, -32603, "Subscription limit reached");
+		}
+		const filter = parseListenFilter(message);
+		if (filter === void 0) return jsonRpcError(message.id, -32602, "Invalid params: 'notifications' is required and must be a valid SubscriptionFilter");
+		const honored = honoredSubset(filter, capabilities);
+		const subscriptionId = message.id;
+		const encoder = new TextEncoder();
+		let controller;
+		let closed = false;
+		let unsubscribe;
+		let keepAliveTimer;
+		let abortCleanup;
+		const writeFrame = (frame) => {
+			if (closed) return;
+			try {
+				controller.enqueue(encoder.encode(frame));
+			} catch (error) {
+				onerror?.(error instanceof Error ? error : new Error(String(error)));
+			}
+		};
+		const writeNotification = (method, params) => {
+			writeFrame(`event: message\ndata: ${JSON.stringify({
+				jsonrpc: "2.0",
+				method,
+				params
+			})}\n\n`);
+		};
+		const teardown = (graceful) => {
+			if (closed) return;
+			if (graceful) writeFrame(`event: message\ndata: ${JSON.stringify({
+				jsonrpc: "2.0",
+				id: subscriptionId,
+				result: {
+					resultType: "complete",
+					_meta: {
+						[SUBSCRIPTION_ID_META_KEY]: subscriptionId,
+						[SERVER_INFO_META_KEY]: serverInfo
+					}
+				}
+			})}\n\n`);
+			closed = true;
+			try {
+				unsubscribe?.();
+			} catch (error) {
+				onerror?.(error instanceof Error ? error : new Error(String(error)));
+			}
+			if (keepAliveTimer !== void 0) clearInterval(keepAliveTimer);
+			abortCleanup?.();
+			open.delete(teardown);
+			try {
+				controller.close();
+			} catch {}
+		};
+		const readable = new ReadableStream({
+			start(streamController) {
+				controller = streamController;
+				const ack = stampSubscriptionId({
+					method: "notifications/subscriptions/acknowledged",
+					params: { notifications: honored }
+				}, subscriptionId);
+				writeNotification(ack.method, ack.params);
+				if (Object.keys(honored).length === 0) {
+					teardown(true);
+					return;
+				}
+				unsubscribe = bus.subscribe((event) => {
+					if (closed || !listenFilterAccepts(honored, event)) return;
+					const note = stampSubscriptionId(serverEventToNotification(event), subscriptionId);
+					writeNotification(note.method, note.params);
+				});
+				keepAliveTimer = armSseKeepAlive(keepAliveMs, () => writeFrame(": keepalive\n\n"));
+				open.add(teardown);
+			},
+			cancel() {
+				teardown(false);
+			}
+		});
+		if (signal !== void 0) if (signal.aborted) teardown(false);
+		else {
+			const onAbort = () => teardown(false);
+			signal.addEventListener("abort", onAbort, { once: true });
+			abortCleanup = () => signal.removeEventListener("abort", onAbort);
+		}
+		return new Response(readable, {
+			status: 200,
+			headers: {
+				"Content-Type": "text/event-stream",
+				"Cache-Control": "no-cache, no-transform",
+				Connection: "keep-alive",
+				"X-Accel-Buffering": "no"
+			}
+		});
+	}
+	return {
+		serve,
+		closeAll() {
+			for (const teardown of open) teardown(true);
+		},
+		get openCount() {
+			return open.size;
+		}
+	};
+}
+const CHANGE_NOTIFICATION_METHODS = new Set([
+	"notifications/tools/list_changed",
+	"notifications/prompts/list_changed",
+	"notifications/resources/list_changed",
+	"notifications/resources/updated"
+]);
+/**
+* Per-connection listen state for the stdio entry. One instance is held by
+* `serveStdio` for the connection lifetime; it routes inbound
+* `subscriptions/listen` / `notifications/cancelled` and rewrites outbound
+* change notifications onto the active subscriptions. No bus — the long-lived
+* pinned instance's existing `send*ListChanged()` calls feed straight into
+* `routeOutbound()`.
+*/
+var listenRouter_Bartj63y_StdioListenRouter = class {
+	/** Active subscriptions, keyed by the listen request's JSON-RPC id verbatim. */
+	_subs = /* @__PURE__ */ new Map();
+	/**
+	* The serving instance's declared capabilities. Filled in by the entry
+	* once the modern instance is constructed (the router is created before
+	* the instance exists), so the acknowledged filter is narrowed against
+	* what the server can actually deliver.
+	*/
+	_serverCapabilities;
+	/**
+	* The serving instance's identity, stamped onto the graceful-close
+	* results' `_meta` (the spec's `SubscriptionsListenResultMetaObject` extends
+	* `ResultMetaObject`). Handed over together with the capabilities.
+	*/
+	_serverInfo;
+	constructor(_maxSubscriptions = listenRouter_Bartj63y_DEFAULT_MAX_SUBSCRIPTIONS, serverCapabilities, serverInfo) {
+		this._maxSubscriptions = _maxSubscriptions;
+		this._serverCapabilities = serverCapabilities;
+		this._serverInfo = serverInfo;
+	}
+	/**
+	* Record the serving instance's declared capabilities and identity once
+	* it has been constructed. Called by `serveStdio`'s connect path;
+	* subsequent `serve()` calls narrow the honored filter against the
+	* capabilities, and `teardownAll()` stamps the identity.
+	*/
+	setServerCapabilities(capabilities, serverInfo) {
+		this._serverCapabilities = capabilities;
+		if (serverInfo !== void 0) this._serverInfo = serverInfo;
+	}
+	/** Whether `id` is an active listen subscription on this connection. */
+	has(id) {
+		return this._subs.has(id);
+	}
+	/**
+	* Serve one inbound `subscriptions/listen` request: registers the
+	* subscription and returns the stamped acknowledged notification (or, on
+	* capacity / params rejection, the in-band JSON-RPC error response).
+	*
+	* @throws when called before {@linkcode setServerCapabilities} (or the
+	* constructor) has supplied the serving instance's capabilities. Honoring a
+	* filter without knowing the server's advertised capabilities would fail
+	* open (deliver unadvertised types); the entry guarantees capabilities are
+	* set before any listen request is routed here.
+	*/
+	serve(message) {
+		if (this._serverCapabilities === void 0) throw new Error("StdioListenRouter.serve() called before setServerCapabilities(); refusing to honor a filter without capabilities");
+		if (this._subs.size >= this._maxSubscriptions) return {
+			jsonrpc: "2.0",
+			id: message.id,
+			error: {
+				code: -32603,
+				message: "Subscription limit reached"
+			}
+		};
+		const filter = parseListenFilter(message);
+		if (filter === void 0) return {
+			jsonrpc: "2.0",
+			id: message.id,
+			error: {
+				code: -32602,
+				message: "Invalid params: 'notifications' is required and must be a valid SubscriptionFilter"
+			}
+		};
+		const honored = honoredSubset(filter, this._serverCapabilities);
+		this._subs.set(message.id, honored);
+		return stampSubscriptionId({
+			method: "notifications/subscriptions/acknowledged",
+			params: { notifications: honored }
+		}, message.id);
+	}
+	/**
+	* Tear down one subscription (inbound `notifications/cancelled`). Returns
+	* `true` when a subscription was removed. After this call NOTHING further
+	* is delivered for that subscription id (the post-cancel hardening).
+	*/
+	cancel(id) {
+		return this._subs.delete(id);
+	}
+	/**
+	* Route an outbound notification through the active subscriptions.
+	*
+	* - For a subscription-gated change notification, returns one stamped copy
+	*   per subscription that opted in to it (an empty array means it is
+	*   dropped — the modern era never delivers an un-requested change type).
+	* - For any other outbound message, returns `'passthrough'` (the entry
+	*   forwards it as-is).
+	*/
+	routeOutbound(message) {
+		if (!CHANGE_NOTIFICATION_METHODS.has(message.method)) return "passthrough";
+		const uriParam = message.params?.["uri"];
+		const uri = typeof uriParam === "string" ? uriParam : void 0;
+		const event = notificationToServerEvent(message.method, uri);
+		const out = [];
+		for (const [subscriptionId, filter] of this._subs) if (listenFilterAccepts(filter, event)) out.push(stampSubscriptionId({
+			method: message.method,
+			params: message.params ?? {}
+		}, subscriptionId));
+		return out;
+	}
+	/**
+	* Server-side graceful teardown of every active subscription: returns the
+	* empty `subscriptions/listen` JSON-RPC result for each subscription id —
+	* the spec's graceful-close signal, `_meta` carrying the subscription id
+	* and the serving instance's identity — for the entry to emit before
+	* closing the wire. Clears the set so nothing further is delivered.
+	*/
+	teardownAll() {
+		const out = [];
+		for (const id of this._subs.keys()) out.push({
+			jsonrpc: "2.0",
+			id,
+			result: {
+				resultType: "complete",
+				_meta: {
+					[SUBSCRIPTION_ID_META_KEY]: id,
+					...this._serverInfo !== void 0 && { [SERVER_INFO_META_KEY]: this._serverInfo }
+				}
+			}
+		});
+		this._subs.clear();
+		return out;
+	}
+};
+function notificationToServerEvent(method, uri) {
+	switch (method) {
+		case "notifications/tools/list_changed": return { kind: "tools_list_changed" };
+		case "notifications/prompts/list_changed": return { kind: "prompts_list_changed" };
+		case "notifications/resources/list_changed": return { kind: "resources_list_changed" };
+		default: return {
+			kind: "resource_updated",
+			uri: uri ?? ""
+		};
+	}
+}
+
+//#endregion
+
+//# sourceMappingURL=listenRouter-Bartj63y.mjs.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/stdio.mjs
+
 
 
 
@@ -29595,227 +30376,12 @@ const external_node_util_namespaceObject = __WEBPACK_EXTERNAL_createRequire(impo
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
 ;// CONCATENATED MODULE: external "node:os"
 const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.3.1/node_modules/@modelcontextprotocol/server/dist/index.mjs
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server/dist/index.mjs
 
 
 
 
-//#region src/server/perRequestTransport.ts
-/**
-* The per-request micro-transport: a real, connected `Transport` whose whole
-* lifetime is one HTTP exchange. See the module documentation for the
-* response shapes it produces.
-*/
-var PerRequestHTTPServerTransport = class {
-	onclose;
-	onerror;
-	onmessage;
-	_classification;
-	_responseMode;
-	_started = false;
-	_used = false;
-	_closed = false;
-	_terminalDelivered = false;
-	/**
-	* `true` only while the inbound message is being delivered synchronously
-	* to the connected protocol layer. The pre-handler gates (the era
-	* registry gate, the edge→instance handoff check, the missing-handler
-	* rejection) answer inside this window; request handlers always run
-	* after it (the protocol layer defers them to a microtask). An error
-	* sent inside the window is therefore ladder-originated, and an error
-	* sent after it is handler-produced.
-	*/
-	_dispatchWindowOpen = false;
-	_requestId;
-	_deferredResponse;
-	_sse;
-	_abortCleanup;
-	_keepAliveMs;
-	constructor(options) {
-		this._classification = options.classification;
-		this._responseMode = options.responseMode ?? "auto";
-		this._keepAliveMs = options.keepAliveMs ?? DEFAULT_SSE_KEEP_ALIVE_MS;
-	}
-	async start() {
-		if (this._started) throw new Error("PerRequestHTTPServerTransport is already started");
-		this._started = true;
-	}
-	/**
-	* Serves the single exchange: delivers the classified message to the
-	* connected server instance and resolves with the HTTP response.
-	*
-	* Throws when called a second time (the transport is strictly
-	* single-use), or before a server has been connected to the transport.
-	* The returned promise rejects with a connection-closed error when the
-	* transport is closed before a response was produced (for example because
-	* the client disconnected).
-	*/
-	async handleMessage(message, extra) {
-		if (this._used) throw new Error("PerRequestHTTPServerTransport serves exactly one exchange; construct a new transport per request");
-		if (!this._started || this.onmessage === void 0) throw new Error("PerRequestHTTPServerTransport is not connected: connect a server to this transport before handling a message");
-		if (this._closed) throw new Error("PerRequestHTTPServerTransport is closed");
-		this._used = true;
-		const signal = extra?.request?.signal;
-		if (signal?.aborted) {
-			await this.close();
-			throw new SdkError(SdkErrorCode.ConnectionClosed, "The request was aborted before it could be handled");
-		}
-		const messageExtra = {
-			classification: this._classification,
-			...extra?.request !== void 0 && { request: extra.request },
-			...extra?.authInfo !== void 0 && { authInfo: extra.authInfo }
-		};
-		if (isJSONRPCRequest(message)) {
-			this._requestId = message.id;
-			let resolve;
-			let reject;
-			const promise = new Promise((promiseResolve, promiseReject) => {
-				resolve = promiseResolve;
-				reject = promiseReject;
-			});
-			this._deferredResponse = {
-				promise,
-				resolve,
-				reject,
-				settled: false
-			};
-			if (signal !== void 0) {
-				const onAbort = () => void this.close();
-				signal.addEventListener("abort", onAbort, { once: true });
-				this._abortCleanup = () => signal.removeEventListener("abort", onAbort);
-			}
-			this._dispatchWindowOpen = true;
-			try {
-				this.onmessage(message, messageExtra);
-			} finally {
-				this._dispatchWindowOpen = false;
-			}
-			if (this._responseMode === "sse" && !this._closed && !this._deferredResponse.settled) this.upgradeToSse();
-			return promise;
-		}
-		this.onmessage(message, messageExtra);
-		return new Response(null, { status: 202 });
-	}
-	async send(message, options) {
-		if (this._closed) return;
-		const isResponse = isJSONRPCResultResponse(message) || isJSONRPCErrorResponse(message);
-		const relatedId = isResponse ? message.id : options?.relatedRequestId;
-		if (this._requestId === void 0 || relatedId === void 0 || relatedId !== this._requestId) {
-			if (isResponse) this.onerror?.(/* @__PURE__ */ new Error(`Received a response for an unknown request id: ${String(message.id)}`));
-			return;
-		}
-		if (isResponse) {
-			if (this._terminalDelivered) return;
-			this._terminalDelivered = true;
-			const errorCode = isJSONRPCErrorResponse(message) ? message.error.code : void 0;
-			const ladderStatus = errorCode !== void 0 && (this._dispatchWindowOpen || errorCode === ProtocolErrorCode.MissingRequiredClientCapability) ? LADDER_ERROR_HTTP_STATUS[errorCode] : void 0;
-			if (ladderStatus !== void 0 && this._sse === void 0) {
-				this.settleResponse(Response.json(message, {
-					status: ladderStatus,
-					headers: { "Content-Type": "application/json" }
-				}));
-				queueMicrotask(() => void this.close());
-				return;
-			}
-			if (this._sse !== void 0 || this._responseMode === "sse") {
-				if (this._sse === void 0) this.upgradeToSse();
-				this.writeMessageFrame(message);
-				this.finalizeStream();
-				return;
-			}
-			this.settleResponse(Response.json(message, {
-				status: 200,
-				headers: { "Content-Type": "application/json" }
-			}));
-			queueMicrotask(() => void this.close());
-			return;
-		}
-		if (this._responseMode === "json") return;
-		if (this._sse === void 0) this.upgradeToSse();
-		this.writeMessageFrame(message);
-	}
-	/**
-	* Writes an SSE comment frame (a keep-alive heartbeat). Dropped when the
-	* exchange is not currently streaming.
-	*/
-	writeCommentFrame(comment) {
-		if (this._closed || this._sse === void 0 || this._sse.closed) return;
-		const frame = comment.split("\n").map((line) => `: ${line}`).join("\n");
-		this.writeFrame(`${frame}\n\n`);
-	}
-	async close() {
-		if (this._closed) return;
-		this._closed = true;
-		this._abortCleanup?.();
-		this._abortCleanup = void 0;
-		if (this._sse?.keepAliveTimer !== void 0) clearInterval(this._sse.keepAliveTimer);
-		if (this._sse !== void 0 && !this._sse.closed) {
-			this._sse.closed = true;
-			try {
-				this._sse.controller.close();
-			} catch {}
-		}
-		if (this._deferredResponse !== void 0 && !this._deferredResponse.settled) {
-			this._deferredResponse.settled = true;
-			this._deferredResponse.reject(new SdkError(SdkErrorCode.ConnectionClosed, "Connection closed before a response was produced"));
-		}
-		this.onclose?.();
-	}
-	settleResponse(response) {
-		if (this._deferredResponse === void 0 || this._deferredResponse.settled) return;
-		this._deferredResponse.settled = true;
-		this._deferredResponse.resolve(response);
-	}
-	upgradeToSse() {
-		let controller;
-		const readable = new ReadableStream({
-			start: (streamController) => {
-				controller = streamController;
-			},
-			cancel: () => {
-				this.close();
-			}
-		});
-		this._sse = {
-			controller,
-			encoder: new TextEncoder(),
-			closed: false
-		};
-		this._sse.keepAliveTimer = armSseKeepAlive(this._keepAliveMs, () => this.writeCommentFrame("keepalive"));
-		this.settleResponse(new Response(readable, {
-			status: 200,
-			headers: {
-				"Content-Type": "text/event-stream",
-				"Cache-Control": "no-cache, no-transform",
-				Connection: "keep-alive",
-				"X-Accel-Buffering": "no"
-			}
-		}));
-	}
-	finalizeStream() {
-		if (this._sse?.keepAliveTimer !== void 0) clearInterval(this._sse.keepAliveTimer);
-		if (this._sse !== void 0 && !this._sse.closed) {
-			this._sse.closed = true;
-			try {
-				this._sse.controller.close();
-			} catch {}
-		}
-		queueMicrotask(() => void this.close());
-	}
-	writeMessageFrame(message) {
-		this.writeFrame(`event: message\ndata: ${JSON.stringify(message)}\n\n`);
-	}
-	writeFrame(frame) {
-		if (this._sse === void 0 || this._sse.closed) return;
-		try {
-			this._sse.controller.enqueue(this._sse.encoder.encode(frame));
-		} catch (error) {
-			this.onerror?.(/* @__PURE__ */ new Error(`Failed to write to the response stream: ${error}`));
-		}
-	}
-};
 
-//#endregion
 //#region src/server/invoke.ts
 /**
 * Serves one classified inbound message on the given server instance and
@@ -30625,7 +31191,10 @@ function jsonRpcErrorResponse(httpStatus, code, message, data, id = null) {
 			...data !== void 0 && { data }
 		},
 		id
-	}, { status: httpStatus });
+	}, {
+		status: httpStatus,
+		...httpStatus === 405 && { headers: { Allow: "POST" } }
+	});
 }
 function rejectionResponse(rejection, id = null) {
 	return jsonRpcErrorResponse(rejection.httpStatus, rejection.code, rejection.message, rejection.data, id);
@@ -30991,7 +31560,7 @@ function createMcpHandler(factory, options = {}) {
 			const inputSchema = toolName === void 0 ? void 0 : product.toolInputSchemaJson(toolName);
 			if (inputSchema !== void 0) {
 				const scan = scanXMcpHeaderDeclarations(inputSchema);
-				if (scan.valid && scan.declarations.length > 0) {
+				if (scan.declarations !== void 0 && scan.declarations.length > 0) {
 					const rejection = validateMcpParamHeaders(scan.declarations, callParams?.arguments, request.headers);
 					if (rejection !== void 0) {
 						product.close().catch(reportError);
@@ -32184,7 +32753,7 @@ function okResult(data) {
     };
 }
 function createServer(config) {
-    const server = new mcp_DIH4cS6P_McpServer({ name: 'agent-readiness', version: TOOL_VERSION }, {
+    const server = new mcp_oHn3ureC_McpServer({ name: 'agent-readiness', version: TOOL_VERSION }, {
         instructions: 'Deterministic, read-only audits of local repositories for AI coding agents. ' +
             'Report scores exactly as returned. ' +
             UNTRUSTED_NOTE,
