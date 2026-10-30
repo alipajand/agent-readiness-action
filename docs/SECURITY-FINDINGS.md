@@ -83,7 +83,6 @@ Best effort or not masked:
 ## Not verified
 
 - Claude Code in an interactive session. Variable substitution and the plugin's and skill's
-  `allowed-tools` were verified in signed-in headless sessions on 2026-10-12
-  ([RELEASE-READINESS.md](RELEASE-READINESS.md)).
+  `allowed-tools` were verified in signed-in headless sessions on 2026-10-12.
 - Cursor loading the plugin.
 - Any Windows run.
