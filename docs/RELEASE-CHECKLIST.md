@@ -61,7 +61,7 @@ pnpm integrations:typecheck && pnpm integrations:build && pnpm integrations:test
 ## 3. Manual client checks
 
 Results from 2026-10-12 (Claude Code 2.1.278, signed in, headless `claude -p` from temporary
-fixture repositories; evidence in `RELEASE-READINESS.md`):
+fixture repositories):
 
 - [x] Claude Code: `claude --plugin-dir ./plugins/agent-readiness`, run `/agent-readiness:audit`
       on a sample repository, and confirm the command runs the bundled script without a permission
