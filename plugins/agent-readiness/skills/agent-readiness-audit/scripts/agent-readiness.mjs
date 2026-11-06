@@ -1,5 +1,5 @@
 // Generated from integrations/src/cli.ts by integrations/scripts/build.mjs. Do not edit.
-// Engines: agent-readiness-kit@1.0.0 (daa257b103b63a0a006c94421f770ab19198c9e9), agent-context-doctor@1.0.0 (a60f53e044e7714875dc6929fc3f5b55ed25e349)
+// Engines: agent-readiness-kit@1.0.0 (daa257b103b63a0a006c94421f770ab19198c9e9), agent-context-doctor@1.0.0 (402d7633f75eab5b00f459f0e89cff40b0b66efb)
 import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
 /******/ var __webpack_modules__ = ({
 
@@ -20905,7 +20905,7 @@ const ENGINE_PROVENANCE = {
     "context": {
         "name": "agent-context-doctor",
         "version": "1.0.0",
-        "commit": "a60f53e044e7714875dc6929fc3f5b55ed25e349",
+        "commit": "402d7633f75eab5b00f459f0e89cff40b0b66efb",
         "repository": "https://github.com/alipajand/agent-context-doctor"
     }
 };
