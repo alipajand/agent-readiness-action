@@ -6,6 +6,10 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ## [Unreleased]
 
+### Changed
+
+- Move the bundled agent-readiness-kit from `daa257b` to `3c64acb` and rebuild the integration bundles. The engine's source is unchanged (documentation and development dependencies only), so audit results are the same; only the recorded engine commit changes.
+
 ### Security
 
 - Raise the `undici` override from 6.29.0 to 6.29.1 and rebuild `dist/`. `undici` is bundled into the action through `@actions/http-client`, and 6.29.1 fixes two denial-of-service advisories (unbounded memory growth, and an unhandled error on excessive input).
