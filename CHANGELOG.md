@@ -8,6 +8,7 @@ This project follows [Semantic Versioning](https://semver.org/) and the [Keep a 
 
 ### Changed
 
+- Move the bundled agent-readiness-kit from `daa257b` to `3c64acb` and rebuild the integration bundles. The engine's source is unchanged (documentation and development dependencies only), so audit results are the same; only the recorded engine commit changes.
 - Move the bundled agent-context-doctor from `a60f53e` to `402d763` and rebuild the integration bundles. The engine's source is unchanged (repository cleanup and development dependencies only), so audit results are the same; only the recorded engine commit changes.
 
 ### Security

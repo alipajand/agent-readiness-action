@@ -1,5 +1,5 @@
 // Generated from integrations/src/cli.ts by integrations/scripts/build.mjs. Do not edit.
-// Engines: agent-readiness-kit@1.0.0 (daa257b103b63a0a006c94421f770ab19198c9e9), agent-context-doctor@1.0.0 (402d7633f75eab5b00f459f0e89cff40b0b66efb)
+// Engines: agent-readiness-kit@1.0.0 (3c64acbdddb35e6fbf31b4d683bc73a18f6aa75c), agent-context-doctor@1.0.0 (402d7633f75eab5b00f459f0e89cff40b0b66efb)
 import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
 /******/ var __webpack_modules__ = ({
 
@@ -20899,7 +20899,7 @@ const ENGINE_PROVENANCE = {
     "readiness": {
         "name": "agent-readiness-kit",
         "version": "1.0.0",
-        "commit": "daa257b103b63a0a006c94421f770ab19198c9e9",
+        "commit": "3c64acbdddb35e6fbf31b4d683bc73a18f6aa75c",
         "repository": "https://github.com/alipajand/agent-readiness-kit"
     },
     "context": {
