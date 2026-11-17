@@ -28,11 +28,11 @@
     "@types/node": "^24.19.2",
     "@vercel/ncc": "^0.45.0",
     "@vitest/coverage-v8": "^4.1.12",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "picocolors": "1.1.1",
     "prettier": "^3.9.10",
     "typescript": "^6.0.3",
-    "vite": "^8.3.5",
+    "vite": "^8.3.7",
     "vitest": "^4.1.12"
   },
   "engines": {
