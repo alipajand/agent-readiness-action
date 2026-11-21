@@ -59,10 +59,12 @@ describe('clean installation of the packed tarball', () => {
       cwd: pkgDir,
       encoding: 'utf8',
     });
-    const [{ filename, files }] = JSON.parse(out) as Array<{
-      filename: string;
-      files: Array<{ path: string }>;
-    }>;
+    type PackEntry = { filename: string; files: Array<{ path: string }> };
+    // npm 10 and 11 print an array of entries; npm 12 prints an object keyed by package name.
+    const parsed = JSON.parse(out) as PackEntry[] | Record<string, PackEntry>;
+    const entries = Array.isArray(parsed) ? parsed : Object.values(parsed);
+    expect(entries).toHaveLength(1);
+    const [{ filename, files }] = entries;
     expect(files.map((f) => f.path).sort()).toEqual([
       'LICENSE',
       'README.md',
