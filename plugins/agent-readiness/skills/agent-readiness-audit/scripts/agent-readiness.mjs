@@ -1,5 +1,5 @@
 // Generated from integrations/src/cli.ts by integrations/scripts/build.mjs. Do not edit.
-// Engines: agent-readiness-kit@1.0.0 (3c64acbdddb35e6fbf31b4d683bc73a18f6aa75c), agent-context-doctor@1.0.0 (402d7633f75eab5b00f459f0e89cff40b0b66efb)
+// Engines: agent-readiness-kit@1.0.0 (6655b5658a41b2686cf74537cd4f82d46288cebf), agent-context-doctor@1.0.0 (6a0d767b347ecfb790da835a6243a09fb612fc93)
 import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
 /******/ var __webpack_modules__ = ({
 
@@ -4123,7 +4123,8 @@ function proportionalPoints(maxPoints, satisfied, applicable) {
  * the common layouts of each format; they are not full parsers.
  */
 /**
- * Map each TOML table header (`[a.b]` or `[[a.b]]`) to the keys set in it.
+ * Map each TOML table header (`[a.b]` or `[[a.b]]`, optionally followed by a
+ * `# comment`) to the keys set in it.
  * Keys before the first header belong to the table named `''`.
  */
 function tomlTables(content) {
@@ -4133,7 +4134,7 @@ function tomlTables(content) {
         const line = raw.trim();
         if (line === '' || line.startsWith('#'))
             continue;
-        const header = /^\[\[?([^\]]*)\]\]?$/.exec(line);
+        const header = /^\[\[?([^\]]*)\]\]?\s*(?:#.*)?$/.exec(line);
         if (header) {
             current = header[1]
                 .trim()
@@ -20899,13 +20900,13 @@ const ENGINE_PROVENANCE = {
     "readiness": {
         "name": "agent-readiness-kit",
         "version": "1.0.0",
-        "commit": "3c64acbdddb35e6fbf31b4d683bc73a18f6aa75c",
+        "commit": "6655b5658a41b2686cf74537cd4f82d46288cebf",
         "repository": "https://github.com/alipajand/agent-readiness-kit"
     },
     "context": {
         "name": "agent-context-doctor",
         "version": "1.0.0",
-        "commit": "402d7633f75eab5b00f459f0e89cff40b0b66efb",
+        "commit": "6a0d767b347ecfb790da835a6243a09fb612fc93",
         "repository": "https://github.com/alipajand/agent-context-doctor"
     }
 };
