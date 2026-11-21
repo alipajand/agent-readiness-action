@@ -36603,7 +36603,8 @@ function proportionalPoints(maxPoints, satisfied, applicable) {
  * the common layouts of each format; they are not full parsers.
  */
 /**
- * Map each TOML table header (`[a.b]` or `[[a.b]]`) to the keys set in it.
+ * Map each TOML table header (`[a.b]` or `[[a.b]]`, optionally followed by a
+ * `# comment`) to the keys set in it.
  * Keys before the first header belong to the table named `''`.
  */
 function tomlTables(content) {
@@ -36613,7 +36614,7 @@ function tomlTables(content) {
         const line = raw.trim();
         if (line === '' || line.startsWith('#'))
             continue;
-        const header = /^\[\[?([^\]]*)\]\]?$/.exec(line);
+        const header = /^\[\[?([^\]]*)\]\]?\s*(?:#.*)?$/.exec(line);
         if (header) {
             current = header[1]
                 .trim()
